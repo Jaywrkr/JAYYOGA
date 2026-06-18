@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suelo y Respiro — Movilidad y recuperación</title>
+<style>
+  :root{
+    --bg: #F6F2EC;
+    --ink: #2E2A26;
+    --moss: #5C6B4F;
+    --moss-dark: #46523C;
+    --clay: #C77B4F;
+    --line: #DDD5C8;
+    --paper: #FFFFFF;
+    --muted: #8B8378;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap{max-width: 640px; margin: 0 auto; padding: 28px 20px 80px;}
+
+  header.hero{
+    padding: 36px 0 28px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 28px;
+  }
+  .eyebrow{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--moss);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  h1{
+    font-size: 38px;
+    line-height: 1.1;
+    font-weight: 400;
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+  }
+  h1 em{ font-style: italic; color: var(--clay); }
+  .hero p{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 480px;
+  }
+
+  .progress-box{
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 24px;
+    display:flex; align-items:center; gap:16px;
+  }
+  .progress-track{
+    flex:1; height:8px; background:var(--line); border-radius:4px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; background: var(--moss); border-radius:4px; transition: width .3s ease;
+  }
+  .progress-label{
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:13px; color:var(--muted); white-space:nowrap;
+  }
+
+  .week-nav{
+    display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;
+  }
+  .week-tab{
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:13px; padding:8px 16px; border-radius:20px;
+    border:1px solid var(--line); background:var(--paper); color:var(--muted);
+    cursor:pointer; transition: all .15s ease;
+  }
+  .week-tab.active{ background: var(--moss); color:#fff; border-color:var(--moss); }
+
+  .week-intro{ margin-bottom: 22px; }
+  .week-intro h2{ font-size:22px; font-weight:400; margin-bottom:6px; }
+  .week-intro .focus{
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:13px; color:var(--clay); font-weight:600; margin-bottom:8px;
+  }
+  .week-intro .note{
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:14px; line-height:1.6; color:var(--muted);
+  }
+
+  .day{
+    background:var(--paper); border:1px solid var(--line); border-radius:14px;
+    margin-bottom:12px; overflow:hidden;
+  }
+  .day-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 18px; cursor:pointer;
+  }
+  .day-head-left{ display:flex; align-items:center; gap:14px; }
+  .day-number{
+    width:30px; height:30px; border-radius:50%; background:var(--bg);
+    border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+    font-family:'Helvetica Neue', Arial, sans-serif; font-size:13px; color:var(--muted); flex-shrink:0;
+  }
+  .day-number.checked{ background:var(--moss); color:#fff; border-color:var(--moss); }
+  .day-title{ font-size:17px; }
+  .day-meta{
+    font-family:'Helvetica Neue', Arial, sans-serif; font-size:12px; color:var(--muted); margin-top:2px;
+  }
+  .chevron{ color:var(--muted); font-size:20px; transition: transform .2s ease; }
+  .day.open .chevron{ transform: rotate(90deg); }
+  .day-body{ display:none; padding: 0 18px 18px; }
+  .day.open .day-body{ display:block; }
+
+  .pose{ padding:14px 0; border-top:1px solid var(--line); }
+  .day-body .pose:first-child{ border-top:none; padding-top:6px; }
+  .pose-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px; }
+  .pose-name{ font-size:15px; font-weight:600; }
+  .pose-time{
+    font-family:'Helvetica Neue', Arial, sans-serif; font-size:12px; color:var(--clay); flex-shrink:0; margin-left:12px;
+  }
+  .pose-desc{
+    font-family:'Helvetica Neue', Arial, sans-serif; font-size:13.5px; color:var(--ink); line-height:1.5; margin-bottom:4px;
+  }
+  .pose-tip{
+    font-family:'Helvetica Neue', Arial, sans-serif; font-size:12.5px; color:var(--muted); font-style:italic; line-height:1.5;
+  }
+
+  .complete-btn{
+    width:100%; margin-top:14px; padding:12px; border-radius:10px;
+    border:1px solid var(--moss); background:transparent; color:var(--moss);
+    font-family:'Helvetica Neue', Arial, sans-serif; font-size:13px; font-weight:600;
+    cursor:pointer; transition: all .15s ease;
+  }
+  .complete-btn.done{ background:var(--moss); color:#fff; }
+
+  footer{
+    text-align:center; font-family:'Helvetica Neue', Arial, sans-serif;
+    font-size:12px; color:var(--muted); margin-top:30px;
+  }
+
+  @media (max-width: 420px){
+    h1{ font-size:30px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Plan de 4 semanas · Complemento</div>
+    <h1>Movilidad y<br><em>recuperación</em><br>para sumar a tu<br>entreno.</h1>
+    <p>12 sesiones, 3 por semana. Esto no reemplaza tu cardio ni tu fuerza — los complementa. Yoga simple para mejorar tu movilidad, soltar cadera y espalda baja (lo que más se tensa con kettlebell), y recuperarte mejor entre entrenos.</p>
+  </header>
+
+  <div class="progress-box">
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="progress-label" id="progress-count">0 / 12 sesiones</div>
+  </div>
+
+  <div class="week-nav" id="week-nav"></div>
+  <div class="week-intro" id="week-intro"></div>
+  <div id="days"></div>
+
+  <footer>Hazlo en días de descanso o después de entrenar. Si algo duele, sal de la postura.</footer>
+</div>
+
+<script>
+const DATA = [
+  {
+    week: 1,
+    title: "Semana 1 — Soltar lo básico",
+    focus: "Enfoque: cadera, espalda baja e isquiotibiales",
+    note: "Esto no es para sumar más esfuerzo a tu semana, sino para soltar lo que el kettlebell y FitXR dejan tenso. Hazlo en días de descanso o después de entrenar. Si algo duele (no 'tensión', sino dolor real), sal de la postura.",
+    days: [
+      {
+        title: "Día 1 — Cadera y espalda baja",
+        duration: "16 min",
+        poses: [
+          {name:"Respiración diafragmática", time:"2 min", desc:"Acostado, manos sobre el abdomen. Inhala por la nariz expandiendo el abdomen, exhala lento.", tip:"Esto activa el sistema parasimpático — es lo que más te va a faltar después de entrenar."},
+          {name:"Postura del niño", time:"3 min", desc:"De rodillas, sienta los glúteos hacia atrás y extiende los brazos al frente, frente al piso.", tip:"No fuerces el rango. Solo deja que el peso del torso haga el trabajo."},
+          {name:"Estiramiento de flexor de cadera (media luna baja)", time:"2.5 min por lado", desc:"Rodilla en el piso, pie adelantado en 90°, empuja la cadera hacia adelante.", tip:"Aquí es donde el kettlebell deja la mayor tensión acumulada."},
+          {name:"Flexión hacia adelante con rodillas dobladas", time:"2 min", desc:"De pie, dobla las rodillas todo lo necesario y deja caer el torso. No se trata de tocar el piso.", tip:"La flexibilidad no es el objetivo hoy. Es solo soltar."},
+          {name:"Savasana", time:"4 min", desc:"Acostado, brazos a los lados, ojos cerrados. Solo respira.", tip:"Este descanso cuenta como parte del entreno, no como tiempo perdido."}
+        ]
+      },
+      {
+        title: "Día 2 — Hombros y espalda alta",
+        duration: "15 min",
+        poses: [
+          {name:"Respiración diafragmática", time:"2 min", desc:"Igual que el día 1. Empieza siempre así.", tip:"Repetirlo construye el hábito de bajar revoluciones antes de moverte."},
+          {name:"Gato-vaca", time:"2 min", desc:"En cuatro puntos, alterna arquear y redondear la espalda con la respiración.", tip:"Lento. Cada repetición debería tomar 4-5 segundos."},
+          {name:"Estiramiento de hombro cruzado", time:"1.5 min por lado", desc:"De pie o sentado, cruza un brazo al pecho y sostenlo con el otro.", tip:"Los swings y presses dejan los hombros más cargados de lo que crees."},
+          {name:"Torsión sentada", time:"2 min por lado", desc:"Sentado con piernas cruzadas, gira el torso hacia un lado apoyando la mano detrás.", tip:"Exhala mientras giras un poco más, nunca fuerces la torsión."},
+          {name:"Postura del niño extendido", time:"3 min", desc:"Igual que día 1 pero con brazos más extendidos y respiración más lenta.", tip:"Cierra los ojos en este último minuto."}
+        ]
+      },
+      {
+        title: "Día 3 — Isquiotibiales y cadera",
+        duration: "17 min",
+        poses: [
+          {name:"Respiración diafragmática", time:"2 min", desc:"Punto de partida fijo de cada sesión.", tip:"Si solo tienes 5 minutos un día, haz esto y la postura del niño."},
+          {name:"Estiramiento de isquiotibiales acostado", time:"2.5 min por lado", desc:"Acostado, sube una pierna y sostenla con ambas manos detrás del muslo.", tip:"Mantén la rodilla apenas flexionada si está muy tensa."},
+          {name:"Mariposa sentada", time:"3 min", desc:"Sentado, plantas de los pies juntas, rodillas hacia afuera. No empujes las rodillas.", tip:"Deja que la gravedad haga el trabajo, no tus manos."},
+          {name:"Media luna baja", time:"2 min por lado", desc:"Repite el estiramiento de cadera del día 1.", tip:"Compara cómo se siente hoy contra el día 1 — ese es tu progreso real."},
+          {name:"Savasana", time:"4 min", desc:"Cierre de la semana 1.", tip:"Si te quedas dormido, está bien."}
+        ]
+      }
+    ]
+  },
+  {
+    week: 2,
+    title: "Semana 2 — Profundizar",
+    focus: "Enfoque: cadera, hombros y espalda baja con más rango",
+    note: "Ya conoces las posturas base. Esta semana sostienes un poco más de tiempo en cada una. Sigue sin forzar — el objetivo es repetir, no avanzar rápido.",
+    days: [
+      {
+        title: "Día 4 — Cadera profunda",
+        duration: "18 min",
+        poses: [
+          {name:"Respiración diafragmática", time:"2 min", desc:"Igual que siempre.", tip:"Nota si esta semana te cuesta menos bajar el ritmo respiratorio."},
+          {name:"Paloma reclinada", time:"2.5 min por lado", desc:"Acostado boca arriba, cruza un tobillo sobre la rodilla opuesta y jala la pierna de abajo hacia el pecho.", tip:"Versión suave de la paloma clásica — no fuerces la rotación de cadera."},
+          {name:"Media luna baja con torsión", time:"2 min por lado", desc:"Desde la media luna baja, agrega una torsión suave hacia el lado de la pierna adelantada.", tip:"Esto suma cadera + espalda baja en un solo movimiento."},
+          {name:"Postura del niño con brazos laterales", time:"3 min", desc:"Postura del niño pero caminando las manos hacia un lado y luego el otro.", tip:"Cada lateral abre una zona distinta de la espalda baja."},
+          {name:"Savasana", time:"4 min", desc:"Cierre.", tip:"Respira sin contar — solo nota el ritmo natural."}
+        ]
+      },
+      {
+        title: "Día 5 — Hombros y torsión",
+        duration: "17 min",
+        poses: [
+          {name:"Respiración diafragmática", time:"2 min", desc:"Igual que siempre.", tip:"Constancia, no novedad — eso construye el hábito."},
+          {name:"Gato-vaca", time:"2.5 min", desc:"Igual que día 2, pero más lento, más repeticiones.", tip:"Si sientes un punto tenso en espalda alta, quédate ahí un par de respiraciones extra."},
+          {name:"Estiramiento de hombro cruzado", time:"2 min por lado", desc:"Igual que día 2 con más tiempo de sostén.", tip:"Los press y los swings de esta semana ya están guardados aquí."},
+          {name:"Torsión sentada profunda", time:"2.5 min por lado", desc:"Igual que día 2 pero sosteniendo más tiempo y respirando 4 ciclos completos por lado.", tip:"La torsión también ayuda a la digestión — útil después de cenar."},
+          {name:"Savasana", time:"4 min", desc:"Cierre.", tip:"Nada que hacer aquí más que estar."}
+        ]
+      },
+      {
+        title: "Día 6 — Isquiotibiales y cierre de semana",
+        duration: "18 min",
+        poses: [
+          {name:"Respiración diafragmática", time:"2 min", desc:"Igual que siempre.", tip:"Dos semanas de constancia ya cuentan como hábito formado."},
+          {name:"Estiramiento de isquiotibiales acostado", time:"3 min por lado", desc:"Igual que día 3, con más tiempo.", tip:"Si hoy llegas un poco más lejos que en el día 3, ahí está tu progreso medible."},
+          {name:"Mariposa sentada", time:"3 min", desc:"Igual que día 3.", tip:"Nota si las rodillas bajan un poco más que la semana pasada."},
+          {name:"Paloma reclinada", time:"2.5 min por lado", desc:"Repite del día 4.", tip:"Esta es la postura que más te va a costar — por eso se repite seguido."},
+          {name:"Savasana", time:"5 min", desc:"Cierre de semana 2, un poco más largo.", tip:"Te ganaste este descanso extra."}
+        ]
+      }
+    ]
+  },
+  {
+    week: 3,
+    title: "Semana 3 — Sostener",
+    focus: "Enfoque: resistencia en la postura, cadera e isquiotibiales",
+    note: "Esta semana se trata de sostener más tiempo sin moverte, no de posturas nuevas. La incomodidad leve es normal — el dolor agudo no. Ahí siempre sales de la postura.",
+    days: [
+      {
+        title: "Día 7 — Cadera sostenida",
+        duration: "19 min",
+        poses: [
+          {name:"Respiración diafragmática", time:"2 min", desc:"Igual que siempre.", tip:"Para esta semana, intenta alargar un poco más la exhalación que la inhalación."},
+          {name:"Media luna baja sostenida", time:"3 min por lado", desc:"Igual que las semanas anteriores, pero sin la torsión — solo sostener quieto.", tip:"Sostener quieto es más difícil que combinar movimientos. Es normal que tiemble un poco la pierna."},
+          {name:"Paloma reclinada sostenida", time:"3 min por lado", desc:"Igual que semana 2, sosteniendo sin moverte.", tip:"Si la cadera ya cede más que en semana 1, ahí está el resultado de la repetición."},
+          {name:"Postura del niño", time:"3 min", desc:"Vuelve a la versión simple del día 1.", tip:"A veces volver a lo simple muestra mejor el progreso que complicar la postura."},
+          {name:"Savasana", time:"4 min", desc:"Cierre.", tip:"Sin nada que ajustar — solo quedarte."}
+        ]
+      },
+      {
+        title: "Día 8 — Espalda y hombros sostenidos",
+        duration: "18 min",
+        poses: [
+          {name:"Respiración diafragmática", time:"2 min", desc:"Igual que siempre.", tip:"Tres semanas seguidas — esto ya es rutina, no esfuerzo."},
+          {name:"Gato-vaca lento", time:"2 min", desc:"Misma postura, pero un ciclo completo cada 6-7 segundos.", tip:"Más lento de lo que se siente natural — ese es el punto."},
+          {name:"Estiramiento de hombro cruzado sostenido", time:"2.5 min por lado", desc:"Igual que siempre, con más tiempo de sostén sin soltar.", tip:"Si notas un punto particularmente tenso, respira ahí 3 ciclos extra."},
+          {name:"Torsión sentada sostenida", time:"3 min por lado", desc:"Igual que semana 2, sosteniendo sin profundizar más.", tip:"No busques ir más lejos esta semana — solo sostener lo que ya alcanzas."},
+          {name:"Savasana", time:"4 min", desc:"Cierre.", tip:"Nada que ajustar."}
+        ]
+      },
+      {
+        title: "Día 9 — Isquiotibiales sostenidos",
+        duration: "19 min",
+        poses: [
+          {name:"Respiración diafragmática", time:"2 min", desc:"Igual que siempre.", tip:"Última repetición antes de la semana de cierre."},
+          {name:"Estiramiento de isquiotibiales sostenido", time:"3.5 min por lado", desc:"Igual que siempre, sosteniendo sin rebotar ni forzar.", tip:"Compara con el día 3 — la diferencia ya debería notarse."},
+          {name:"Mariposa sentada sostenida", time:"3.5 min", desc:"Igual que siempre, con más tiempo quieto.", tip:"Deja que el peso de las piernas haga el trabajo, no la fuerza de los brazos."},
+          {name:"Flexión hacia adelante con rodillas dobladas", time:"2 min", desc:"Vuelve a la versión del día 1.", tip:"Nota si hoy las rodillas se doblan menos que en el día 1."},
+          {name:"Savasana", time:"5 min", desc:"Cierre de semana 3.", tip:"Una semana más y cierras el plan completo."}
+        ]
+      }
+    ]
+  },
+  {
+    week: 4,
+    title: "Semana 4 — Integrar",
+    focus: "Enfoque: repetir lo aprendido y medir el progreso real",
+    note: "Esta semana repite posturas del día 1 a propósito, para que compares cómo se sienten ahora. No hay nada nuevo que aprender — solo notar el cambio.",
+    days: [
+      {
+        title: "Día 10 — Repaso de cadera",
+        duration: "18 min",
+        poses: [
+          {name:"Respiración diafragmática", time:"2 min", desc:"Igual que siempre.", tip:"Si esta respiración ya se siente automática, ese es un cambio real, aunque no se vea."},
+          {name:"Media luna baja", time:"2.5 min por lado", desc:"Repite exactamente el día 1.", tip:"Compara el rango de hoy contra el día 1 — debería sentirse más abierto."},
+          {name:"Paloma reclinada", time:"3 min por lado", desc:"Repite la versión de semana 2-3.", tip:"Esta era la más difícil al inicio. Nota si hoy cuesta menos."},
+          {name:"Postura del niño", time:"3 min", desc:"Repite el día 1, sin cambios.", tip:"Vuelve a la postura más simple del plan, a propósito."},
+          {name:"Savasana", time:"4 min", desc:"Cierre.", tip:"Falta poco."}
+        ]
+      },
+      {
+        title: "Día 11 — Repaso de hombros y torsión",
+        duration: "17 min",
+        poses: [
+          {name:"Respiración diafragmática", time:"2 min", desc:"Igual que siempre.", tip:"La fuerza y la movilidad van juntas, no son cosas opuestas."},
+          {name:"Gato-vaca", time:"2 min", desc:"Repite el día 2.", tip:"Nota si tu columna se siente más suelta moviendo esta postura."},
+          {name:"Estiramiento de hombro cruzado", time:"2 min por lado", desc:"Repite el día 2.", tip:"Compara la tensión de hoy contra la del día 2."},
+          {name:"Torsión sentada", time:"2.5 min por lado", desc:"Repite con atención a la respiración durante la torsión.", tip:"Exhala mientras giras un poco más, sin forzar."},
+          {name:"Savasana", time:"5 min", desc:"Descanso largo.", tip:"Permítete este tiempo sin culpa."}
+        ]
+      },
+      {
+        title: "Día 12 — Cierre del mes",
+        duration: "24 min",
+        poses: [
+          {name:"Respiración diafragmática", time:"3 min", desc:"La práctica más larga de respiración del plan. Solo siéntate y respira.", tip:"Esta calma que sientes ahora, la construiste tú mismo en 4 semanas."},
+          {name:"Flexión hacia adelante con rodillas dobladas", time:"2 min", desc:"Repite, comparando con el primer día de semana 3.", tip:"Mide tu progreso en sensación, no en centímetros."},
+          {name:"Mariposa sentada", time:"3 min", desc:"Última vez. Nota cómo se sienten hoy las rodillas comparado con el día 1 del plan.", tip:"Este es el cambio más honesto que vas a medir."},
+          {name:"Postura del niño extendido", time:"3 min", desc:"Vuelve a la primera postura que aprendiste.", tip:"A veces volver al inicio muestra mejor el progreso que avanzar."},
+          {name:"Savasana", time:"6 min", desc:"Descanso final de todo el plan.", tip:"Cuando termines, decide si quieres repetir el plan completo como rutina fija después de FitXR/kettlebell. Funciona bien como recuperación activa 2-3 veces por semana, indefinidamente."}
+        ]
+      }
+    ]
+  }
+];
+
+const TOTAL_SESSIONS = DATA.reduce((acc, w) => acc + w.days.length, 0);
+
+const state = {
+  activeWeek: 0,
+  openDay: null,
+  completed: {}
+};
+
+function loadState(){
+  try{
+    const saved = JSON.parse(localStorage.getItem('jay-yoga-state') || '{}');
+    state.completed = saved.completed || {};
+  }catch(e){ state.completed = {}; }
+}
+function saveState(){
+  localStorage.setItem('jay-yoga-state', JSON.stringify({ completed: state.completed }));
+}
+
+function renderWeekNav(){
+  const nav = document.getElementById('week-nav');
+  nav.innerHTML = '';
+  DATA.forEach((w, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'week-tab' + (i === state.activeWeek ? ' active' : '');
+    btn.textContent = 'Semana ' + w.week;
+    btn.onclick = () => { state.activeWeek = i; state.openDay = null; render(); };
+    nav.appendChild(btn);
+  });
+}
+
+function renderWeekIntro(){
+  const w = DATA[state.activeWeek];
+  const box = document.getElementById('week-intro');
+  box.innerHTML = `
+    <h2>${w.title}</h2>
+    <div class="focus">${w.focus}</div>
+    <div class="note">${w.note}</div>
+  `;
+}
+
+function renderDays(){
+  const w = DATA[state.activeWeek];
+  const container = document.getElementById('days');
+  container.innerHTML = '';
+  w.days.forEach((day, di) => {
+    const key = state.activeWeek + '-' + di;
+    const isDone = !!state.completed[key];
+    const isOpen = state.openDay === di;
+    const dayEl = document.createElement('div');
+    dayEl.className = 'day' + (isOpen ? ' open' : '');
+
+    const posesHtml = day.poses.map(p => `
+      <div class="pose">
+        <div class="pose-head">
+          <span class="pose-name">${p.name}</span>
+          <span class="pose-time">${p.time}</span>
+        </div>
+        <div class="pose-desc">${p.desc}</div>
+        <div class="pose-tip">${p.tip}</div>
+      </div>
+    `).join('');
+
+    dayEl.innerHTML = `
+      <div class="day-head">
+        <div class="day-head-left">
+          <div class="day-number ${isDone ? 'checked' : ''}">${isDone ? '✓' : (di + 1)}</div>
+          <div>
+            <div class="day-title">${day.title}</div>
+            <div class="day-meta">${day.duration} · ${day.poses.length} posturas</div>
+          </div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="day-body">
+        ${posesHtml}
+        <button class="complete-btn ${isDone ? 'done' : ''}">${isDone ? 'Sesión completada ✓' : 'Marcar como completada'}</button>
+      </div>
+    `;
+
+    dayEl.querySelector('.day-head').onclick = () => {
+      state.openDay = isOpen ? null : di;
+      render();
+    };
+
+    dayEl.querySelector('.complete-btn').onclick = (e) => {
+      e.stopPropagation();
+      state.completed[key] = !state.completed[key];
+      saveState();
+      render();
+    };
+
+    container.appendChild(dayEl);
+  });
+}
+
+function renderProgress(){
+  const done = Object.values(state.completed).filter(Boolean).length;
+  document.getElementById('progress-count').textContent = `${done} / ${TOTAL_SESSIONS} sesiones`;
+  document.getElementById('progress-fill').style.width = `${(done / TOTAL_SESSIONS) * 100}%`;
+}
+
+function render(){
+  renderWeekNav();
+  renderWeekIntro();
+  renderDays();
+  renderProgress();
+}
+
+loadState();
+render();
+</script>
+</body>
+</html>
