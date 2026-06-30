@@ -9,221 +9,201 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html{height:100%}
+html,body{height:100%}
 
 :root{
   --bg:#05050d;
   --surface:rgba(255,255,255,0.03);
-  --surface2:rgba(255,255,255,0.06);
+  --surface2:rgba(255,255,255,0.065);
   --border:rgba(255,255,255,0.055);
-  --border2:rgba(255,255,255,0.1);
+  --border2:rgba(255,255,255,0.11);
   --text:#dde1e9;
   --muted:#5e6a7d;
   --dim:#323b47;
   --font:'Space Grotesk',system-ui,sans-serif;
   --mono:'Space Mono',monospace;
+  --w:1200px;
 }
 
 body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:var(--font);
-  min-height:100vh;
+  background:var(--bg);color:var(--text);font-family:var(--font);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
-
-/* ── Responsive base ── */
-.container{max-width:600px;margin:0 auto;padding:0 clamp(16px,5vw,32px)}
-@media(min-width:900px){
-  body{display:grid;place-items:start center}
-  .screen.active{width:100%;max-width:600px;margin:0 auto}
-}
-@media(max-width:360px){
-  .home-hero h1{font-size:24px}
-  .dash-card-name{font-size:14px}
 }
 
 /* ── Orbs ── */
 .orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.orb{position:absolute;border-radius:50%;filter:blur(110px);animation:drift 24s ease-in-out infinite alternate}
-.orb-1{width:600px;height:600px;background:radial-gradient(#6d28d9 0%,transparent 70%);top:-20%;left:-20%;opacity:.1;animation-duration:26s}
-.orb-2{width:450px;height:450px;background:radial-gradient(#0891b2 0%,transparent 70%);top:35%;right:-22%;opacity:.09;animation-duration:20s;animation-delay:-10s}
-.orb-3{width:380px;height:380px;background:radial-gradient(#065f46 0%,transparent 70%);bottom:-10%;left:25%;opacity:.08;animation-duration:30s;animation-delay:-16s}
-@keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(50px,35px)}}
+.orb{position:absolute;border-radius:50%;filter:blur(120px);animation:drift 26s ease-in-out infinite alternate}
+.orb-1{width:700px;height:700px;background:radial-gradient(#6d28d9,transparent);top:-25%;left:-15%;opacity:.08;animation-duration:28s}
+.orb-2{width:550px;height:550px;background:radial-gradient(#0891b2,transparent);top:30%;right:-20%;opacity:.07;animation-duration:22s;animation-delay:-11s}
+.orb-3{width:450px;height:450px;background:radial-gradient(#065f46,transparent);bottom:-10%;left:20%;opacity:.06;animation-duration:32s;animation-delay:-18s}
+@keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(60px,40px)}}
 
 /* ── Screens ── */
 .screen{position:relative;z-index:1;display:none;min-height:100vh}
 .screen.active{display:block}
 
-/* ── Header ── */
-.app-header{padding:clamp(18px,4vw,30px) 0 14px;display:flex;align-items:center;justify-content:space-between}
+/* ── Wide container (home/explore) ── */
+.cw{max-width:var(--w);margin:0 auto;padding:0 clamp(18px,4vw,48px)}
+
+/* ── Narrow container (session/level detail) ── */
+.cn{max-width:680px;margin:0 auto;padding:0 clamp(16px,4vw,32px)}
+
+/* ── App header ── */
+.app-header{
+  padding:clamp(16px,3vw,26px) 0 0;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
 .logo{
-  font-size:13px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  font-size:13px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;flex-shrink:0;
   background:linear-gradient(90deg,rgba(196,181,253,.9),rgba(103,232,249,.8));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .back-btn{
   background:transparent;border:1px solid var(--border2);
-  color:var(--muted);padding:7px 15px;border-radius:100px;
-  cursor:pointer;font-size:12px;font-family:var(--font);letter-spacing:.04em;
-  transition:all .2s;
+  color:var(--muted);padding:7px 16px;border-radius:100px;
+  cursor:pointer;font-size:12px;font-family:var(--font);letter-spacing:.04em;transition:all .2s;
 }
 .back-btn:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
 
-/* ── Divider ── */
-.divider{height:1px;background:var(--border);margin:0 0 28px}
+/* ── Tabs ── */
+.tabs{display:flex;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:100px;padding:3px}
+.tab-btn{
+  padding:8px 20px;border-radius:100px;border:none;
+  font-size:12px;font-weight:500;letter-spacing:.04em;font-family:var(--font);
+  cursor:pointer;color:var(--muted);background:transparent;transition:all .2s;white-space:nowrap;
+}
+.tab-btn.active{background:rgba(255,255,255,.09);color:var(--text)}
+
+/* ── Tab content ── */
+.tab-pane{display:none;padding-bottom:60px}
+.tab-pane.active{display:block}
 
 /* ── Section label ── */
 .section-label{
   font-size:10px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--muted);margin-bottom:14px;font-weight:500;
+  color:var(--muted);margin-bottom:16px;font-weight:500;
 }
 
-/* ══ HOME ══════════════════════════════════ */
-.home-hero{padding:clamp(28px,6vw,44px) 0 clamp(20px,4vw,36px)}
-.home-hero-eyebrow{
-  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--muted);margin-bottom:14px;font-weight:500;
-}
-.home-hero h1{
-  font-size:clamp(24px,6vw,32px);font-weight:700;line-height:1.18;
-  letter-spacing:-.02em;margin-bottom:12px;color:#e8ecf2;
-}
-.home-hero p{
-  color:var(--muted);font-size:clamp(12px,3vw,13px);line-height:1.75;
-  max-width:min(280px,90%);font-weight:400;
-}
+/* ══ HOME — TODAS ═══════════════════════════════ */
+.todas-header{padding:clamp(24px,4vw,40px) 0 clamp(16px,3vw,28px);display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.todas-header-left h2{font-size:clamp(20px,3vw,28px);font-weight:700;letter-spacing:-.02em;margin-bottom:5px}
+.todas-header-left p{font-size:13px;color:var(--muted);line-height:1.55}
+.todas-header-right{flex-shrink:0}
 
-/* Ring */
-.ring-wrap{display:flex;align-items:center;gap:24px;margin:clamp(20px,4vw,32px) 0 clamp(24px,5vw,44px);padding:clamp(14px,3vw,20px) clamp(16px,4vw,24px);background:var(--surface);border:1px solid var(--border);border-radius:20px}
-.ring-box{position:relative;width:80px;height:80px;flex-shrink:0}
-.ring-box svg{transform:rotate(-90deg)}
-.r-bg{fill:none;stroke:rgba(255,255,255,.05);stroke-width:6}
-.r-fg{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1)}
-.ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring-n{font-size:22px;font-weight:700;font-family:var(--mono);letter-spacing:-.02em}
-.ring-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-top:1px}
-.ring-text-side{flex:1}
-.ring-text-side h3{font-size:16px;font-weight:600;letter-spacing:-.01em;margin-bottom:4px}
-.ring-text-side p{font-size:12px;color:var(--muted);line-height:1.5}
-
-/* Explore card */
-.explore-card{
-  border:1px solid var(--border);border-radius:20px;
-  padding:20px 22px;margin-bottom:28px;cursor:pointer;
-  background:var(--surface);
-  transition:all .22s;display:flex;align-items:center;gap:16px;
-}
-.explore-card:hover{background:var(--surface2);border-color:rgba(255,255,255,.1)}
-.explore-card-icon{
-  width:44px;height:44px;border-radius:14px;
-  background:linear-gradient(135deg,rgba(109,40,217,.3),rgba(8,145,178,.25));
-  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;
-}
-.explore-card-text{flex:1}
-.explore-card-text h3{font-size:15px;font-weight:600;margin-bottom:3px;letter-spacing:-.01em}
-.explore-card-text p{font-size:12px;color:var(--muted)}
-.explore-card-arrow{font-size:16px;color:var(--dim)}
-
-/* Level cards */
-.levels-grid{display:flex;flex-direction:column;gap:8px;padding-bottom:44px}
-.level-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:18px;padding:16px 18px;cursor:pointer;
-  transition:all .22s;position:relative;overflow:hidden;
-}
-.level-card:hover{background:var(--surface2);border-color:rgba(255,255,255,.09)}
-.level-card-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.level-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.level-meta{flex:1}
-.level-num-label{font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:2px;font-weight:500}
-.level-name{font-size:16px;font-weight:600;letter-spacing:-.01em}
-.level-sub{font-size:11px;color:var(--muted);margin-top:1px}
-.level-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
-.tag{font-size:10px;padding:3px 9px;border-radius:100px;background:rgba(255,255,255,.05);color:var(--muted);letter-spacing:.03em}
-.level-bar{height:2px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
-.level-bar-fill{height:100%;border-radius:2px;transition:width .7s ease}
-.level-badge{position:absolute;top:16px;right:16px;font-size:11px;color:var(--dim);font-family:var(--mono)}
-
-/* ══ EXPLORE / DASHBOARD ═════════════════════ */
-.explore-header{padding:clamp(18px,4vw,28px) 0 22px}
-.explore-header h2{font-size:clamp(20px,5vw,24px);font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
-.explore-header p{font-size:13px;color:var(--muted);line-height:1.6}
-
-.filter-row{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px;margin-bottom:22px;scrollbar-width:none}
+.filter-row{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px;margin-bottom:20px;scrollbar-width:none}
 .filter-row::-webkit-scrollbar{display:none}
 .filter-chip{
-  flex-shrink:0;padding:7px 14px;border-radius:100px;
+  flex-shrink:0;padding:7px 15px;border-radius:100px;
   font-size:11px;font-weight:500;letter-spacing:.04em;
   background:var(--surface);border:1px solid var(--border);color:var(--muted);
-  cursor:pointer;transition:all .2s;white-space:nowrap;font-family:var(--font);
+  cursor:pointer;transition:all .18s;white-space:nowrap;font-family:var(--font);
 }
-.filter-chip.active{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.18);color:var(--text)}
+.filter-chip.active{background:rgba(255,255,255,.09);border-color:var(--border2);color:var(--text)}
 
-.sessions-dashboard{display:flex;flex-direction:column;gap:10px;padding-bottom:44px}
-
+/* Session grid */
+.sessions-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:12px;
+}
 .dash-card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:18px;padding:18px 20px;cursor:pointer;
+  border-radius:18px;padding:22px 24px;cursor:pointer;
   transition:all .22s;position:relative;overflow:hidden;
   display:none;
 }
 .dash-card.visible{display:block}
-.dash-card:hover{background:var(--surface2);border-color:rgba(255,255,255,.09);transform:translateY(-1px)}
-
-.dash-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
-.dash-card-left{}
-.dash-level-badge{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:9px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;
-  padding:3px 9px;border-radius:100px;margin-bottom:8px;
-  font-family:var(--mono);
-}
-.dash-card-name{font-size:16px;font-weight:600;letter-spacing:-.01em;margin-bottom:3px}
-.dash-card-cat{font-size:11px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;font-weight:500}
-.dash-card-right{text-align:right;flex-shrink:0;margin-left:12px}
-.dash-mins{font-size:22px;font-weight:700;font-family:var(--mono);letter-spacing:-.02em}
-.dash-mins-lbl{font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
-
-.dash-endel-row{
-  margin-top:12px;padding-top:12px;border-top:1px solid var(--border);
-  display:flex;align-items:center;gap:9px;
-}
-.dash-endel-pill{
-  font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  padding:2px 8px;border-radius:100px;background:rgba(109,40,217,.18);color:rgba(196,181,253,.8);
-  flex-shrink:0;
-}
-.dash-prompt{font-size:11px;color:var(--muted);font-style:italic;line-height:1.4;font-weight:400}
+.dash-card:hover{background:var(--surface2);border-color:rgba(255,255,255,.1);transform:translateY(-2px)}
 
 .dash-card-glow{
-  position:absolute;top:0;right:0;width:120px;height:120px;
-  border-radius:50%;filter:blur(50px);opacity:.08;pointer-events:none;
+  position:absolute;top:-30px;right:-30px;width:150px;height:150px;
+  border-radius:50%;filter:blur(60px);opacity:.1;pointer-events:none;
 }
+.dash-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.dash-level-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
+  padding:4px 10px;border-radius:100px;margin-bottom:9px;font-family:var(--mono);
+}
+.dash-card-name{font-size:17px;font-weight:600;letter-spacing:-.01em;margin-bottom:4px;line-height:1.25}
+.dash-card-cat{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+.dash-card-right{text-align:right;flex-shrink:0;padding-left:12px}
+.dash-mins{font-size:28px;font-weight:700;font-family:var(--mono);letter-spacing:-.03em;line-height:1}
+.dash-mins-lbl{font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:3px}
+.dash-endel-row{
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--border);
+  display:flex;align-items:flex-start;gap:9px;
+}
+.dash-endel-pill{
+  font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  padding:3px 8px;border-radius:100px;background:rgba(109,40,217,.18);color:rgba(196,181,253,.8);
+  flex-shrink:0;margin-top:1px;font-family:var(--mono);
+}
+.dash-prompt{font-size:12px;color:var(--muted);font-style:italic;line-height:1.45;font-weight:400}
+
+/* ══ HOME — PROGRAMA ════════════════════════════ */
+.prog-header{padding:clamp(24px,4vw,40px) 0 clamp(16px,3vw,28px);display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.prog-header-left h2{font-size:clamp(20px,3vw,28px);font-weight:700;letter-spacing:-.02em;margin-bottom:5px}
+.prog-header-left p{font-size:13px;color:var(--muted);line-height:1.55}
+
+/* Progress strip */
+.prog-strip{
+  display:flex;align-items:center;gap:20px;
+  background:var(--surface);border:1px solid var(--border);border-radius:18px;
+  padding:18px 24px;margin-bottom:28px;
+}
+.prog-ring-box{position:relative;width:72px;height:72px;flex-shrink:0}
+.prog-ring-box svg{transform:rotate(-90deg)}
+.r-bg{fill:none;stroke:rgba(255,255,255,.05);stroke-width:6}
+.r-fg{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .9s ease}
+.ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-n{font-size:19px;font-weight:700;font-family:var(--mono)}
+.ring-lbl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:1px}
+.prog-strip-text h3{font-size:15px;font-weight:600;letter-spacing:-.01em;margin-bottom:3px}
+.prog-strip-text p{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* Levels grid */
+.levels-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  gap:12px;
+}
+.level-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:18px;padding:20px 22px;cursor:pointer;
+  transition:all .22s;position:relative;overflow:hidden;
+}
+.level-card:hover{background:var(--surface2);border-color:rgba(255,255,255,.09);transform:translateY(-2px)}
+.level-card-top{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.level-icon{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.level-meta{flex:1}
+.level-num-label{font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:2px;font-weight:500;font-family:var(--mono)}
+.level-name{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.level-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.level-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.tag{font-size:10px;padding:3px 10px;border-radius:100px;background:rgba(255,255,255,.05);color:var(--muted);letter-spacing:.03em}
+.level-bar{height:2px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
+.level-bar-fill{height:100%;border-radius:2px;transition:width .7s ease}
+.level-badge{position:absolute;top:18px;right:18px;font-size:11px;color:var(--dim);font-family:var(--mono)}
 
 /* ══ LEVEL DETAIL ════════════════════════════ */
-.level-detail-hdr{text-align:center;padding:clamp(16px,4vw,26px) 0 18px}
-.level-detail-icon{font-size:clamp(36px,8vw,44px);margin-bottom:10px}
-.level-detail-name{font-size:clamp(22px,5vw,26px);font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
-.level-detail-desc{font-size:13px;color:var(--muted);line-height:1.7;max-width:320px;margin:0 auto}
+.level-detail-hdr{text-align:center;padding:clamp(18px,4vw,30px) 0 20px}
+.level-detail-icon{font-size:clamp(36px,6vw,48px);margin-bottom:10px}
+.level-detail-name{font-size:clamp(22px,4vw,28px);font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+.level-detail-desc{font-size:13px;color:var(--muted);line-height:1.7;max-width:360px;margin:0 auto}
 .focus-pills{display:flex;justify-content:center;gap:6px;margin:14px 0 28px;flex-wrap:wrap}
-.focus-pill{
-  padding:5px 13px;border-radius:100px;font-size:10px;font-weight:600;
-  background:rgba(255,255,255,.05);border:1px solid var(--border);
-  letter-spacing:.08em;text-transform:uppercase;
-}
+.focus-pill{padding:5px 14px;border-radius:100px;font-size:10px;font-weight:600;background:rgba(255,255,255,.05);border:1px solid var(--border);letter-spacing:.08em;text-transform:uppercase}
 
 .session-card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:16px;padding:15px 18px;margin-bottom:8px;
+  border-radius:16px;padding:16px 20px;margin-bottom:8px;
   cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px;
 }
 .session-card:hover{background:var(--surface2)}
 .session-card.done{border-color:rgba(16,185,129,.2)}
 .session-num{
-  width:36px;height:36px;border-radius:10px;
+  width:38px;height:38px;border-radius:11px;
   display:flex;align-items:center;justify-content:center;
   font-size:13px;font-weight:700;flex-shrink:0;font-family:var(--mono);
   background:rgba(255,255,255,.05);
@@ -236,50 +216,45 @@ body{
 
 /* ══ SESSION PLAYER ══════════════════════════ */
 .session-player-wrap{padding-bottom:60px}
-.session-title-bar{padding:clamp(12px,3vw,18px) 0 14px}
-.session-title-bar h2{font-size:clamp(18px,5vw,22px);font-weight:700;letter-spacing:-.02em;margin-bottom:4px}
-.session-title-bar p{font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:.04em}
+.session-title-bar{padding:clamp(14px,3vw,22px) 0 16px}
+.session-title-bar h2{font-size:clamp(18px,4vw,24px);font-weight:700;letter-spacing:-.02em;margin-bottom:4px}
+.session-title-bar p{font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase}
 
 /* Breath */
-.breath-zone{display:flex;flex-direction:column;align-items:center;padding:clamp(20px,5vw,32px) 0}
+.breath-zone{display:flex;flex-direction:column;align-items:center;padding:clamp(22px,4vw,36px) 0}
 .breath-ring{
-  width:132px;height:132px;border-radius:50%;
+  width:130px;height:130px;border-radius:50%;
   border:1px solid rgba(255,255,255,.07);
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;position:relative;
 }
-.breath-ring::after{
-  content:'';position:absolute;inset:-8px;border-radius:50%;
-  border:1px solid rgba(255,255,255,.03);
-}
+.breath-ring::after{content:'';position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(255,255,255,.025)}
 .breath-inner{
-  width:108px;height:108px;border-radius:50%;
+  width:106px;height:106px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;flex-direction:column;
   background:radial-gradient(circle,rgba(109,40,217,.2) 0%,transparent 70%);
-  border:1px solid rgba(109,40,217,.15);
-  transition:transform .3s ease;
+  border:1px solid rgba(109,40,217,.14);transition:transform .3s ease;
 }
 .breath-ring.inhale .breath-inner{animation:bIn 4s ease-in-out infinite}
 .breath-ring.exhale .breath-inner{animation:bOut 6s ease-in-out infinite}
-@keyframes bIn{0%{transform:scale(1)}50%{transform:scale(1.25)}100%{transform:scale(1)}}
-@keyframes bOut{0%{transform:scale(1.2)}50%{transform:scale(.85)}100%{transform:scale(1.2)}}
+@keyframes bIn{0%{transform:scale(1)}50%{transform:scale(1.26)}100%{transform:scale(1)}}
+@keyframes bOut{0%{transform:scale(1.18)}50%{transform:scale(.85)}100%{transform:scale(1.18)}}
 .breath-emoji{font-size:22px}
 .breath-txt{font-size:9px;color:var(--muted);margin-top:3px;letter-spacing:.1em;text-transform:uppercase}
-.breath-status{font-size:12px;color:var(--muted);margin-top:14px;letter-spacing:.03em}
+.breath-status{font-size:12px;color:var(--muted);margin-top:14px}
 .breath-hint{font-size:10px;color:var(--dim);margin-top:5px;font-family:var(--mono)}
 
 /* Endel card */
 .endel-card{
   border:1px solid rgba(109,40,217,.2);border-radius:18px;
-  padding:16px 18px;margin-bottom:16px;
+  padding:16px 20px;margin-bottom:16px;
   background:linear-gradient(135deg,rgba(109,40,217,.07) 0%,rgba(8,145,178,.05) 100%);
 }
-.endel-hdr{display:flex;align-items:center;gap:9px;cursor:pointer;margin-bottom:0}
+.endel-hdr{display:flex;align-items:center;gap:9px;cursor:pointer}
 .endel-pill{
   font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
   padding:3px 9px;border-radius:100px;
-  background:rgba(109,40,217,.2);color:rgba(196,181,253,.85);
-  font-family:var(--mono);
+  background:rgba(109,40,217,.2);color:rgba(196,181,253,.85);font-family:var(--mono);
 }
 .endel-hdr-title{font-size:13px;font-weight:500;flex:1;letter-spacing:-.01em}
 .endel-chevron{font-size:10px;color:var(--dim);transition:transform .2s}
@@ -298,15 +273,15 @@ body{
 }
 .e-bar{height:3px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-top:8px}
 .e-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#6d28d9,#0891b2)}
-.e-tip{font-size:12px;color:var(--muted);line-height:1.55;font-weight:400}
+.e-tip{font-size:12px;color:var(--muted);line-height:1.55}
 
 /* Poses */
 .poses-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;font-weight:500}
 .pose-card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:15px;padding:15px 16px;margin-bottom:8px;transition:border-color .2s;
+  border-radius:15px;padding:15px 18px;margin-bottom:8px;
 }
-.pose-card.done{border-color:rgba(16,185,129,.2);opacity:.65}
+.pose-card.done{border-color:rgba(16,185,129,.2);opacity:.6}
 .pose-hdr{display:flex;align-items:center;gap:10px;cursor:pointer}
 .pose-chk{
   width:24px;height:24px;border-radius:7px;border:1px solid var(--border2);
@@ -320,13 +295,13 @@ body{
 .pose-dur{font-size:11px;color:var(--muted);flex-shrink:0;font-family:var(--mono)}
 .pose-body{display:none;margin-top:13px;padding-top:13px;border-top:1px solid var(--border)}
 .pose-card.expanded .pose-body{display:block}
-.pose-desc{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:10px;font-weight:400}
-.pose-tip-row{display:flex;gap:8px;background:rgba(255,255,255,.03);border-radius:9px;padding:9px 11px}
+.pose-desc{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:10px}
+.pose-tip-row{display:flex;gap:8px;background:rgba(255,255,255,.03);border-radius:9px;padding:9px 12px}
 .pose-tip-ico{font-size:12px;flex-shrink:0;opacity:.6}
 .pose-tip-txt{font-size:11px;color:var(--muted);line-height:1.55}
-.pose-breath{font-size:11px;color:rgba(139,92,246,.8);margin-top:8px;font-style:italic;letter-spacing:.01em}
+.pose-breath{font-size:11px;color:rgba(139,92,246,.8);margin-top:8px;font-style:italic}
 
-/* Btn */
+/* Complete btn */
 .complete-btn{
   width:100%;padding:16px;border-radius:16px;border:none;
   font-size:14px;font-weight:600;cursor:pointer;margin-top:20px;
@@ -346,13 +321,12 @@ body{
 .celebration.show{display:flex}
 .cel-emoji{font-size:60px;margin-bottom:20px;animation:celPop .4s cubic-bezier(.34,1.56,.64,1)}
 @keyframes celPop{0%{transform:scale(0)}100%{transform:scale(1)}}
-.celebration h2{font-size:24px;font-weight:700;letter-spacing:-.02em;margin-bottom:10px}
-.celebration p{color:var(--muted);font-size:13px;line-height:1.7;max-width:280px;margin-bottom:30px;font-weight:400}
+.celebration h2{font-size:clamp(20px,4vw,26px);font-weight:700;letter-spacing:-.02em;margin-bottom:10px}
+.celebration p{color:var(--muted);font-size:13px;line-height:1.7;max-width:280px;margin-bottom:30px}
 .cel-btn{
-  padding:14px 36px;border-radius:100px;border:none;
+  padding:14px 38px;border-radius:100px;border:none;
   background:linear-gradient(135deg,rgba(109,40,217,.9),rgba(8,145,178,.85));
-  color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);
-  letter-spacing:.02em;
+  color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);letter-spacing:.02em;
 }
 
 ::-webkit-scrollbar{width:3px}
@@ -367,73 +341,68 @@ body{
   <div class="orb orb-3"></div>
 </div>
 
-<!-- ══ HOME ══ -->
+<!-- ══ HOME (tabs) ══ -->
 <div id="screen-home" class="screen active">
-  <div class="container">
-    <div class="app-header"><div class="logo">Jayyoga</div></div>
-    <div class="home-hero">
-      <div class="home-hero-eyebrow">Tu practica personal</div>
-      <h1>Yoga + Endel.<br>Cuerpo y sonido.</h1>
-      <p>5 niveles progresivos para fortalecer tu core, ganar flexibilidad y aprender yoga desde cero.</p>
-    </div>
-
-    <div class="ring-wrap">
-      <div class="ring-box">
-        <svg width="80" height="80" viewBox="0 0 80 80">
-          <circle class="r-bg" cx="40" cy="40" r="33"/>
-          <circle class="r-fg" id="ring-fg" cx="40" cy="40" r="33"
-            stroke="url(#rg)" stroke-dasharray="207.3" stroke-dashoffset="207.3"/>
-          <defs>
-            <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#6d28d9"/>
-              <stop offset="100%" stop-color="#0891b2"/>
-            </linearGradient>
-          </defs>
-        </svg>
-        <div class="ring-inner">
-          <div class="ring-n" id="ring-num">0</div>
-          <div class="ring-lbl">/ 15</div>
-        </div>
-      </div>
-      <div class="ring-text-side">
-        <h3 id="ring-heading">Empieza hoy</h3>
-        <p id="ring-sub">15 sesiones para transformar tu cuerpo y mente</p>
-      </div>
-    </div>
-
-    <div class="explore-card" onclick="showExplore()">
-      <div class="explore-card-icon">&#9889;</div>
-      <div class="explore-card-text">
-        <h3>Sesiones Express</h3>
-        <p>10 sesiones curadas &middot; Niveles 1&ndash;5</p>
-      </div>
-      <div class="explore-card-arrow">&#8250;</div>
-    </div>
-
-    <div class="section-label">Programa completo</div>
-    <div class="levels-grid" id="levels-grid"></div>
-  </div>
-</div>
-
-<!-- ══ EXPLORE DASHBOARD ══ -->
-<div id="screen-explore" class="screen">
-  <div class="container">
+  <div class="cw">
     <div class="app-header">
       <div class="logo">Jayyoga</div>
-      <button class="back-btn" onclick="showHome()">&#8592; Inicio</button>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="setTab('todas')">Todas las sesiones</button>
+        <button class="tab-btn" onclick="setTab('programa')">Programa</button>
+      </div>
     </div>
-    <div class="explore-header">
-      <h2>Sesiones Express</h2>
-      <p>Elige por categoria o nivel. Cada sesion incluye configuracion para Endel.</p>
+
+    <!-- Tab: Todas -->
+    <div id="tab-todas" class="tab-pane active">
+      <div class="todas-header">
+        <div class="todas-header-left">
+          <h2>Sesiones</h2>
+          <p>10 sesiones curadas &middot; Niveles 1&ndash;5 &middot; Cada una con configuracion Endel</p>
+        </div>
+      </div>
+      <div class="filter-row" id="filter-row"></div>
+      <div class="sessions-grid" id="sessions-grid"></div>
     </div>
-    <div class="filter-row" id="filter-row"></div>
-    <div class="sessions-dashboard" id="sessions-dashboard"></div>
+
+    <!-- Tab: Programa -->
+    <div id="tab-programa" class="tab-pane">
+      <div class="prog-header">
+        <div class="prog-header-left">
+          <h2>Programa completo</h2>
+          <p>5 niveles &middot; 15 sesiones &middot; Progresion de principiante a practicante</p>
+        </div>
+      </div>
+      <div class="prog-strip">
+        <div class="prog-ring-box">
+          <svg width="72" height="72" viewBox="0 0 72 72">
+            <circle class="r-bg" cx="36" cy="36" r="29"/>
+            <circle class="r-fg" id="ring-fg" cx="36" cy="36" r="29"
+              stroke="url(#rg)" stroke-dasharray="182.2" stroke-dashoffset="182.2"/>
+            <defs>
+              <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#6d28d9"/>
+                <stop offset="100%" stop-color="#0891b2"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="ring-inner">
+            <div class="ring-n" id="ring-num">0</div>
+            <div class="ring-lbl">/ 15</div>
+          </div>
+        </div>
+        <div class="prog-strip-text">
+          <h3 id="ring-heading">Empieza cuando quieras</h3>
+          <p id="ring-sub">15 sesiones para transformar tu cuerpo y mente. Sin orden obligatorio.</p>
+        </div>
+      </div>
+      <div class="levels-grid" id="levels-grid"></div>
+    </div>
   </div>
 </div>
 
 <!-- ══ LEVEL ══ -->
 <div id="screen-level" class="screen">
-  <div class="container">
+  <div class="cn">
     <div class="app-header">
       <div class="logo">Jayyoga</div>
       <button class="back-btn" onclick="showHome()">&#8592; Inicio</button>
@@ -444,7 +413,7 @@ body{
 
 <!-- ══ SESSION ══ -->
 <div id="screen-session" class="screen">
-  <div class="container">
+  <div class="cn">
     <div class="app-header">
       <div class="logo">Jayyoga</div>
       <button class="back-btn" id="session-back">&#8592; Atras</button>
@@ -462,7 +431,7 @@ body{
 </div>
 
 <script>
-// ─── LEVEL DATA ─────────────────────────────────
+// ─── LEVELS DATA ─────────────────────────────────
 const LEVELS=[
   {id:1,name:"Despertar",emoji:"🌱",sub:"Conoce tu cuerpo",color:"#10b981",
    desc:"El primer paso. Aprende a respirar con intencion, suelta tensiones acumuladas y descubre como habita tu cuerpo en el espacio.",
@@ -474,15 +443,15 @@ const LEVELS=[
       {name:"Postura del Nino (Balasana)",dur:"2 min",desc:"Rodillas separadas al ancho de la esterilla, pies juntos. Extiende los brazos al frente y deja caer la frente al suelo o un cojin. Respira hacia la espalda baja.",tip:"Si las caderas no llegan a los talones, pon una manta doblada entre muslos y pantorrillas.",breath:"Inhala 4 tiempos, exhala 6 tiempos"},
       {name:"Gato-Vaca (Marjaryasana)",dur:"2 min",desc:"En cuatro puntos. Inhala: arquea la espalda, levanta cabeza y coccix. Exhala: redondea la espalda, lleva menton al pecho. Fluye suavemente.",tip:"Siente cada vertebra. El movimiento sigue a la respiracion.",breath:"Inhala vaca / Exhala gato"},
       {name:"Torsion Supina",dur:"1.5 min c/lado",desc:"Acostado boca arriba, dobla la rodilla derecha al pecho y cruzala al lado izquierdo. Extiende el brazo derecho en T. Mira hacia la derecha.",tip:"El hombro opuesto intenta tocar el suelo. La gravedad hace el trabajo.",breath:"Exhala profundo para profundizar la torsion"},
-      {name:"Savasana",dur:"3 min",desc:"Acostado completamente plano. Pies separados naturalmente, palmas hacia arriba. Ojos cerrados.",tip:"Esta pose es tan importante como las demas. No la saltes.",breath:"Respira natural, sin controlar"}
+      {name:"Savasana",dur:"3 min",desc:"Acostado completamente plano. Pies separados, palmas hacia arriba. Ojos cerrados.",tip:"Esta pose es tan importante como las demas. No la saltes.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"1-2",name:"Raices",mins:22,
      endel:{scene:"Relax",energy:30,prompt:"Bosque al amanecer, tierra humeda, silencio verde",tip:"Prueba sin auriculares, telefono en el suelo cerca de ti."},
      poses:[
-      {name:"Montana (Tadasana)",dur:"2 min",desc:"De pie, pies al ancho de caderas. Distribuye el peso en los 4 puntos de cada pie. Activa muslos, alarga la columna, corona hacia el techo.",tip:"Cierra los ojos 30 segundos para sentir tu equilibrio real.",breath:"Inhala crece / Exhala enraiza"},
-      {name:"Flexion hacia adelante (suave)",dur:"2 min",desc:"Desde montana, dobla ligeramente las rodillas y deja caer el torso. Manos en espinillas. Cabeza pesada.",tip:"Las rodillas dobladas protegen la zona lumbar.",breath:"Exhala completamente cada vez"},
+      {name:"Montana (Tadasana)",dur:"2 min",desc:"De pie, pies al ancho de caderas. Distribuye el peso en los 4 puntos de cada pie. Activa muslos, alarga la columna.",tip:"Cierra los ojos 30 segundos para sentir tu equilibrio real.",breath:"Inhala crece / Exhala enraiza"},
+      {name:"Flexion hacia adelante suave",dur:"2 min",desc:"Desde montana, dobla ligeramente las rodillas y deja caer el torso. Manos en espinillas. Cabeza pesada.",tip:"Las rodillas dobladas protegen la zona lumbar.",breath:"Exhala completamente cada vez"},
       {name:"Mariposa (Baddha Konasana)",dur:"3 min",desc:"Sentado, plantas de pies juntas, rodillas hacia afuera. Sujeta los tobillos. Columna larga.",tip:"No empujes las rodillas. La gravedad las relaja con el tiempo.",breath:"Inhala crece, exhala sueltate un poco mas"},
-      {name:"Flexion sentada (rodillas dobladas)",dur:"2 min",desc:"Piernas extendidas, dobla un poco las rodillas. Extiende los brazos hacia los pies. Columna larga.",tip:"Un cinturon o toalla alrededor de los pies te ayuda a mantener la espalda recta.",breath:"Cada exhala: acercar pecho a muslos"},
+      {name:"Flexion sentada (rodillas dobladas)",dur:"2 min",desc:"Piernas extendidas, dobla un poco las rodillas. Extiende los brazos hacia los pies. Columna larga.",tip:"Un cinturon o toalla alrededor de los pies ayuda.",breath:"Cada exhala: acercar pecho a muslos"},
       {name:"Savasana",dur:"3 min",desc:"Cierra la practica. Completa quietud. El cuerpo integra todo lo que trabajaste.",tip:"Pon una almohada bajo las rodillas si la zona lumbar lo pide.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"1-3",name:"Apertura",mins:25,
@@ -490,8 +459,8 @@ const LEVELS=[
      poses:[
       {name:"Gato-Vaca con extension lateral",dur:"2 min",desc:"Desde cuatro puntos, haz gato-vaca 4 veces. Luego camina las manos a la derecha y respira al costado izquierdo. Cambia.",tip:"Siente la apertura intercostal al respirar.",breath:"Inhala hacia el costado que se abre"},
       {name:"Aguja ensartada",dur:"1.5 min c/lado",desc:"Desde cuatro puntos, desliza el brazo derecho por el suelo hacia la izquierda. Hombro y mejilla descansan en el suelo.",tip:"Libera tension de hombros acumulada por pantallas.",breath:"Exhala profundo para liberar el hombro"},
-      {name:"Figura 4 supina",dur:"2 min c/lado",desc:"Acostado, tobillo derecho sobre muslo izquierdo. Entrelaza manos detras del muslo y acerca las piernas al pecho.",tip:"Si la cadera se resiste, mantén el pie izquierdo en el suelo.",breath:"Exhala para profundizar suavemente"},
-      {name:"Bebe feliz (Ananda Balasana)",dur:"2 min",desc:"Acostado, sujeta la parte externa de los pies. Rodillas hacia el suelo. Balancea si quieres.",tip:"Esta pose es un mensaje a tu sistema nervioso: todo esta bien.",breath:"Respira libre y natural"},
+      {name:"Figura 4 supina",dur:"2 min c/lado",desc:"Acostado, tobillo derecho sobre muslo izquierdo. Entrelaza manos detras del muslo y acerca las piernas al pecho.",tip:"Si la cadera se resiste, mantén el pie contrario en el suelo.",breath:"Exhala para profundizar suavemente"},
+      {name:"Bebe feliz (Ananda Balasana)",dur:"2 min",desc:"Acostado, sujeta la parte externa de los pies. Rodillas hacia el suelo. Balancea si quieres.",tip:"Un mensaje a tu sistema nervioso: todo esta bien.",breath:"Respira libre y natural"},
       {name:"Savasana",dur:"3 min",desc:"Cierra los ojos. El suelo te sostiene completamente.",tip:"Notaras que la savasana se vuelve mas facil con la practica.",breath:"Respira natural, sin controlar"}
      ]}
    ]},
@@ -503,17 +472,17 @@ const LEVELS=[
      endel:{scene:"Focus",energy:45,prompt:"Rio en movimiento, concentracion fluida, ritmo constante",tip:"Auriculares recomendados. El ritmo de Focus guia tus movimientos."},
      poses:[
       {name:"Saludo al Sol modificado (3 rondas)",dur:"9 min",desc:"Montana > Brazos arriba > Flexion adelante > Medio levantamiento > Plancha de rodillas > Perro boca abajo de rodillas > Vuelta a montana.",tip:"Las 3 rondas son lentas. Aprende la secuencia primero.",breath:"Un movimiento = una respiracion"},
-      {name:"Guerrero I",dur:"1.5 min c/lado",desc:"Pie izquierdo atras (~1 metro), rodilla derecha sobre tobillo. Caderas cuadradas al frente. Brazos al cielo, hombros abajo.",tip:"La rodilla delantera nunca pasa el tobillo.",breath:"Inhala al subir, exhala para enraizar"},
-      {name:"Postura del Nino",dur:"2 min",desc:"Descanso activo. Rodillas anchas, brazos extendidos.",tip:"Esta es siempre una opcion de descanso en cualquier clase.",breath:"Respira hacia la espalda baja"},
-      {name:"Savasana",dur:"3 min",desc:"El cuerpo aprende durante el descanso, no durante el esfuerzo.",tip:"Tus piernas pueden estar mas pesadas. Es normal.",breath:"Respira natural, sin controlar"}
+      {name:"Guerrero I",dur:"1.5 min c/lado",desc:"Pie izquierdo atras (~1 metro), rodilla derecha sobre tobillo. Caderas cuadradas al frente. Brazos al cielo.",tip:"La rodilla delantera nunca pasa el tobillo.",breath:"Inhala al subir, exhala para enraizar"},
+      {name:"Postura del Nino",dur:"2 min",desc:"Descanso activo. Rodillas anchas, brazos extendidos.",tip:"Siempre disponible como descanso en cualquier clase.",breath:"Respira hacia la espalda baja"},
+      {name:"Savasana",dur:"3 min",desc:"El cuerpo aprende durante el descanso.",tip:"Tus piernas pueden estar mas pesadas. Es normal.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"2-2",name:"Nucleo Despierto",mins:28,
      endel:{scene:"Focus",energy:55,prompt:"Montana en la manana, estabilidad firme, calma activa",tip:"Sube la energia en Endel para las secciones de core."},
      poses:[
       {name:"Plancha en rodillas",dur:"3 x 20 seg",desc:"Desde cuatro puntos, caderas a la linea de hombros. Columna neutral. Activa abdomen.",tip:"Forma sobre tiempo. 20 segundos bien > 60 segundos mal.",breath:"Respira normalmente, sin retener"},
-      {name:"Pajaro-Perro",dur:"1.5 min c/lado",desc:"Cuatro puntos. Extiende brazo derecho y pierna izquierda simultaneamente. Cadera nivelada. Lento y controlado.",tip:"Imagina un vaso de agua en la espalda. Sin derramar.",breath:"Exhala al extender, inhala al volver"},
+      {name:"Pajaro-Perro",dur:"1.5 min c/lado",desc:"Cuatro puntos. Extiende brazo derecho y pierna izquierda simultaneamente. Cadera nivelada. Lento.",tip:"Imagina un vaso de agua en la espalda. Sin derramar.",breath:"Exhala al extender, inhala al volver"},
       {name:"Barco (rodillas dobladas)",dur:"3 x 20 seg",desc:"Sentado, inclinate levemente atras, levanta pies. Rodillas dobladas. Espalda larga.",tip:"Si la espalda se redondea, agarra detras de los muslos.",breath:"Exhala profundo, inhala para subir"},
-      {name:"Puente (Setu Bandhasana)",dur:"2 min",desc:"Acostado, pies en el suelo cerca de gluteos. Presiona pies y levanta caderas. Muslos paralelos.",tip:"Empuja el suelo con los pies. Eso activa mas que apretar gluteos.",breath:"Inhala para subir, exhala larga al mantener"},
+      {name:"Puente (Setu Bandhasana)",dur:"2 min",desc:"Acostado, pies en el suelo cerca de gluteos. Presiona pies y levanta caderas.",tip:"Empuja el suelo con los pies. Eso activa mas.",breath:"Inhala para subir, exhala larga al mantener"},
       {name:"Savasana",dur:"3 min",desc:"El core se fortalece descansando. Esta es parte del entrenamiento.",tip:"Siente tu abdomen expandirse y contraerse al respirar.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"2-3",name:"Apertura de Caderas",mins:30,
@@ -523,7 +492,7 @@ const LEVELS=[
       {name:"Paloma preparatoria",dur:"2 min c/lado",desc:"Desde cuatro puntos, lleva la rodilla derecha detras de la muneca derecha. Pierna trasera larga.",tip:"Si la cadera no llega al suelo, usa un bloque o manta.",breath:"Inhala largo, exhala y sueltate 1mm mas"},
       {name:"Mariposa con flexion",dur:"2 min",desc:"Plantas de pies juntas. Inclinate hacia adelante desde las caderas.",tip:"Cuanto mas lejos esten los pies, menos intensa es la apertura.",breath:"Cada exhala: avanza un poco mas"},
       {name:"Flexion sentada piernas extendidas",dur:"2 min",desc:"Piernas juntas al frente. Torso hacia adelante desde las caderas.",tip:"Flexiona un poco las rodillas si la espalda se redondea.",breath:"Inhala para alargar la columna, exhala para avanzar"},
-      {name:"Piernas en la pared",dur:"3 min",desc:"Piernas apoyadas en la pared, espalda plana en el suelo. Ojos cerrados.",tip:"Una de las posturas mas restaurativas que existen.",breath:"Respira natural, sin controlar"}
+      {name:"Piernas en la pared",dur:"3 min",desc:"Piernas apoyadas en la pared, espalda plana. Ojos cerrados.",tip:"Una de las posturas mas restaurativas.",breath:"Respira natural, sin controlar"}
      ]}
    ]},
   {id:3,name:"Enraizar",emoji:"🌿",sub:"Construye bases solidas",color:"#8b5cf6",
@@ -533,30 +502,30 @@ const LEVELS=[
     {id:"3-1",name:"Equilibrio",mins:30,
      endel:{scene:"Focus",energy:50,prompt:"Bambu en la brisa, flexible pero firme, concentracion tranquila",tip:"Focus ayuda con la concentracion que necesitan las poses de equilibrio."},
      poses:[
-      {name:"Guerrero II",dur:"1.5 min c/lado",desc:"Pies a ~1.2m, pie derecho al frente, izquierdo a 90°. Dobla rodilla derecha. Brazos en T.",tip:"Hombros sobre caderas. Brazo trasero igual de activo que el delantero.",breath:"Inhala para crecer, exhala para profundizar"},
-      {name:"Triangulo (Trikonasana)",dur:"1.5 min c/lado",desc:"Piernas extendidas. Brazo derecho hacia adelante, baja la mano a espinilla o bloque. Brazo izquierdo al cielo.",tip:"Un bloque es una solucion inteligente, no una derrota.",breath:"Inhala largo, exhala y abre el pecho"},
-      {name:"Arbol (Vrksasana)",dur:"1 min c/lado",desc:"De pie en un pie. Planta del otro en tobillo, espinilla o muslo (nunca rodilla). Mirada en un punto fijo.",tip:"Si te caes, vuelve. El equilibrio no es no caer.",breath:"Respira suave y regular"},
-      {name:"Guerrero III preparatorio",dur:"1 min c/lado",desc:"Desde Guerrero I, peso a la pierna delantera. Torso a 45°, pierna trasera sube. Manos en la cadera.",tip:"La pierna trasera y el torso forman una linea.",breath:"Exhala para estabilizar"},
+      {name:"Guerrero II",dur:"1.5 min c/lado",desc:"Pies a ~1.2m, pie derecho al frente, izquierdo a 90°. Dobla rodilla derecha. Brazos en T.",tip:"Hombros sobre caderas. Brazo trasero igual de activo.",breath:"Inhala para crecer, exhala para profundizar"},
+      {name:"Triangulo (Trikonasana)",dur:"1.5 min c/lado",desc:"Piernas extendidas. Brazo derecho al frente, baja la mano a espinilla o bloque. Brazo izquierdo al cielo.",tip:"Un bloque es una solucion inteligente, no una derrota.",breath:"Inhala largo, exhala y abre el pecho"},
+      {name:"Arbol (Vrksasana)",dur:"1 min c/lado",desc:"De pie en un pie. Planta del otro en tobillo, espinilla o muslo. Mirada en un punto fijo.",tip:"Si te caes, vuelve. El equilibrio no es no caer.",breath:"Respira suave y regular"},
+      {name:"Guerrero III preparatorio",dur:"1 min c/lado",desc:"Desde Guerrero I, peso a la pierna delantera. Torso a 45°, pierna trasera sube.",tip:"La pierna trasera y el torso forman una linea.",breath:"Exhala para estabilizar"},
       {name:"Savasana",dur:"3 min",desc:"El equilibrio tambien es descansar sin hacer nada.",tip:"Nota como se siente cada tobillo despues de trabajar.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"3-2",name:"Nucleo Fuerte",mins:32,
-     endel:{scene:"Move",energy:65,prompt:"Oceano en movimiento, fuerza constante, respiracion activa",tip:"Move de Endel esta disenado para actividad fisica. Energia al 65%."},
+     endel:{scene:"Move",energy:65,prompt:"Oceano en movimiento, fuerza constante, respiracion activa",tip:"Move de Endel para actividad fisica. Energia al 65%."},
      poses:[
       {name:"Plancha completa",dur:"3 x 30 seg",desc:"Manos bajo hombros, cuerpo en linea recta de cabeza a talones. Activa abdomen, gluteos y piernas.",tip:"Si duele la zona lumbar: rodillas en el suelo. Forma primero.",breath:"Respira continuamente. Nunca retengas"},
       {name:"Plancha lateral en rodillas",dur:"45 seg c/lado",desc:"Desde plancha, gira al lado. Rodilla inferior en el suelo. Cadera arriba en linea diagonal.",tip:"Aprieta el costado activo. La cadera no puede hundirse.",breath:"Exhala larga para estabilizar"},
       {name:"Barco (Navasana)",dur:"3 x 20-30 seg",desc:"Sentado, piernas a 45° (o dobladas). Espalda en angulo. Brazos paralelos al suelo.",tip:"Es normal que tiemble. Es la adaptacion.",breath:"Exhala profundo al mantener"},
       {name:"Superman",dur:"2 x 45 seg",desc:"Boca abajo, brazos al frente. Levanta simultaneamente brazos, pecho y piernas.",tip:"Trabaja la espalda baja, el antagonista del abdomen.",breath:"Inhala para levantar, exhala sostenido"},
-      {name:"Puente con un pie",dur:"45 seg c/lado",desc:"Desde el puente, extiende una pierna al cielo. Caderas niveladas.",tip:"Es mas dificil de lo que parece. Reduce el tiempo si la cadera cae.",breath:"Respira constante"},
+      {name:"Puente con un pie",dur:"45 seg c/lado",desc:"Desde el puente, extiende una pierna al cielo. Caderas niveladas.",tip:"Reduce el tiempo si la cadera cae.",breath:"Respira constante"},
       {name:"Savasana",dur:"3 min",desc:"El core se recupera y fortalece en el descanso.",tip:"Siente la diferencia en tu espalda baja.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"3-3",name:"Flexibilidad Profunda",mins:35,
      endel:{scene:"Relax",energy:25,prompt:"Crepusculo en el bosque, completa entrega, tierra acogedora",tip:"Minima energia. La flexibilidad profunda requiere sistema nervioso en calma."},
      poses:[
-      {name:"Paloma completa",dur:"3 min c/lado",desc:"Desde cuatro puntos, rodilla derecha detras de la muneca. Pierna trasera completamente extendida. Antebrazos o frente en el suelo.",tip:"Es intensa. Respira hacia la incomodidad, no te alejes.",breath:"10 respiraciones lentas antes de cambiar"},
+      {name:"Paloma completa",dur:"3 min c/lado",desc:"Rodilla derecha detras de la muneca. Pierna trasera extendida. Antebrazos o frente en el suelo.",tip:"Es intensa. Respira hacia la incomodidad, no te alejes.",breath:"10 respiraciones lentas antes de cambiar"},
       {name:"Doble paloma",dur:"2 min c/lado",desc:"Espinillas apiladas, una sobre otra. Inclinate hacia adelante suavemente.",tip:"Si el tobillo de arriba cuelga, apoyalo en un bloque.",breath:"Exhala profunda para liberar caderas externas"},
       {name:"Flexion sentada larga",dur:"2 min",desc:"Piernas extendidas, dobla rodillas levemente. Avanza el torso con espalda larga.",tip:"La meta es acercar el pecho a los muslos, no tocar los pies.",breath:"Inhala para alargar, exhala para avanzar 1mm"},
-      {name:"Torsion sentada",dur:"1.5 min c/lado",desc:"Dobla rodilla derecha, pie fuera del muslo izquierdo. Abraza la rodilla con el brazo izquierdo. Gira.",tip:"La torsion empieza desde la base de la columna.",breath:"Exhala para torcer un poco mas"},
-      {name:"Piernas en la pared",dur:"4 min",desc:"Sistema nervioso en modo restauracion completa.",tip:"Bolsita de arroz sobre los ojos para mayor relajacion.",breath:"Respira natural, sin controlar"}
+      {name:"Torsion sentada",dur:"1.5 min c/lado",desc:"Dobla rodilla derecha, pie fuera del muslo izquierdo. Abraza la rodilla. Gira.",tip:"La torsion empieza desde la base de la columna.",breath:"Exhala para torcer un poco mas"},
+      {name:"Piernas en la pared",dur:"4 min",desc:"Sistema nervioso en modo restauracion completa.",tip:"Bolsita sobre los ojos para mayor relajacion.",breath:"Respira natural, sin controlar"}
      ]}
    ]},
   {id:4,name:"Elevar",emoji:"🔥",sub:"Siente tu fuerza",color:"#f59e0b",
@@ -577,18 +546,18 @@ const LEVELS=[
      poses:[
       {name:"Plancha completa",dur:"3 x 45 seg",desc:"Cuerpo en linea perfecta. Si el temblor no cede, descansa 10 seg y vuelve.",tip:"Presiona el suelo como si quisieras abrirlo. Activa lats.",breath:"Respiracion lenta y controlada"},
       {name:"Plancha lateral completa",dur:"45 seg c/lado",desc:"Apoyo en la mano. Cuerpo en linea diagonal. Cadera que no cae.",tip:"Siempre forma sobre duracion.",breath:"Respira continuamente"},
-      {name:"Barco + dobla + sube",dur:"3 x 10 reps",desc:"Piernas a 45°. Dobla rodillas al pecho. Vuelve a extender. 1 rep. Lento y controlado.",tip:"Sin balanceo. El movimiento es deliberado.",breath:"Exhala al doblar, inhala al extender"},
+      {name:"Barco + dobla + sube",dur:"3 x 10 reps",desc:"Piernas a 45°. Dobla rodillas al pecho. Vuelve a extender. 1 rep. Lento.",tip:"Sin balanceo. El movimiento es deliberado.",breath:"Exhala al doblar, inhala al extender"},
       {name:"Cuervo preparatorio",dur:"5 min practica",desc:"Cuclillas, manos en el suelo. Rodillas en la parte externa de los brazos. Inclinate hacia adelante.",tip:"No saltes. El peso se transfiere gradualmente. Puede tomar semanas.",breath:"Exhala al inclinarte"},
-      {name:"Savasana",dur:"3 min",desc:"El fuego necesita apagarse para que el cuerpo reconstruya.",tip:"Nota como se siente diferente tu centro despues de esta sesion.",breath:"Respira natural, sin controlar"}
+      {name:"Savasana",dur:"3 min",desc:"El fuego necesita apagarse para que el cuerpo reconstruya.",tip:"Nota como se siente diferente tu centro.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"4-3",name:"Gran Apertura",mins:40,
-     endel:{scene:"Relax",energy:20,prompt:"Noche estrellada, rendicion total, cuerpo que se derrama",tip:"Minima energia, maxima relajacion. Endel Relax 20%."},
+     endel:{scene:"Relax",energy:20,prompt:"Noche estrellada, rendicion total, cuerpo que se derrama",tip:"Minima energia, maxima relajacion."},
      poses:[
       {name:"Media splits",dur:"3 min c/lado",desc:"Desde media luna baja, extiende la pierna delantera. Caderas retroceden hasta sentir el isquiotibial.",tip:"No es el splits completo. Es alargar progresivamente.",breath:"Exhala profundo para liberar el isquiotibial"},
-      {name:"Paloma con variacion",dur:"3 min c/lado",desc:"En paloma, prueba brazos al frente y frente al suelo. O levanta el torso para sentir diferente.",tip:"Despues, una torsion suave ayuda a cerrar la cadera.",breath:"10 respiraciones largas antes de cambiar"},
-      {name:"Piernas abiertas (Upavistha Konasana)",dur:"3 min",desc:"Abre las piernas sin esfuerzo. Columna larga. Inclinate desde las caderas.",tip:"Primero trabaja la abertura lateral, luego la inclinacion.",breath:"Cada exhala: 1mm mas adelante"},
-      {name:"Puente profundo",dur:"2 min",desc:"Sube mas alto empujando fuerte con los pies. Prueba levantar levemente los talones.",tip:"Si sientes presion lumbar, baja la altura.",breath:"Inhala profundo, exhala para subir mas"},
-      {name:"Savasana larga",dur:"5 min",desc:"La sesion mas intensa del nivel 4.",tip:"Escanea tu cuerpo de pies a cabeza. Suelta conscientemente cada zona.",breath:"Respira natural, sin controlar"}
+      {name:"Paloma con variacion",dur:"3 min c/lado",desc:"En paloma, prueba brazos al frente y frente al suelo. O levanta el torso.",tip:"Despues, una torsion suave ayuda a cerrar la cadera.",breath:"10 respiraciones largas antes de cambiar"},
+      {name:"Piernas abiertas sentado",dur:"3 min",desc:"Abre las piernas sin esfuerzo. Columna larga. Inclinate desde las caderas.",tip:"Primero trabaja la abertura lateral, luego la inclinacion.",breath:"Cada exhala: 1mm mas adelante"},
+      {name:"Puente profundo",dur:"2 min",desc:"Sube mas alto empujando fuerte con los pies.",tip:"Si sientes presion lumbar, baja la altura.",breath:"Inhala profundo, exhala para subir mas"},
+      {name:"Savasana larga",dur:"5 min",desc:"La sesion mas intensa del nivel 4.",tip:"Escanea tu cuerpo de pies a cabeza.",breath:"Respira natural, sin controlar"}
      ]}
    ]},
   {id:5,name:"Integrar",emoji:"✨",sub:"Eres un practicante",color:"#ec4899",
@@ -599,134 +568,114 @@ const LEVELS=[
      endel:{scene:"Move",energy:60,prompt:"Marea que sube y baja, ritmo de ola, presencia completa",tip:"Ajusta la energia segun la intensidad de cada secuencia."},
      poses:[
       {name:"Saludo al Sol completo (5 rondas)",dur:"15 min",desc:"Montana > Brazos > Flexion > Medio lev. > Plancha > Caturanga > Perro boca arriba > Perro boca abajo > Camina > Medio lev. > Flexion > Montana.",tip:"Rondas 1-2 lentas para calentar. Las 3 restantes con mas fluidez.",breath:"Un movimiento = una respiracion exacta"},
-      {name:"Flujo de pie G1 > G2 > Triangulo > Media Luna",dur:"4 min c/lado",desc:"Sin bajar la pierna entre poses. 4-5 respiraciones en cada una.",tip:"Ahora conoces estas poses. Enfocate en la calidad de las transiciones.",breath:"Respiracion lenta y consciente"},
+      {name:"Flujo de pie G1 > G2 > Triangulo > Media Luna",dur:"4 min c/lado",desc:"Sin bajar la pierna entre poses. 4-5 respiraciones en cada una.",tip:"Enfocate en la calidad de las transiciones.",breath:"Respiracion lenta y consciente"},
       {name:"Secuencia sentada (5 poses)",dur:"8 min",desc:"Mariposa 2min > Flexion 2min > Piernas abiertas 2min > Torsion derecha > Torsion izquierda.",tip:"Observa cuanto cambio tu flexibilidad desde el Nivel 1.",breath:"Exhala en cada torsion"},
       {name:"Savasana meditativa",dur:"5 min",desc:"Recorre mentalmente tu viaje en JAYYOGA. Siente lo que ha cambiado.",tip:"Si quieres, practica 5 minutos de meditacion sentado despues.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"5-2",name:"Fuego Interior",mins:40,
      endel:{scene:"Move",energy:80,prompt:"Amanecer de verano, maxima vitalidad, plenitud fisica",tip:"La energia mas alta del programa. Preparate antes de empezar."},
      poses:[
-      {name:"Circuito Core (4 x 3 rondas)",dur:"15 min",desc:"Plancha 45seg > Plancha lateral izq 30seg > Plancha lateral der 30seg > Barco 30seg. Descanso 30seg entre rondas.",tip:"Mantén el registro de cuanto aguantas. La mejora sera visible.",breath:"Nunca retengas la respiracion en poses de fuerza"},
+      {name:"Circuito Core (4 x 3 rondas)",dur:"15 min",desc:"Plancha 45seg > Plancha lateral izq 30seg > Plancha lateral der 30seg > Barco 30seg. Descanso 30seg entre rondas.",tip:"Mantén el registro. La mejora sera visible.",breath:"Nunca retengas la respiracion en poses de fuerza"},
       {name:"Secuencia de equilibrio",dur:"8 min c/lado",desc:"Arbol 1min > Guerrero III 1min > Media Luna 1min > Guerrero III 30seg.",tip:"El equilibrio en yoga es 80% mental, 20% fuerza.",breath:"Mirada fija, respiracion suave"},
-      {name:"Apertura profunda",dur:"10 min",desc:"Paloma derecha 3min > Paloma izquierda 3min > Media splits 2min > Postura del nino 2min.",tip:"Despues, tus caderas se sentiran mas abiertas que nunca.",breath:"4 tiempos adentro, 8 tiempos afuera"},
+      {name:"Apertura profunda",dur:"10 min",desc:"Paloma derecha 3min > Paloma izquierda 3min > Media splits 2min > Postura del nino 2min.",tip:"Tus caderas se sentiran mas abiertas que nunca.",breath:"4 tiempos adentro, 8 tiempos afuera"},
       {name:"Savasana restaurativa",dur:"5 min",desc:"Lo has hecho extraordinariamente bien.",tip:"Esta savasana es un regalo que te das a ti mismo.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"5-3",name:"Renacimiento",mins:45,
-     endel:{scene:"Relax",energy:40,prompt:"Ultimo respiro del dia, completud, paz que ya no busca nada",tip:"La sesion final. Endel Relax para una practica meditativa y profunda."},
+     endel:{scene:"Relax",energy:40,prompt:"Ultimo respiro del dia, completud, paz que ya no busca nada",tip:"La sesion final. Endel Relax para una practica meditativa."},
      poses:[
-      {name:"Flujo personal libre",dur:"15 min",desc:"Sin instrucciones. Muevete como tu cuerpo pida. Repite favoritas o explora nuevas conexiones.",tip:"Confia en tu cuerpo. Despues de 15 sesiones, ya sabe.",breath:"La respiracion guia el movimiento"},
-      {name:"Pose cumbre (tu eliges)",dur:"5 min",desc:"Una pose que al principio parecia imposible: Cuervo, Splits, Media luna, Rueda.",tip:"No importa si no llegas. Importa que lo intentas con curiosidad.",breath:"Respira largo y profundo"},
+      {name:"Flujo personal libre",dur:"15 min",desc:"Sin instrucciones. Muevete como tu cuerpo pida.",tip:"Confia en tu cuerpo. Despues de 15 sesiones, ya sabe.",breath:"La respiracion guia el movimiento"},
+      {name:"Pose cumbre (tu eliges)",dur:"5 min",desc:"Una pose que al principio parecia imposible: Cuervo, Splits, Media luna, Rueda.",tip:"No importa si no llegas. Importa que lo intentas.",breath:"Respira largo y profundo"},
       {name:"Secuencia restaurativa completa",dur:"15 min",desc:"Paloma ambos lados 4min > Piernas en la pared 4min > Torsion supina 3min > Nino 2min > Savasana 2min.",tip:"Esta secuencia cierra el ciclo.",breath:"Respiracion lenta y profunda"},
-      {name:"Savasana final del programa",dur:"7 min",desc:"Mereces cada segundo. Nada que hacer. Nada que alcanzar. Solo ser.",tip:"Escribe despues: 3 cosas que cambiaron en tu cuerpo durante el programa.",breath:"Respira natural, sin controlar"}
+      {name:"Savasana final del programa",dur:"7 min",desc:"Mereces cada segundo. Nada que hacer. Solo ser.",tip:"Escribe despues: 3 cosas que cambiaron en tu cuerpo durante el programa.",breath:"Respira natural, sin controlar"}
      ]}
    ]}
 ];
 
-// ─── EXPRESS SESSIONS (DASHBOARD) ───────────────
+// ─── EXPRESS DATA ────────────────────────────────
 const EXPRESS=[
-  {
-    id:"e1",name:"Despertar Lento",cat:"Manana",level:1,mins:20,color:"#10b981",
-    endel:{scene:"Relax",energy:20,prompt:"Primera luz del dia, silencio del hogar, cuerpo que despierta sin prisa"},
-    poses:[
-      {name:"Respiracion consciente",dur:"3 min",desc:"Acostado, manos en el abdomen. Siente como sube y baja con cada respiracion. Solo observa.",tip:"No cambies nada. Solo observa el patron natural de tu respiracion.",breath:"Natural, sin controlar"},
-      {name:"Estiramiento de gato-vaca",dur:"3 min",desc:"Suave, lento. 5 segundos en cada posicion. No hay apuro.",tip:"La columna vertebral se lubrica con el movimiento. Dale tiempo.",breath:"Inhala vaca / Exhala gato"},
-      {name:"Torsion supina",dur:"2 min c/lado",desc:"Acostado, rodilla al pecho y cruzala al lado opuesto. 5 respiraciones lentas.",tip:"El hombro opuesto intenta tocar el suelo. La gravedad hace el trabajo.",breath:"Exhala profundo en cada respiracion"},
-      {name:"Savasana",dur:"5 min",desc:"Sin apuro. Puedes quedarte mas tiempo si quieres.",tip:"Este es tu tiempo.",breath:"Respira natural"}
-    ]
-  },
-  {
-    id:"e2",name:"Reset de Mediodia",cat:"Energia",level:2,mins:15,color:"#06b6d4",
-    endel:{scene:"Focus",energy:55,prompt:"Brisa marina en la tarde, claridad mental, energia renovada"},
-    poses:[
-      {name:"Saludo al Sol x 3 rapido",dur:"5 min",desc:"3 rondas a ritmo medio. Activa el cuerpo dormido por estar sentado.",tip:"Despues de estar sentado, el cuerpo necesita moverse en todas direcciones.",breath:"Un movimiento = una respiracion"},
-      {name:"Guerrero I x 30 seg c/lado",dur:"2 min",desc:"Sin demora. Activa piernas y core rapidamente.",tip:"Planta los pies con fuerza. Raiz antes de crecer.",breath:"Inhala al subir, exhala al mantener"},
-      {name:"Flexion adelante",dur:"2 min",desc:"Deja caer el torso. Dobla rodillas. Cabeza pesada. Balancea.",tip:"Libera tension acumulada en el cuello y hombros.",breath:"Exhala completamente cada vez"},
-      {name:"Savasana corta",dur:"2 min",desc:"Cierra ojos. 5 respiraciones largas. Vuelves con energia renovada.",tip:"Dos minutos de savasana equivalen a 20 minutos de descanso pasivo.",breath:"Respira largo y profundo"}
-    ]
-  },
-  {
-    id:"e3",name:"Core Express",cat:"Core",level:3,mins:25,color:"#8b5cf6",
-    endel:{scene:"Move",energy:70,prompt:"Fuego controlado, centro de gravedad, fuerza que no grita"},
-    poses:[
-      {name:"Plancha completa",dur:"3 x 30 seg",desc:"Forma perfecta. Activa abdomen, gluteos y piernas simultaneamente.",tip:"Presiona el suelo con las palmas como si quisieras abrirlo.",breath:"Respira continuamente"},
-      {name:"Pajaro-Perro",dur:"2 min c/lado",desc:"Lento y controlado. Cadera nivelada. Sin rotar el torso.",tip:"Imagina el vaso de agua en la espalda.",breath:"Exhala al extender"},
-      {name:"Barco (Navasana)",dur:"3 x 25 seg",desc:"Piernas extendidas o dobladas. Espalda larga. Sin romper la postura.",tip:"Si tiemblas: bien. Es la adaptacion.",breath:"Exhala profundo al mantener"},
-      {name:"Puente dinamico",dur:"2 min",desc:"Sube y baja el puente con control. 10 reps lentas, luego mantén 30 seg.",tip:"Activa los gluteos en cada subida.",breath:"Inhala subir, exhala bajar"},
-      {name:"Savasana",dur:"3 min",desc:"Core trabajado. Sistema nervioso en calma.",tip:"Siente la diferencia en tu centro ahora.",breath:"Respira natural"}
-    ]
-  },
-  {
-    id:"e4",name:"Liberacion de Caderas",cat:"Estiramiento",level:2,mins:30,color:"#06b6d4",
-    endel:{scene:"Relax",energy:30,prompt:"Tierra calida, caderas que se derraman, profunda liberacion"},
-    poses:[
-      {name:"Mariposa",dur:"4 min",desc:"Plantas de pies juntas. Columna larga. Inclinate muy suavemente hacia adelante.",tip:"No empujes las rodillas. Tiempo y respiracion hacen el trabajo.",breath:"Inhala crece, exhala sueltate"},
-      {name:"Paloma preparatoria",dur:"3 min c/lado",desc:"Rodilla detras de la muneca. Pierna trasera larga. Antebrazos en el suelo.",tip:"Respira en el limite. No te alejes de la incomodidad.",breath:"10 respiraciones lentas antes de cambiar"},
-      {name:"Figura 4 supina",dur:"2 min c/lado",desc:"Tobillo sobre muslo opuesto. Acerca piernas al pecho.",tip:"Si la cadera se resiste, deja el pie contrario en el suelo.",breath:"Exhala para profundizar"},
-      {name:"Piernas en la pared",dur:"4 min",desc:"Piernas completamente apoyadas. Ojos cerrados. No hay nada que hacer.",tip:"Permite que el cuerpo libere sin esfuerzo.",breath:"Respira natural, sin controlar"}
-    ]
-  },
-  {
-    id:"e5",name:"Mindfulness en Movimiento",cat:"Mindfulness",level:4,mins:35,color:"#f59e0b",
-    endel:{scene:"Focus",energy:40,prompt:"Presencia total, movimiento como meditacion, cada pose un refugio"},
-    poses:[
-      {name:"Saludo al Sol meditativo (3 rondas)",dur:"9 min",desc:"Extremadamente lento. 5 respiraciones en cada posicion. La mente en el cuerpo, no en el futuro.",tip:"Si la mente se va, regresala al cuerpo con la siguiente respiracion.",breath:"5 respiraciones por posicion"},
-      {name:"Guerrero II estatico",dur:"3 min c/lado",desc:"Sin mover nada. 20 respiraciones en cada lado. Observa la mente quejarse y luego calmarse.",tip:"Este es yoga real: no flexibilidad, sino presencia ante la incomodidad.",breath:"Respira largo y uniforme"},
-      {name:"Arbol",dur:"2 min c/lado",desc:"Equilibrio como practica de presencia. Si caes, vuelves sin juicio.",tip:"El punto de equilibrio esta en la mirada fija y la respiracion suave.",breath:"Respira suave y constante"},
-      {name:"Savasana larga con escaneo corporal",dur:"7 min",desc:"Pasa mentalmente por cada parte del cuerpo de pies a cabeza. Suelta conscientemente cada zona.",tip:"Esta es la parte mas avanzada de la practica.",breath:"Respira natural, sin controlar"}
-    ]
-  },
-  {
-    id:"e6",name:"Potencia Guerrero",cat:"Flujo",level:4,mins:30,color:"#f59e0b",
-    endel:{scene:"Move",energy:75,prompt:"Determinacion silenciosa, guerrero que no pelea, fortaleza tranquila"},
-    poses:[
-      {name:"Saludo al Sol x 5 (caliente)",dur:"10 min",desc:"Rondas 1-2 lentas, 3-5 a ritmo constante. Cuerpo completamente activado al final.",tip:"Despues de 5 rondas tu cuerpo deberia sentirse caliente y vivo.",breath:"Fluye con la respiracion"},
-      {name:"Flujo Guerrero: G1 > G2 > GInverso > GIII",dur:"5 min c/lado",desc:"Una transicion por respiracion. Fluye como agua entre las poses.",tip:"Si necesitas descanso, postura del nino. Siempre.",breath:"Un movimiento = una respiracion"},
-      {name:"Media Luna",dur:"1.5 min c/lado",desc:"Desde triangulo, dobla la rodilla y levanta la pierna trasera. Mano libre al cielo.",tip:"Mira hacia arriba cuando el equilibrio se estabilice.",breath:"Respira suave y constante"},
-      {name:"Savasana",dur:"4 min",desc:"Guerrero descansando. Igual de poderoso.",tip:"La fuerza se construye en el descanso.",breath:"Respira natural"}
-    ]
-  },
-  {
-    id:"e7",name:"Equilibrio y Tierra",cat:"Equilibrio",level:3,mins:28,color:"#8b5cf6",
-    endel:{scene:"Focus",energy:50,prompt:"Roca en el rio, todo fluye alrededor, tu permaneces"},
-    poses:[
-      {name:"Montana con ojos cerrados",dur:"2 min",desc:"De pie, ojos cerrados, 2 minutos. Observa como el cuerpo se balancea micro-micro constantemente.",tip:"Nunca estamos completamente quietos. El equilibrio es continuo.",breath:"Respira natural"},
-      {name:"Arbol prolongado",dur:"3 min c/lado",desc:"1 minuto con ojos abiertos, 1 con semicerrados, 1 con cerrados.",tip:"Avanza gradualmente. No saltes al nivel mas dificil de inmediato.",breath:"Respira suave y regular"},
-      {name:"Guerrero III estatico",dur:"1.5 min c/lado",desc:"Mantén sin mover. La mente querra que te vayas. Tu decides quedarte.",tip:"El temblor es normal. Es el sistema nervioso calibrandose.",breath:"Exhala para estabilizar"},
-      {name:"Arbol con torsion",dur:"1 min c/lado",desc:"En arbol, lleva las manos juntas al pecho y gira levemente hacia el lado de la pierna levantada.",tip:"Variacion avanzada. Muy bien si eres capaz de explorarla.",breath:"Exhala al girar"},
-      {name:"Savasana",dur:"4 min",desc:"El equilibrio se aprende en el descanso, no solo en la practica.",tip:"Siente como los pies se hunden en el suelo.",breath:"Respira natural"}
-    ]
-  },
-  {
-    id:"e8",name:"Noche Restaurativa",cat:"Noche",level:1,mins:25,color:"#10b981",
-    endel:{scene:"Relax",energy:15,prompt:"Luna llena sobre el mar, cuerpo que se funde con la esterilla, noche que abraza"},
-    poses:[
-      {name:"Postura del Nino largo",dur:"5 min",desc:"Brazos extendidos. Frente en el suelo o un cojin. Respira profundo hacia la espalda baja.",tip:"Deja que el dia se vaya con cada exhala.",breath:"Inhala profundo, exhala suelta el dia"},
-      {name:"Bebe feliz",dur:"3 min",desc:"Sujeta los pies. Rodillas hacia el suelo. Balancea suavemente.",tip:"Tu sistema nervioso recibe el mensaje: es seguro relajarse.",breath:"Respira libre y natural"},
-      {name:"Torsion supina larga",dur:"3 min c/lado",desc:"Sin apuro. 6 respiraciones largas en cada lado.",tip:"Cada exhala libera tension fisica y mental del dia.",breath:"Exhala profundo, lento"},
-      {name:"Piernas en la pared",dur:"5 min",desc:"El cierre perfecto del dia. Flujo venoso invertido. Sistema nervioso parasimpatico.",tip:"Si puedes, queda aqui 10 minutos.",breath:"Respira natural, sin controlar"}
-    ]
-  },
-  {
-    id:"e9",name:"Flexibilidad Radical",cat:"Estiramiento",level:5,mins:40,color:"#ec4899",
-    endel:{scene:"Relax",energy:20,prompt:"Rendicion total, tejidos que se ablandan, cuerpo sin resistencia"},
-    poses:[
-      {name:"Paloma completa profunda",dur:"5 min c/lado",desc:"Busca la posicion mas profunda que hayas estado. Frente al suelo, brazos extendidos. Quietud total.",tip:"Respira en el dolor sordo. Ese es el tejido conectivo liberandose.",breath:"10 respiraciones antes de considerar cambiar"},
-      {name:"Media splits",dur:"3 min c/lado",desc:"Pierna delantera extendida al maximo. Caderas al suelo si es posible.",tip:"El objetivo no es el splits. Es la conversacion con tu limite.",breath:"Exhala profundo para liberar el isquiotibial"},
-      {name:"Piernas abiertas maximas",dur:"4 min",desc:"Abre al maximo sin esfuerzo muscular. Inclinate muy lentamente hacia adelante.",tip:"No compitas contigo mismo. Compara solo con la semana pasada.",breath:"Cada exhala: 1mm mas"},
-      {name:"Puente de rueda preparatorio",dur:"3 min",desc:"Puente con manos cerca de la cabeza, codos al cielo. Si llega, empuja para abrir el pecho.",tip:"Si la rueda no llega aun: el puente profundo es igual de valioso.",breath:"Inhala para preparar, exhala para abrir"},
-      {name:"Savasana larga",dur:"7 min",desc:"El tejido conectivo necesita tiempo para re-organizarse. Dale ese tiempo.",tip:"Esta savasana es parte del estiramiento. No la acortes.",breath:"Respira natural, sin controlar"}
-    ]
-  },
-  {
-    id:"e10",name:"Fuego y Calma",cat:"Reset",level:5,mins:45,color:"#ec4899",
-    endel:{scene:"Move",energy:65,prompt:"Dos mundos en uno, esfuerzo y rendicion, yin y yang en movimiento"},
-    poses:[
-      {name:"Circuito core intenso",dur:"12 min",desc:"Plancha 1min > Plancha lateral 45seg c/lado > Barco 45seg > Supino elevaciones piernas 20reps > Descanso 1min. Repite 2 veces.",tip:"Primera ronda: aprende el circuito. Segunda ronda: dale todo.",breath:"Nunca retengas la respiracion"},
-      {name:"Flujo de guerreros completo",dur:"8 min",desc:"Saludo al Sol x 2 > Flujo Guerrero I/II/Inverso/III x 2 c/lado. Sin pausa entre elementos.",tip:"La transicion entre poses es parte de la practica.",breath:"Fluye con cada movimiento"},
-      {name:"Secuencia restaurativa completa",dur:"15 min",desc:"Paloma 3min c/lado > Media splits 2min c/lado > Piernas abiertas 3min > Piernas en la pared 4min.",tip:"El contraste entre el fuego y la calma hace que ambas partes sean mas efectivas.",breath:"Respira profundo en cada pose restaurativa"},
-      {name:"Savasana final",dur:"7 min",desc:"Integracion total. Fuego y calma juntos en el descanso.",tip:"Siente la combinacion de fuerza y suavidad en tu cuerpo ahora.",breath:"Respira natural, sin controlar"}
-    ]
-  }
+  {id:"e1",name:"Despertar Lento",cat:"Manana",level:1,mins:20,color:"#10b981",
+   endel:{scene:"Relax",energy:20,prompt:"Primera luz del dia, silencio del hogar, cuerpo que despierta sin prisa",tip:"Volumen muy bajo, sin auriculares si puedes."},
+   poses:[
+    {name:"Respiracion consciente",dur:"3 min",desc:"Acostado, manos en el abdomen. Observa como sube y baja con cada respiracion. Sin cambiar nada.",tip:"No cambies nada. Solo observa.",breath:"Natural, sin controlar"},
+    {name:"Gato-Vaca suave",dur:"3 min",desc:"5 segundos en cada posicion. Lento. No hay apuro.",tip:"La columna se lubrica con el movimiento. Dale tiempo.",breath:"Inhala vaca / Exhala gato"},
+    {name:"Torsion supina",dur:"2 min c/lado",desc:"Acostado, rodilla al pecho y cruzala al lado opuesto. 5 respiraciones lentas.",tip:"El hombro opuesto intenta tocar el suelo.",breath:"Exhala profundo en cada respiracion"},
+    {name:"Savasana",dur:"5 min",desc:"Sin apuro. Puedes quedarte mas tiempo si quieres.",tip:"Este es tu tiempo.",breath:"Respira natural"}
+   ]},
+  {id:"e2",name:"Reset de Mediodia",cat:"Energia",level:2,mins:15,color:"#06b6d4",
+   endel:{scene:"Focus",energy:55,prompt:"Brisa marina en la tarde, claridad mental, energia renovada",tip:"Auriculares. El ritmo de Focus te saca del letargo."},
+   poses:[
+    {name:"Saludo al Sol x 3",dur:"5 min",desc:"3 rondas a ritmo medio. Activa el cuerpo dormido por estar sentado.",tip:"Despues de estar sentado, el cuerpo necesita moverse en todas direcciones.",breath:"Un movimiento = una respiracion"},
+    {name:"Guerrero I x 30 seg c/lado",dur:"2 min",desc:"Sin demora. Activa piernas y core rapidamente.",tip:"Planta los pies con fuerza. Raiz antes de crecer.",breath:"Inhala al subir, exhala al mantener"},
+    {name:"Flexion adelante",dur:"2 min",desc:"Deja caer el torso. Dobla rodillas. Cabeza pesada. Balancea.",tip:"Libera tension acumulada en cuello y hombros.",breath:"Exhala completamente cada vez"},
+    {name:"Savasana corta",dur:"2 min",desc:"Cierra ojos. 5 respiraciones largas. Vuelves con energia renovada.",tip:"2 minutos de savasana equivalen a 20 minutos de descanso pasivo.",breath:"Respira largo y profundo"}
+   ]},
+  {id:"e3",name:"Core Express",cat:"Core",level:3,mins:25,color:"#8b5cf6",
+   endel:{scene:"Move",energy:70,prompt:"Fuego controlado, centro de gravedad, fuerza que no grita",tip:"Move a 70%. El ritmo te mantiene en el esfuerzo justo."},
+   poses:[
+    {name:"Plancha completa",dur:"3 x 30 seg",desc:"Forma perfecta. Activa abdomen, gluteos y piernas simultaneamente.",tip:"Presiona el suelo con las palmas como si quisieras abrirlo.",breath:"Respira continuamente"},
+    {name:"Pajaro-Perro",dur:"2 min c/lado",desc:"Lento y controlado. Cadera nivelada. Sin rotar el torso.",tip:"Imagina el vaso de agua en la espalda.",breath:"Exhala al extender"},
+    {name:"Barco (Navasana)",dur:"3 x 25 seg",desc:"Piernas extendidas o dobladas. Espalda larga. Sin romper la postura.",tip:"Si tiemblas: bien. Es la adaptacion.",breath:"Exhala profundo al mantener"},
+    {name:"Puente dinamico",dur:"2 min",desc:"Sube y baja con control. 10 reps lentas, luego mantén 30 seg.",tip:"Activa los gluteos en cada subida.",breath:"Inhala subir, exhala bajar"},
+    {name:"Savasana",dur:"3 min",desc:"Core trabajado. Sistema nervioso en calma.",tip:"Siente la diferencia en tu centro ahora.",breath:"Respira natural"}
+   ]},
+  {id:"e4",name:"Liberacion de Caderas",cat:"Estiramiento",level:2,mins:30,color:"#06b6d4",
+   endel:{scene:"Relax",energy:30,prompt:"Tierra calida, caderas que se derraman, profunda liberacion",tip:"Endel Relax al minimo. Necesitas calma total en el sistema nervioso."},
+   poses:[
+    {name:"Mariposa",dur:"4 min",desc:"Plantas de pies juntas. Columna larga. Inclinate muy suavemente.",tip:"No empujes las rodillas. Tiempo y respiracion hacen el trabajo.",breath:"Inhala crece, exhala sueltate"},
+    {name:"Paloma preparatoria",dur:"3 min c/lado",desc:"Rodilla detras de la muneca. Pierna trasera larga. Antebrazos en el suelo.",tip:"Respira en el limite. No te alejes de la incomodidad.",breath:"10 respiraciones lentas antes de cambiar"},
+    {name:"Figura 4 supina",dur:"2 min c/lado",desc:"Tobillo sobre muslo opuesto. Acerca piernas al pecho.",tip:"Si la cadera se resiste, deja el pie contrario en el suelo.",breath:"Exhala para profundizar"},
+    {name:"Piernas en la pared",dur:"4 min",desc:"Piernas completamente apoyadas. Ojos cerrados.",tip:"Permite que el cuerpo libere sin esfuerzo.",breath:"Respira natural, sin controlar"}
+   ]},
+  {id:"e5",name:"Mindfulness en Movimiento",cat:"Mindfulness",level:4,mins:35,color:"#f59e0b",
+   endel:{scene:"Focus",energy:40,prompt:"Presencia total, movimiento como meditacion, cada pose un refugio",tip:"Focus bajo (40%) — el sonido como ancla, no como estimulacion."},
+   poses:[
+    {name:"Saludo al Sol meditativo (3 rondas)",dur:"9 min",desc:"Extremadamente lento. 5 respiraciones en cada posicion. La mente en el cuerpo.",tip:"Si la mente se va, regresala con la siguiente respiracion.",breath:"5 respiraciones por posicion"},
+    {name:"Guerrero II estatico",dur:"3 min c/lado",desc:"Sin mover nada. 20 respiraciones en cada lado.",tip:"Esto es yoga real: no flexibilidad, sino presencia ante la incomodidad.",breath:"Respira largo y uniforme"},
+    {name:"Arbol",dur:"2 min c/lado",desc:"Equilibrio como practica de presencia. Si caes, vuelves sin juicio.",tip:"El punto de equilibrio esta en la mirada fija y la respiracion suave.",breath:"Respira suave y constante"},
+    {name:"Savasana con escaneo corporal",dur:"7 min",desc:"Pasa mentalmente por cada parte del cuerpo de pies a cabeza. Suelta conscientemente.",tip:"Esta es la parte mas avanzada de la practica.",breath:"Respira natural, sin controlar"}
+   ]},
+  {id:"e6",name:"Potencia Guerrero",cat:"Flujo",level:4,mins:30,color:"#f59e0b",
+   endel:{scene:"Move",energy:75,prompt:"Determinacion silenciosa, guerrero que no pelea, fortaleza tranquila",tip:"Move al 75%. Deja que el ritmo marque el compas de las transiciones."},
+   poses:[
+    {name:"Saludo al Sol x 5 (caliente)",dur:"10 min",desc:"Rondas 1-2 lentas, 3-5 a ritmo constante. Cuerpo completamente activado.",tip:"Despues de 5 rondas tu cuerpo deberia sentirse caliente y vivo.",breath:"Fluye con la respiracion"},
+    {name:"Flujo Guerrero: G1 > G2 > GInverso > GIII",dur:"5 min c/lado",desc:"Una transicion por respiracion. Fluye como agua entre las poses.",tip:"Si necesitas descanso, postura del nino. Siempre.",breath:"Un movimiento = una respiracion"},
+    {name:"Media Luna",dur:"1.5 min c/lado",desc:"Desde triangulo, dobla la rodilla y levanta la pierna trasera. Mano libre al cielo.",tip:"Mira hacia arriba cuando el equilibrio se estabilice.",breath:"Respira suave y constante"},
+    {name:"Savasana",dur:"4 min",desc:"Guerrero descansando. Igual de poderoso.",tip:"La fuerza se construye en el descanso.",breath:"Respira natural"}
+   ]},
+  {id:"e7",name:"Equilibrio y Tierra",cat:"Equilibrio",level:3,mins:28,color:"#8b5cf6",
+   endel:{scene:"Focus",energy:50,prompt:"Roca en el rio, todo fluye alrededor, tu permaneces",tip:"Focus al 50%. Ni muy activo, ni muy relajante. El equilibrio exacto."},
+   poses:[
+    {name:"Montana con ojos cerrados",dur:"2 min",desc:"De pie, ojos cerrados, 2 minutos. Observa como el cuerpo se balancea constantemente.",tip:"Nunca estamos completamente quietos. El equilibrio es continuo.",breath:"Respira natural"},
+    {name:"Arbol prolongado",dur:"3 min c/lado",desc:"1 minuto con ojos abiertos, 1 con semicerrados, 1 con cerrados.",tip:"Avanza gradualmente. No saltes al nivel mas dificil.",breath:"Respira suave y regular"},
+    {name:"Guerrero III estatico",dur:"1.5 min c/lado",desc:"Mantén sin mover. La mente querra que te vayas. Tu decides quedarte.",tip:"El temblor es normal. Es el sistema nervioso calibrandose.",breath:"Exhala para estabilizar"},
+    {name:"Arbol con torsion",dur:"1 min c/lado",desc:"En arbol, lleva las manos al pecho y gira levemente hacia el lado de la pierna levantada.",tip:"Variacion avanzada. Explora sin presion.",breath:"Exhala al girar"},
+    {name:"Savasana",dur:"4 min",desc:"El equilibrio se aprende en el descanso.",tip:"Siente como los pies se hunden en el suelo.",breath:"Respira natural"}
+   ]},
+  {id:"e8",name:"Noche Restaurativa",cat:"Noche",level:1,mins:25,color:"#10b981",
+   endel:{scene:"Relax",energy:15,prompt:"Luna llena sobre el mar, cuerpo que se funde con la esterilla, noche que abraza",tip:"Endel al minimo posible. Volumen muy bajo. Esta sesion es silencio."},
+   poses:[
+    {name:"Postura del Nino largo",dur:"5 min",desc:"Brazos extendidos. Frente en el suelo o un cojin. Respira profundo hacia la espalda baja.",tip:"Deja que el dia se vaya con cada exhala.",breath:"Inhala profundo, exhala suelta el dia"},
+    {name:"Bebe feliz",dur:"3 min",desc:"Sujeta los pies. Rodillas hacia el suelo. Balancea suavemente.",tip:"Tu sistema nervioso recibe el mensaje: es seguro relajarse.",breath:"Respira libre y natural"},
+    {name:"Torsion supina larga",dur:"3 min c/lado",desc:"Sin apuro. 6 respiraciones largas en cada lado.",tip:"Cada exhala libera tension fisica y mental del dia.",breath:"Exhala profundo, lento"},
+    {name:"Piernas en la pared",dur:"5 min",desc:"El cierre perfecto del dia. Sistema nervioso parasimpatico.",tip:"Si puedes, queda aqui 10 minutos.",breath:"Respira natural, sin controlar"}
+   ]},
+  {id:"e9",name:"Flexibilidad Radical",cat:"Estiramiento",level:5,mins:40,color:"#ec4899",
+   endel:{scene:"Relax",energy:20,prompt:"Rendicion total, tejidos que se ablandan, cuerpo sin resistencia",tip:"Endel Relax al 20%. La flexibilidad profunda necesita un sistema nervioso en calma absoluta."},
+   poses:[
+    {name:"Paloma completa profunda",dur:"5 min c/lado",desc:"Busca la posicion mas profunda que hayas estado. Frente al suelo, brazos extendidos. Quietud total.",tip:"Respira en el dolor sordo. Ese es el tejido conectivo liberandose.",breath:"10 respiraciones antes de considerar cambiar"},
+    {name:"Media splits",dur:"3 min c/lado",desc:"Pierna delantera extendida al maximo. Caderas al suelo si es posible.",tip:"El objetivo no es el splits. Es la conversacion con tu limite.",breath:"Exhala profundo para liberar el isquiotibial"},
+    {name:"Piernas abiertas maximas",dur:"4 min",desc:"Abre al maximo sin esfuerzo muscular. Inclinate muy lentamente hacia adelante.",tip:"No compitas contigo mismo. Compara solo con la semana pasada.",breath:"Cada exhala: 1mm mas"},
+    {name:"Puente de rueda preparatorio",dur:"3 min",desc:"Puente con manos cerca de la cabeza, codos al cielo. Si llega, empuja para abrir el pecho.",tip:"Si la rueda no llega: el puente profundo es igual de valioso.",breath:"Inhala para preparar, exhala para abrir"},
+    {name:"Savasana larga",dur:"7 min",desc:"El tejido conectivo necesita tiempo para re-organizarse.",tip:"Esta savasana es parte del estiramiento. No la acortes.",breath:"Respira natural, sin controlar"}
+   ]},
+  {id:"e10",name:"Fuego y Calma",cat:"Reset",level:5,mins:45,color:"#ec4899",
+   endel:{scene:"Move",energy:65,prompt:"Dos mundos en uno, esfuerzo y rendicion, yin y yang en movimiento",tip:"Move al 65%. Ni muy intenso ni muy relajante. El balance perfecto para esta sesion."},
+   poses:[
+    {name:"Circuito core intenso",dur:"12 min",desc:"Plancha 1min > Plancha lateral 45seg c/lado > Barco 45seg > Elevaciones supinas 20reps > Descanso 1min. Repite 2 veces.",tip:"Primera ronda: aprende el circuito. Segunda ronda: dale todo.",breath:"Nunca retengas la respiracion"},
+    {name:"Flujo de guerreros completo",dur:"8 min",desc:"Saludo al Sol x 2 > Flujo G1/G2/GInverso/GIII x 2 c/lado. Sin pausa entre elementos.",tip:"La transicion entre poses es parte de la practica.",breath:"Fluye con cada movimiento"},
+    {name:"Secuencia restaurativa completa",dur:"15 min",desc:"Paloma 3min c/lado > Media splits 2min c/lado > Piernas abiertas 3min > Piernas en la pared 4min.",tip:"El contraste entre el fuego y la calma hace que ambas partes sean mas efectivas.",breath:"Respira profundo en cada pose restaurativa"},
+    {name:"Savasana final",dur:"7 min",desc:"Integracion total. Fuego y calma juntos en el descanso.",tip:"Siente la combinacion de fuerza y suavidad en tu cuerpo.",breath:"Respira natural, sin controlar"}
+   ]}
 ];
 
 const CATS=["Todas","Manana","Energia","Core","Estiramiento","Mindfulness","Flujo","Equilibrio","Noche","Reset"];
@@ -736,31 +685,33 @@ let completed=new Set(JSON.parse(localStorage.getItem('jy_done')||'[]'));
 let activeLevelId=null;
 let activeBackScreen='home';
 let activeFilter='Todas';
+let activeTab='todas';
 
 function save(){localStorage.setItem('jy_done',JSON.stringify([...completed]))}
 function levelDone(l){return l.sessions.filter(s=>completed.has(s.id)).length}
 
+// ─── TABS ────────────────────────────────────────
+function setTab(tab){
+  activeTab=tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.toggle('active',p.id==='tab-'+tab));
+  if(tab==='programa')renderPrograma();
+}
+
 // ─── SCREENS ────────────────────────────────────
 function showHome(){
   switchScreen('screen-home');
-  renderHome();
-}
-function showExplore(){
-  switchScreen('screen-explore');
-  renderExplore();
+  if(activeTab==='programa')renderPrograma();
 }
 function showLevel(lid){
-  activeLevelId=lid;
-  switchScreen('screen-level');
-  renderLevel(lid);
+  activeLevelId=lid;switchScreen('screen-level');renderLevel(lid);
 }
-function showSession(sid,backScreen){
-  activeBackScreen=backScreen||'home';
+function showSession(sid,back){
+  activeBackScreen=back||'home';
   switchScreen('screen-session');
   document.getElementById('session-back').onclick=()=>{
     breathActive=false;clearTimeout(breathTimer);
-    if(activeBackScreen==='explore')showExplore();
-    else if(activeBackScreen==='level')showLevel(activeLevelId);
+    if(activeBackScreen==='level')showLevel(activeLevelId);
     else showHome();
   };
   renderSession(sid);
@@ -770,23 +721,63 @@ function switchScreen(id){
   document.getElementById(id).classList.add('active');
 }
 
-// ─── HOME ───────────────────────────────────────
-function renderHome(){
-  const done=completed.size,total=15;
-  const pct=done/total,circ=207.3;
+// ─── RENDER TODAS ───────────────────────────────
+function renderTodas(){
+  // Filter chips
+  const fr=document.getElementById('filter-row');
+  fr.innerHTML=CATS.map(c=>`<button class="filter-chip${activeFilter===c?' active':''}" onclick="setFilter('${c}')">${c}</button>`).join('');
+  // Assign data-tab to tab buttons now
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{b.dataset.tab=i===0?'todas':'programa'});
+
+  const grid=document.getElementById('sessions-grid');
+  grid.innerHTML=EXPRESS.map(s=>{
+    const lvlColor=LEVELS[s.level-1].color;
+    const vis=activeFilter==='Todas'||activeFilter===s.cat;
+    return`<div class="dash-card${vis?' visible':''}" id="dc-${s.id}" data-cat="${s.cat}" onclick="showSession('${s.id}','home')">
+      <div class="dash-card-glow" style="background:${lvlColor}"></div>
+      <div class="dash-card-top">
+        <div>
+          <div class="dash-level-badge" style="background:${lvlColor}18;color:${lvlColor}">${LEVELS[s.level-1].emoji} Nivel ${s.level}</div>
+          <div class="dash-card-name">${s.name}</div>
+          <div class="dash-card-cat">${s.cat}</div>
+        </div>
+        <div class="dash-card-right">
+          <div class="dash-mins" style="color:${lvlColor}">${s.mins}</div>
+          <div class="dash-mins-lbl">min</div>
+        </div>
+      </div>
+      <div class="dash-endel-row">
+        <div class="dash-endel-pill">endel</div>
+        <div class="dash-prompt">"${s.endel.prompt}"</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setFilter(cat){
+  activeFilter=cat;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.toggle('active',c.textContent===cat));
+  EXPRESS.forEach(s=>{
+    const el=document.getElementById('dc-'+s.id);
+    if(el)el.classList.toggle('visible',cat==='Todas'||cat===s.cat);
+  });
+}
+
+// ─── RENDER PROGRAMA ────────────────────────────
+function renderPrograma(){
+  const done=completed.size,total=15,circ=182.2;
   document.getElementById('ring-num').textContent=done;
-  document.getElementById('ring-fg').style.strokeDashoffset=circ*(1-pct);
+  document.getElementById('ring-fg').style.strokeDashoffset=circ*(1-done/total);
   const h=document.getElementById('ring-heading');
   const s=document.getElementById('ring-sub');
-  if(done===0){h.textContent='Empieza hoy';s.textContent='15 sesiones para transformar tu cuerpo y mente'}
-  else if(done<5){h.textContent='Vas bien';s.textContent=`${15-done} sesiones para completar el programa`}
-  else if(done<10){h.textContent='Gran progreso';s.textContent=`A mitad de camino. Sigue.`}
-  else if(done<15){h.textContent='Casi lo logras';s.textContent=`Solo ${15-done} sesiones mas`}
-  else{h.textContent='Completado';s.textContent='Has recorrido todo el programa. Increible.'}
+  if(done===0){h.textContent='Empieza cuando quieras';s.textContent='15 sesiones para transformar tu cuerpo y mente. Sin orden obligatorio.'}
+  else if(done<8){h.textContent='Buen comienzo';s.textContent=`${done} sesiones completadas. ${15-done} por descubrir.`}
+  else if(done<15){h.textContent='Vas muy bien';s.textContent=`Solo ${15-done} sesiones restantes`}
+  else{h.textContent='Programa completado';s.textContent='Has recorrido todo el programa. Increible.'}
 
   const grid=document.getElementById('levels-grid');
   grid.innerHTML='';
-  LEVELS.forEach((level)=>{
+  LEVELS.forEach(level=>{
     const ld=levelDone(level);
     const lp=ld/level.sessions.length;
     const card=document.createElement('div');
@@ -808,53 +799,7 @@ function renderHome(){
   });
 }
 
-// ─── EXPLORE ────────────────────────────────────
-function renderExplore(){
-  // Filter row
-  const fr=document.getElementById('filter-row');
-  fr.innerHTML=CATS.map(c=>`<button class="filter-chip${activeFilter===c?' active':''}" onclick="setFilter('${c}')">${c}</button>`).join('');
-
-  // Cards
-  const dash=document.getElementById('sessions-dashboard');
-  dash.innerHTML=EXPRESS.map(s=>{
-    const lvlColor=LEVELS[s.level-1].color;
-    const visible=activeFilter==='Todas'||activeFilter===s.cat;
-    return`<div class="dash-card${visible?' visible':''}" id="dc-${s.id}" data-cat="${s.cat}" onclick="showSession('${s.id}','explore')">
-      <div class="dash-card-glow" style="background:${lvlColor}"></div>
-      <div class="dash-card-top">
-        <div class="dash-card-left">
-          <div class="dash-level-badge" style="background:${lvlColor}18;color:${lvlColor}">
-            <span style="font-size:11px">${LEVELS[s.level-1].emoji}</span>
-            Nivel ${s.level}
-          </div>
-          <div class="dash-card-name">${s.name}</div>
-          <div class="dash-card-cat">${s.cat}</div>
-        </div>
-        <div class="dash-card-right">
-          <div class="dash-mins" style="color:${lvlColor}">${s.mins}</div>
-          <div class="dash-mins-lbl">min</div>
-        </div>
-      </div>
-      <div class="dash-endel-row">
-        <div class="dash-endel-pill">endel</div>
-        <div class="dash-prompt">"${s.endel.prompt}"</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function setFilter(cat){
-  activeFilter=cat;
-  document.querySelectorAll('.filter-chip').forEach(c=>{
-    c.classList.toggle('active',c.textContent===cat);
-  });
-  EXPRESS.forEach(s=>{
-    const el=document.getElementById('dc-'+s.id);
-    if(el)el.classList.toggle('visible',cat==='Todas'||cat===s.cat);
-  });
-}
-
-// ─── LEVEL DETAIL ───────────────────────────────
+// ─── RENDER LEVEL ───────────────────────────────
 function renderLevel(lid){
   const level=LEVELS.find(l=>l.id===lid);
   document.getElementById('level-content').innerHTML=`
@@ -879,11 +824,10 @@ function renderLevel(lid){
     <div style="height:40px"></div>`;
 }
 
-// ─── SESSION PLAYER ─────────────────────────────
+// ─── RENDER SESSION ─────────────────────────────
 let breathActive=false,breathTimer=null;
 
 function renderSession(sid){
-  // Find in levels or express
   let session,level,isExpress=false;
   for(const l of LEVELS){const s=l.sessions.find(s=>s.id===sid);if(s){session=s;level=l;break;}}
   if(!session){
@@ -897,7 +841,7 @@ function renderSession(sid){
   document.getElementById('session-content').innerHTML=`
     <div class="session-title-bar">
       <h2>${session.name}</h2>
-      <p>${isExpress?session.cat.toUpperCase()+' &middot; ':''} ${session.mins} MIN &middot; NIVEL ${level.id}</p>
+      <p>${isExpress?session.cat+' &middot; ':''} ${session.mins} MIN &middot; NIVEL ${level.id} &middot; ${level.name.toUpperCase()}</p>
     </div>
 
     <div class="endel-card">
@@ -957,25 +901,22 @@ function renderSession(sid){
       </div>`).join('')}
 
     <button class="complete-btn ${done?'done':'ready'}" id="comp-btn" onclick="completeSession('${sid}')">
-      ${done?'&#10003; Completada':'Marcar como completada'}
+      ${done?'&#10003; Sesion completada':'Marcar como completada'}
     </button>
     <div style="height:20px"></div>`;
 
-  breathActive=false;
-  clearTimeout(breathTimer);
+  breathActive=false;clearTimeout(breathTimer);
   togglePose(0);
 }
 
-// ─── UI INTERACTIONS ─────────────────────────────
+// ─── INTERACTIONS ────────────────────────────────
 function toggleEndel(hdr){
   const body=hdr.nextElementSibling;
   const ch=hdr.querySelector('.endel-chevron');
-  body.classList.toggle('open');
-  ch.classList.toggle('open');
+  body.classList.toggle('open');ch.classList.toggle('open');
 }
 function togglePose(i){
-  const c=document.getElementById('pose-'+i);
-  if(!c)return;
+  const c=document.getElementById('pose-'+i);if(!c)return;
   const was=c.classList.contains('expanded');
   document.querySelectorAll('.pose-card.expanded').forEach(el=>el.classList.remove('expanded'));
   if(!was)c.classList.add('expanded');
@@ -986,32 +927,25 @@ function toggleBreath(){
   const ring=document.getElementById('breath-ring');
   const status=document.getElementById('breath-status');
   if(!breathActive){breathActive=true;doBreath();}
-  else{
-    breathActive=false;clearTimeout(breathTimer);
-    ring.className='breath-ring';
-    status.textContent='Toca para activar guia de respiracion';
-  }
+  else{breathActive=false;clearTimeout(breathTimer);ring.className='breath-ring';status.textContent='Toca para activar guia de respiracion';}
 }
 function doBreath(){
   if(!breathActive)return;
   const ring=document.getElementById('breath-ring');
   const status=document.getElementById('breath-status');
-  ring.className='breath-ring inhale';
-  status.textContent='Inhala... (4s)';
+  ring.className='breath-ring inhale';status.textContent='Inhala... (4s)';
   breathTimer=setTimeout(()=>{
     if(!breathActive)return;
-    ring.className='breath-ring exhale';
-    status.textContent='Exhala... (6s)';
+    ring.className='breath-ring exhale';status.textContent='Exhala... (6s)';
     breathTimer=setTimeout(doBreath,6000);
   },4000);
 }
 
-// ─── COMPLETE ────────────────────────────────────
 function completeSession(sid){
   if(completed.has(sid))return;
   completed.add(sid);save();
   const btn=document.getElementById('comp-btn');
-  if(btn){btn.className='complete-btn done';btn.innerHTML='&#10003; Completada';}
+  if(btn){btn.className='complete-btn done';btn.innerHTML='&#10003; Sesion completada';}
 
   let session,level;
   for(const l of LEVELS){const s=l.sessions.find(s=>s.id===sid);if(s){session=s;level=l;break;}}
@@ -1022,38 +956,36 @@ function completeSession(sid){
   if(session&&level){
     const lvlComplete=level.sessions.every(s=>completed.has(s.id));
     if(lvlComplete){
-      const li=LEVELS.indexOf(level);
-      const nextL=LEVELS[li+1];
+      const li=LEVELS.indexOf(level);const nextL=LEVELS[li+1];
       document.getElementById('cel-emoji').textContent=level.emoji;
       document.getElementById('cel-title').textContent=nextL?`Nivel ${level.name} completado`:'Programa completado';
       document.getElementById('cel-msg').textContent=nextL
-        ?`Desbloqueaste el Nivel ${nextL.id}: ${nextL.name} ${nextL.emoji}. Tu cuerpo ya no es el mismo.`
+        ?`Completaste los 3 dias del Nivel ${level.id}. ${nextL.emoji} ${nextL.name} ya esta disponible.`
         :'Has completado todo JAYYOGA. Tu cuerpo, mente y respiracion te lo agradecen.';
-      celBtn.textContent=nextL?`Ir al Nivel ${nextL.id}`:'Ver inicio';
-      celBtn.onclick=()=>{cel.classList.remove('show');if(nextL)showLevel(nextL.id);else showHome();};
+      celBtn.textContent='Continuar';
+      celBtn.onclick=()=>{cel.classList.remove('show');showLevel(level.id);};
     } else {
-      const allS=LEVELS.flatMap(l=>l.sessions);
-      const next=allS[allS.findIndex(s=>s.id===sid)+1];
       document.getElementById('cel-emoji').textContent='🧘';
       document.getElementById('cel-title').textContent='Sesion completada';
-      document.getElementById('cel-msg').textContent=next?`Tu proxima sesion: "${next.name}".`:'Gran trabajo hoy.';
+      document.getElementById('cel-msg').textContent='Excelente practica. Tu cuerpo integra mientras descansas.';
       celBtn.textContent='Continuar';
       celBtn.onclick=()=>{cel.classList.remove('show');showLevel(activeLevelId);};
     }
   } else {
-    // Express session
     const exS=EXPRESS.find(s=>s.id===sid);
     document.getElementById('cel-emoji').textContent=LEVELS[exS.level-1].emoji;
     document.getElementById('cel-title').textContent='Sesion completada';
     document.getElementById('cel-msg').textContent='Excelente practica. Tu cuerpo integra mientras descansas.';
     celBtn.textContent='Continuar';
-    celBtn.onclick=()=>{cel.classList.remove('show');showExplore();};
+    celBtn.onclick=()=>{cel.classList.remove('show');showHome();};
   }
   cel.classList.add('show');
 }
 
 // ─── INIT ───────────────────────────────────────
-renderHome();
+// Set data-tab on buttons
+document.querySelectorAll('.tab-btn').forEach((b,i)=>{b.dataset.tab=i===0?'todas':'programa'});
+renderTodas();
 </script>
 </body>
 </html>
