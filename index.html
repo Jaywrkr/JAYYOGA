@@ -216,11 +216,12 @@ body{
 
 .session-card{
   background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--s-accent,var(--border));
   border-radius:16px;padding:16px 20px;margin-bottom:8px;
   cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px;
 }
 .session-card:hover{background:var(--surface2)}
-.session-card.done{border-color:rgba(16,185,129,.2)}
+.session-card.done{border-color:rgba(16,185,129,.2);--s-accent:#10b981}
 .session-num{
   width:38px;height:38px;border-radius:11px;
   display:flex;align-items:center;justify-content:center;
@@ -279,6 +280,8 @@ body{
   background:rgba(109,40,217,.2);color:rgba(196,181,253,.85);font-family:var(--mono);
 }
 .endel-hdr-title{font-size:13px;font-weight:500;flex:1;letter-spacing:-.01em}
+.endel-hdr-prompt{font-size:11px;color:var(--muted);font-style:italic;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:260px;margin-top:2px;transition:opacity .2s}
+.endel-body.open~.endel-hdr .endel-hdr-prompt{opacity:0;pointer-events:none}
 .endel-chevron{font-size:10px;color:var(--dim);transition:transform .2s}
 .endel-chevron.open{transform:rotate(180deg)}
 .endel-body{display:none;padding-top:16px}
@@ -297,14 +300,19 @@ body{
 .e-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#6d28d9,#0891b2)}
 .e-tip{font-size:12px;color:var(--muted);line-height:1.55}
 
+/* Pose progress bar */
+.pose-prog-wrap{height:2px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin-bottom:16px}
+.pose-prog-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#6d28d9,#0891b2);transition:width .4s ease;width:0%}
+
 /* Poses */
-.poses-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;font-weight:500}
+.poses-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:500}
 .pose-card{
   background:var(--surface);border:1px solid var(--border);
   border-radius:15px;padding:15px 18px;margin-bottom:8px;transition:border-color .2s;
 }
 .pose-card.done{border-color:rgba(16,185,129,.2);opacity:.6}
 .pose-card.active-pose{border-color:rgba(139,92,246,.25);background:rgba(139,92,246,.04)}
+.pose-card.active-pose .pose-name{color:var(--pose-color,rgba(196,181,253,.9))}
 .pose-hdr{display:flex;align-items:center;gap:10px;cursor:pointer}
 .pose-chk{
   width:24px;height:24px;border-radius:7px;border:1px solid var(--border2);
@@ -468,28 +476,28 @@ const LEVELS=[
     {id:"1-1",name:"Primera Respiracion",mins:20,
      endel:{scene:"Relax",energy:25,prompt:"Amanecer suave, brisa de costa, despertar tranquilo",tip:"Auriculares suaves. Volumen bajo (30%). El sonido como fondo, no protagonista."},
      poses:[
-      {name:"Postura del Nino (Balasana)",dur:"2 min",desc:"Rodillas separadas al ancho de la esterilla, pies juntos. Extiende los brazos al frente y deja caer la frente al suelo o un cojin. Respira hacia la espalda baja.",tip:"Si las caderas no llegan a los talones, pon una manta doblada entre muslos y pantorrillas.",breath:"Inhala 4 tiempos, exhala 6 tiempos"},
-      {name:"Gato-Vaca (Marjaryasana)",dur:"2 min",desc:"En cuatro puntos. Inhala: arquea la espalda, levanta cabeza y coccix. Exhala: redondea la espalda, lleva menton al pecho. Fluye suavemente.",tip:"Siente cada vertebra. El movimiento sigue a la respiracion.",breath:"Inhala vaca / Exhala gato"},
-      {name:"Torsion Supina",dur:"1.5 min c/lado",desc:"Acostado boca arriba, dobla la rodilla derecha al pecho y cruzala al lado izquierdo. Extiende el brazo derecho en T. Mira hacia la derecha.",tip:"El hombro opuesto intenta tocar el suelo. La gravedad hace el trabajo.",breath:"Exhala profundo para profundizar la torsion"},
-      {name:"Savasana",dur:"3 min",desc:"Acostado completamente plano. Pies separados, palmas hacia arriba. Ojos cerrados.",tip:"Esta pose es tan importante como las demas. No la saltes.",breath:"Respira natural, sin controlar"}
+      {name:"Postura del Nino (Balasana)",dur:"2 min",desc:"Arrodillate y separa las rodillas al ancho de la esterilla. Junta los pies detras. Sientate sobre los talones y deja caer el torso hacia adelante hasta que la frente toque el suelo o un cojin. Extiende los brazos al frente con las palmas abajo. El pecho descansa entre los muslos.",tip:"Si las caderas no llegan a los talones, pon una manta doblada entre muslos y pantorrillas.",breath:"Inhala 4 tiempos, exhala 6 tiempos"},
+      {name:"Gato-Vaca (Marjaryasana)",dur:"2 min",desc:"Coloca manos bajo hombros y rodillas bajo caderas, en cuatro puntos. VACA — al inhalar: deja caer el abdomen, levanta la cabeza y el coccix hacia arriba, espalda arqueada. GATO — al exhalar: empuja el suelo con las manos, redondea toda la espalda, lleva el menton al pecho y el coccix hacia abajo. Alterna suavemente.",tip:"Siente cada vertebra moverse por separado. El movimiento siempre sigue a la respiracion, no al reves.",breath:"Inhala vaca / Exhala gato"},
+      {name:"Torsion Supina",dur:"1.5 min c/lado",desc:"Acostado boca arriba, dobla la rodilla derecha al pecho y cruzala al lado izquierdo con la mano izquierda. El brazo derecho se extiende en T. Gira la cabeza hacia la derecha. Mantén ambos hombros apoyados en el suelo lo mas posible. Cambia de lado.",tip:"No fuerces. La gravedad hace el trabajo de a poco con cada exhala.",breath:"Exhala profundo para profundizar la torsion"},
+      {name:"Savasana",dur:"3 min",desc:"Acustate completamente plano boca arriba. Separa los pies al ancho de la esterilla y deja que caigan hacia afuera solos. Palmas hacia arriba, brazos ligeramente separados del cuerpo. Cierra los ojos. No hagas nada. Solo permite que el suelo te sostenga completamente.",tip:"Esta pose integra todo lo que trabajaste. Es tan importante como las demas. No la saltes.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"1-2",name:"Raices",mins:22,
      endel:{scene:"Relax",energy:30,prompt:"Bosque al amanecer, tierra humeda, silencio verde",tip:"Prueba sin auriculares, telefono en el suelo cerca de ti."},
      poses:[
-      {name:"Montana (Tadasana)",dur:"2 min",desc:"De pie, pies al ancho de caderas. Distribuye el peso en los 4 puntos de cada pie. Activa muslos, alarga la columna.",tip:"Cierra los ojos 30 segundos para sentir tu equilibrio real.",breath:"Inhala crece / Exhala enraiza"},
-      {name:"Flexion hacia adelante suave",dur:"2 min",desc:"Desde montana, dobla ligeramente las rodillas y deja caer el torso. Manos en espinillas. Cabeza pesada.",tip:"Las rodillas dobladas protegen la zona lumbar.",breath:"Exhala completamente cada vez"},
-      {name:"Mariposa (Baddha Konasana)",dur:"3 min",desc:"Sentado, plantas de pies juntas, rodillas hacia afuera. Sujeta los tobillos. Columna larga.",tip:"No empujes las rodillas. La gravedad las relaja con el tiempo.",breath:"Inhala crece, exhala sueltate un poco mas"},
-      {name:"Flexion sentada (rodillas dobladas)",dur:"2 min",desc:"Piernas extendidas, dobla un poco las rodillas. Extiende los brazos hacia los pies. Columna larga.",tip:"Un cinturon o toalla alrededor de los pies ayuda.",breath:"Cada exhala: acercar pecho a muslos"},
-      {name:"Savasana",dur:"3 min",desc:"Cierra la practica. Completa quietud. El cuerpo integra todo lo que trabajaste.",tip:"Pon una almohada bajo las rodillas si la zona lumbar lo pide.",breath:"Respira natural, sin controlar"}
+      {name:"Montana (Tadasana)",dur:"2 min",desc:"Parate con los pies separados al ancho de las caderas. Distribuye el peso entre los 4 puntos de cada pie: talon, base del dedo gordo, base del menique, y centro. Activa ligeramente los muslos, alarga la columna como si un hilo tirara de la coronilla hacia arriba. Brazos a los lados, palmas al frente.",tip:"Cierra los ojos 30 segundos para sentir cuanto se balancea tu cuerpo. El equilibrio es dinamico, nunca estatico.",breath:"Inhala crece / Exhala enraiza"},
+      {name:"Flexion hacia adelante suave",dur:"2 min",desc:"Desde Montana, inhala para alargar la columna. Al exhalar, dobla ligeramente las rodillas y deja caer el torso hacia adelante desde las caderas, no desde la cintura. Las manos descansan en las espinillas o el suelo. La cabeza cuelga pesada. Las rodillas pueden estar tan dobladas como necesites.",tip:"Las rodillas dobladas protegen la zona lumbar. Si la espalda se redondea demasiado, dobla mas las rodillas.",breath:"Exhala completamente cada vez"},
+      {name:"Mariposa (Baddha Konasana)",dur:"3 min",desc:"Sentate con la espalda larga. Junta las plantas de los pies frente a ti, dejando que las rodillas caigan hacia los lados. Sujeta los tobillos o los pies. Desde las caderas, inclinate ligeramente hacia adelante manteniendo la columna larga. Las rodillas caen por su propio peso.",tip:"No empujes las rodillas hacia abajo con las manos. La gravedad las relaja con el tiempo y la respiracion.",breath:"Inhala crece, exhala sueltate un poco mas"},
+      {name:"Flexion sentada (rodillas dobladas)",dur:"2 min",desc:"Sentado, extiende las piernas al frente. Dobla las rodillas tanto como necesites. Con la columna larga, inclinate desde las caderas hacia los pies. Las manos pueden llegar a las espinillas, tobillos o pies. Cada exhala busca acercar el pecho a los muslos.",tip:"Un cinturon o toalla alrededor de los pies te permite sostener sin forzar la espalda.",breath:"Cada exhala: acercar pecho a muslos"},
+      {name:"Savasana",dur:"3 min",desc:"Acustate boca arriba. Pies separados, palmas arriba. Cierra los ojos y deja que el suelo te sostenga. El cuerpo integra todo lo que trabajaste durante esta quietud. No hay nada que hacer.",tip:"Pon una almohada bajo las rodillas si la zona lumbar lo pide.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"1-3",name:"Apertura",mins:25,
      endel:{scene:"Relax",energy:35,prompt:"Lago al atardecer, nubes lentas, calma total",tip:"Sube un poco el volumen. Deja que el ambiente te envuelva."},
      poses:[
-      {name:"Gato-Vaca con extension lateral",dur:"2 min",desc:"Desde cuatro puntos, haz gato-vaca 4 veces. Luego camina las manos a la derecha y respira al costado izquierdo. Cambia.",tip:"Siente la apertura intercostal al respirar.",breath:"Inhala hacia el costado que se abre"},
-      {name:"Aguja ensartada",dur:"1.5 min c/lado",desc:"Desde cuatro puntos, desliza el brazo derecho por el suelo hacia la izquierda. Hombro y mejilla descansan en el suelo.",tip:"Libera tension de hombros acumulada por pantallas.",breath:"Exhala profundo para liberar el hombro"},
-      {name:"Figura 4 supina",dur:"2 min c/lado",desc:"Acostado, tobillo derecho sobre muslo izquierdo. Entrelaza manos detras del muslo y acerca las piernas al pecho.",tip:"Si la cadera se resiste, mantén el pie contrario en el suelo.",breath:"Exhala para profundizar suavemente"},
-      {name:"Bebe feliz (Ananda Balasana)",dur:"2 min",desc:"Acostado, sujeta la parte externa de los pies. Rodillas hacia el suelo. Balancea si quieres.",tip:"Un mensaje a tu sistema nervioso: todo esta bien.",breath:"Respira libre y natural"},
-      {name:"Savasana",dur:"3 min",desc:"Cierra los ojos. El suelo te sostiene completamente.",tip:"Notaras que la savasana se vuelve mas facil con la practica.",breath:"Respira natural, sin controlar"}
+      {name:"Gato-Vaca con extension lateral",dur:"2 min",desc:"En cuatro puntos, haz 4 rondas de gato-vaca para calentar. Luego camina ambas manos hacia la derecha, manteniendo las rodillas donde estan. Respira profundo hacia el costado izquierdo, que queda estirado. 5 respiraciones largas. Camina las manos al otro lado.",tip:"Siente como se abren los espacios entre las costillas al inhalar hacia el costado estirado.",breath:"Inhala hacia el costado que se abre"},
+      {name:"Aguja ensartada",dur:"1.5 min c/lado",desc:"En cuatro puntos. Inhala, levanta el brazo derecho al cielo. Al exhalar, desliza ese brazo por el suelo hacia la izquierda, pasando por debajo del cuerpo. El hombro derecho y la mejilla derecha descansan en el suelo. La mano izquierda puede extenderse al frente o apoyarse en el suelo para regular la intensidad.",tip:"Libera la tension de hombros y cuello acumulada por el uso de pantallas. Es mas intensa de lo que parece.",breath:"Exhala profundo para liberar el hombro"},
+      {name:"Figura 4 supina",dur:"2 min c/lado",desc:"Acostado boca arriba con rodillas dobladas, pies en el suelo. Cruza el tobillo derecho sobre el muslo izquierdo, justo encima de la rodilla. Flexiona el pie derecho. Entrelaza las manos detras del muslo izquierdo y acerca ambas piernas al pecho. Sientes el estiramiento en la cadera y gluteo derecho.",tip:"Si la cadera se resiste mucho, mantén el pie izquierdo apoyado en el suelo en lugar de levantar la pierna.",breath:"Exhala para profundizar suavemente"},
+      {name:"Bebe feliz (Ananda Balasana)",dur:"2 min",desc:"Acostado boca arriba, lleva las rodillas al pecho. Sujeta la parte externa de cada pie con la mano correspondiente. Abre las rodillas hacia afuera, alineadas con las axilas. Flexiona los pies. Las pantorrillas quedan perpendiculares al suelo. Puedes mecerte suavemente de lado a lado.",tip:"Esta pose envia un mensaje directo a tu sistema nervioso: es seguro relajarse completamente.",breath:"Respira libre y natural"},
+      {name:"Savasana",dur:"3 min",desc:"Acustate completamente plano. Cierra los ojos. Suelta conscientemente cada parte del cuerpo — pies, piernas, abdomen, espalda, hombros, cara. No hay nada mas que hacer.",tip:"Notaras que la savasana se vuelve mas profunda con la practica. Hoy puede ser inquieta. Esta bien.",breath:"Respira natural, sin controlar"}
      ]}
    ]},
   {id:2,name:"Fluir",emoji:"🌊",sub:"Encuentra el movimiento",color:"#06b6d4",
@@ -499,28 +507,28 @@ const LEVELS=[
     {id:"2-1",name:"Primer Flujo",mins:25,
      endel:{scene:"Focus",energy:45,prompt:"Rio en movimiento, concentracion fluida, ritmo constante",tip:"Auriculares recomendados. El ritmo de Focus guia tus movimientos."},
      poses:[
-      {name:"Saludo al Sol modificado (3 rondas)",dur:"9 min",desc:"Montana > Brazos arriba > Flexion adelante > Medio levantamiento > Plancha de rodillas > Perro boca abajo de rodillas > Vuelta a montana.",tip:"Las 3 rondas son lentas. Aprende la secuencia primero.",breath:"Un movimiento = una respiracion"},
-      {name:"Guerrero I",dur:"1.5 min c/lado",desc:"Pie izquierdo atras (~1 metro), rodilla derecha sobre tobillo. Caderas cuadradas al frente. Brazos al cielo.",tip:"La rodilla delantera nunca pasa el tobillo.",breath:"Inhala al subir, exhala para enraizar"},
-      {name:"Postura del Nino",dur:"2 min",desc:"Descanso activo. Rodillas anchas, brazos extendidos.",tip:"Siempre disponible como descanso en cualquier clase.",breath:"Respira hacia la espalda baja"},
-      {name:"Savasana",dur:"3 min",desc:"El cuerpo aprende durante el descanso.",tip:"Tus piernas pueden estar mas pesadas. Es normal.",breath:"Respira natural, sin controlar"}
+      {name:"Saludo al Sol modificado (3 rondas)",dur:"9 min",desc:"Secuencia: MONTANA (pie, columna larga) → inhala BRAZOS AL CIELO → exhala FLEXION ADELANTE (rodillas dobladas) → inhala MEDIO LEVANTAMIENTO (espalda plana, manos en espinillas) → exhala PLANCHA DE RODILLAS (manos al suelo, cuerpo diagonal) → inhala PERRO BOCA ABAJO DE RODILLAS (caderas arriba) → camina los pies al frente → MONTANA. Cada transicion con una respiracion.",tip:"Primera ronda: muy lenta, aprende el orden. Segunda y tercera: empieza a encontrar el ritmo.",breath:"Un movimiento = una respiracion"},
+      {name:"Guerrero I",dur:"1.5 min c/lado",desc:"De pie, da un gran paso atras con el pie izquierdo (aprox. 1 metro). El pie trasero a 45 grados. Dobla la rodilla delantera hasta que quede directamente sobre el tobillo. Las caderas miran al frente, como si fueran faros de auto. Levanta los brazos al cielo, hombros relajados lejos de las orejas.",tip:"La rodilla delantera nunca pasa el tobillo. Si pasa, alarga el paso atras.",breath:"Inhala al subir los brazos, exhala para enraizar los pies"},
+      {name:"Postura del Nino",dur:"2 min",desc:"Rodillas anchas, pies juntos. Torso cae entre los muslos, frente al suelo. Brazos extendidos al frente o descansando a los lados del cuerpo. Respira hacia la espalda baja y siente como se expande con cada inhala.",tip:"Esta es tu postura de descanso durante cualquier sesion. Usala cuando necesites.",breath:"Respira hacia la espalda baja"},
+      {name:"Savasana",dur:"3 min",desc:"Acustate boca arriba. Las piernas pueden sentirse pesadas despues del Guerrero — es normal. El cuerpo consolida el aprendizaje motor durante el descanso. No te lo saltes.",tip:"Las piernas mas pesadas de lo normal es buena senal. Significa que trabajaste.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"2-2",name:"Nucleo Despierto",mins:28,
      endel:{scene:"Focus",energy:55,prompt:"Montana en la manana, estabilidad firme, calma activa",tip:"Sube la energia en Endel para las secciones de core."},
      poses:[
-      {name:"Plancha en rodillas",dur:"3 x 20 seg",desc:"Desde cuatro puntos, caderas a la linea de hombros. Columna neutral. Activa abdomen.",tip:"Forma sobre tiempo. 20 segundos bien > 60 segundos mal.",breath:"Respira normalmente, sin retener"},
-      {name:"Pajaro-Perro",dur:"1.5 min c/lado",desc:"Cuatro puntos. Extiende brazo derecho y pierna izquierda simultaneamente. Cadera nivelada. Lento.",tip:"Imagina un vaso de agua en la espalda. Sin derramar.",breath:"Exhala al extender, inhala al volver"},
-      {name:"Barco (rodillas dobladas)",dur:"3 x 20 seg",desc:"Sentado, inclinate levemente atras, levanta pies. Rodillas dobladas. Espalda larga.",tip:"Si la espalda se redondea, agarra detras de los muslos.",breath:"Exhala profundo, inhala para subir"},
-      {name:"Puente (Setu Bandhasana)",dur:"2 min",desc:"Acostado, pies en el suelo cerca de gluteos. Presiona pies y levanta caderas.",tip:"Empuja el suelo con los pies. Eso activa mas.",breath:"Inhala para subir, exhala larga al mantener"},
-      {name:"Savasana",dur:"3 min",desc:"El core se fortalece descansando. Esta es parte del entrenamiento.",tip:"Siente tu abdomen expandirse y contraerse al respirar.",breath:"Respira natural, sin controlar"}
+      {name:"Plancha en rodillas",dur:"3 x 20 seg",desc:"Desde cuatro puntos, baja las caderas hasta que esten a la altura de los hombros, formando una linea diagonal de rodillas a cabeza. Aprieta el abdomen como si quisieras alejar el ombligo de la esterilla. Los codos no estan completamente bloqueados. Mantén la mirada entre las manos. 20 seg, descansa 10 seg, repite 3 veces.",tip:"20 segundos con buena forma valen mas que 60 segundos con la cadera hundida o levantada.",breath:"Respira continuamente. Nunca retengas el aire"},
+      {name:"Pajaro-Perro",dur:"1.5 min c/lado",desc:"En cuatro puntos, manos bajo hombros y rodillas bajo caderas. Sin mover las caderas, extiende el brazo derecho al frente y la pierna izquierda atras simultaneamente. Ambos paralelos al suelo. Mantén las caderas niveladas — ninguna cae ni sube. Regresa lentamente. Alterna lados.",tip:"Imagina que llevas un vaso de agua en la espalda y no quieres derramar ni una gota.",breath:"Exhala al extender, inhala al volver al centro"},
+      {name:"Barco (rodillas dobladas)",dur:"3 x 20 seg",desc:"Sentado con las rodillas dobladas y pies en el suelo. Agarra detras de los muslos. Inclinate hacia atras hasta que sientas el abdomen activarse. Levanta los pies del suelo, espinillas paralelas al suelo. Si puedes, suelta las manos y extiendelas al frente. Mantén la espalda lo mas larga posible.",tip:"Si la espalda baja se redondea mucho, agarra detras de los muslos para ayudar a mantener la columna.",breath:"Exhala profundo para activar el abdomen, inhala para preparar cada repeticion"},
+      {name:"Puente (Setu Bandhasana)",dur:"2 min",desc:"Acostado boca arriba, dobla las rodillas y coloca los pies planos en el suelo, cerca de los gluteos. Los pies al ancho de las caderas. Presiona los pies contra el suelo y levanta las caderas hacia el techo. Los muslos quedan paralelos al suelo. Puedes entrelazar las manos bajo la espalda.",tip:"Empuja el suelo con los pies como si quisieras empujar la esterilla lejos de ti. Eso activa mejor los gluteos.",breath:"Inhala para subir, exhala larga mientras mantienes"},
+      {name:"Savasana",dur:"3 min",desc:"El core no se fortalece durante el esfuerzo sino durante el descanso. Esta savasana es literalmente parte del entrenamiento. Acustate y permite la recuperacion.",tip:"Siente tu abdomen expandirse hacia los lados con cada inhala. Es una buena senal de que respiras con el diafragma.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"2-3",name:"Apertura de Caderas",mins:30,
      endel:{scene:"Relax",energy:35,prompt:"Tarde de verano, hierba calida, relajacion muscular profunda",tip:"Vuelve al modo Relax. Las caderas necesitan calma para abrirse."},
      poses:[
-      {name:"Media Luna baja (Anjaneyasana)",dur:"2 min c/lado",desc:"Rodilla trasera en el suelo. Rodilla delantera sobre tobillo. Caderas abajo y adelante.",tip:"Coloca una manta bajo la rodilla trasera. Sentiras el psoas estirarse.",breath:"Exhala para hundir caderas y profundizar"},
-      {name:"Paloma preparatoria",dur:"2 min c/lado",desc:"Desde cuatro puntos, lleva la rodilla derecha detras de la muneca derecha. Pierna trasera larga.",tip:"Si la cadera no llega al suelo, usa un bloque o manta.",breath:"Inhala largo, exhala y sueltate 1mm mas"},
-      {name:"Mariposa con flexion",dur:"2 min",desc:"Plantas de pies juntas. Inclinate hacia adelante desde las caderas.",tip:"Cuanto mas lejos esten los pies, menos intensa es la apertura.",breath:"Cada exhala: avanza un poco mas"},
-      {name:"Flexion sentada piernas extendidas",dur:"2 min",desc:"Piernas juntas al frente. Torso hacia adelante desde las caderas.",tip:"Flexiona un poco las rodillas si la espalda se redondea.",breath:"Inhala para alargar la columna, exhala para avanzar"},
-      {name:"Piernas en la pared",dur:"3 min",desc:"Piernas apoyadas en la pared, espalda plana. Ojos cerrados.",tip:"Una de las posturas mas restaurativas.",breath:"Respira natural, sin controlar"}
+      {name:"Media Luna baja (Anjaneyasana)",dur:"2 min c/lado",desc:"Desde cuatro puntos, lleva el pie derecho entre las manos. La rodilla izquierda queda en el suelo. La rodilla derecha esta directamente sobre el tobillo. Baja las caderas hacia el suelo y empujalas sutilmente hacia adelante. Sientes el estiramiento en la parte frontal de la cadera izquierda — eso es el psoas. Sube los brazos si quieres mas intensidad.",tip:"Coloca una manta doblada bajo la rodilla trasera para protegerla. El psoas es uno de los musculos mas tensos en personas sedentarias.",breath:"Exhala para hundir las caderas y profundizar el estiramiento"},
+      {name:"Paloma preparatoria",dur:"2 min c/lado",desc:"Desde cuatro puntos, desliza la rodilla derecha detras de la muneca derecha. El tobillo derecho avanza hacia la muneca izquierda, segun tu flexibilidad. Extiende la pierna izquierda completamente atras. Baja las caderas hacia el suelo. Si llegan, descansa en los antebrazos o extiende los brazos al frente. El estiramiento es en el gluteo y cadera derecha.",tip:"Si la cadera derecha no llega al suelo, coloca un bloque o manta doblada debajo para sostenerla.",breath:"Inhala para alargar la columna, exhala y sueltate 1mm mas"},
+      {name:"Mariposa con flexion",dur:"2 min",desc:"Sentado, junta las plantas de los pies. Mientras mas cerca del cuerpo esten los pies, mas intensa la apertura — mientras mas lejos, mas suave. Desde las caderas (no desde la cintura), inclinate hacia adelante lentamente. Deja que la espalda se redondee naturalmente al final.",tip:"Cuanto mas lejos esten los pies del cuerpo, menor es la intensidad. Empezá suave.",breath:"Cada exhala: avanza un poco mas"},
+      {name:"Flexion sentada piernas extendidas",dur:"2 min",desc:"Sentado con las piernas extendidas juntas al frente. Flexiona los pies. Desde las caderas — no desde la cintura — inclinate hacia adelante con la espalda lo mas larga posible. Las manos llegan a donde llegan: espinillas, tobillos o pies. Lo que importa es la longitud de la columna, no llegar a los pies.",tip:"Si la espalda se redondea mucho, dobla un poco las rodillas hasta encontrar longitud en la columna.",breath:"Inhala para alargar la columna, exhala para avanzar un centimetro mas"},
+      {name:"Piernas en la pared",dur:"3 min",desc:"Siéntate de lado junto a una pared. Con un movimiento, gira y extiende las piernas hacia arriba apoyandolas en la pared. La espalda queda plana en el suelo, los gluteos cerca de la pared. Cierra los ojos. Esta postura invierte el flujo sanguineo de las piernas y activa el sistema nervioso parasimpatico.",tip:"Una de las posturas mas restaurativas que existen. Si puedes, queda 5-10 minutos.",breath:"Respira natural, sin controlar"}
      ]}
    ]},
   {id:3,name:"Enraizar",emoji:"🌿",sub:"Construye bases solidas",color:"#8b5cf6",
@@ -530,30 +538,30 @@ const LEVELS=[
     {id:"3-1",name:"Equilibrio",mins:30,
      endel:{scene:"Focus",energy:50,prompt:"Bambu en la brisa, flexible pero firme, concentracion tranquila",tip:"Focus ayuda con la concentracion que necesitan las poses de equilibrio."},
      poses:[
-      {name:"Guerrero II",dur:"1.5 min c/lado",desc:"Pies a ~1.2m, pie derecho al frente, izquierdo a 90°. Dobla rodilla derecha. Brazos en T.",tip:"Hombros sobre caderas. Brazo trasero igual de activo.",breath:"Inhala para crecer, exhala para profundizar"},
-      {name:"Triangulo (Trikonasana)",dur:"1.5 min c/lado",desc:"Piernas extendidas. Brazo derecho al frente, baja la mano a espinilla o bloque. Brazo izquierdo al cielo.",tip:"Un bloque es una solucion inteligente, no una derrota.",breath:"Inhala largo, exhala y abre el pecho"},
-      {name:"Arbol (Vrksasana)",dur:"1 min c/lado",desc:"De pie en un pie. Planta del otro en tobillo, espinilla o muslo. Mirada en un punto fijo.",tip:"Si te caes, vuelve. El equilibrio no es no caer.",breath:"Respira suave y regular"},
-      {name:"Guerrero III preparatorio",dur:"1 min c/lado",desc:"Desde Guerrero I, peso a la pierna delantera. Torso a 45°, pierna trasera sube.",tip:"La pierna trasera y el torso forman una linea.",breath:"Exhala para estabilizar"},
-      {name:"Savasana",dur:"3 min",desc:"El equilibrio tambien es descansar sin hacer nada.",tip:"Nota como se siente cada tobillo despues de trabajar.",breath:"Respira natural, sin controlar"}
+      {name:"Guerrero II",dur:"1.5 min c/lado",desc:"Abre los pies a ~1.2 metros. Gira el pie derecho 90° al frente y el izquierdo 15° hacia adentro. Dobla la rodilla derecha hasta que quede sobre el tobillo. Los brazos se extienden en T, paralelos al suelo. Las caderas estan abiertas de lado — como si estuvier de espaldas a una pared. Mira por encima de la mano delantera.",tip:"El brazo trasero tiene que estar igual de activo que el delantero. Y los hombros siempre sobre las caderas, no inclinados.",breath:"Inhala para crecer, exhala para profundizar la rodilla"},
+      {name:"Triangulo (Trikonasana)",dur:"1.5 min c/lado",desc:"Desde Guerrero II, extiende la rodilla delantera. Lleva la mano derecha hacia adelante mientras el torso se inclina sobre la pierna derecha. Baja la mano a la espinilla, tobillo o un bloque. El brazo izquierdo sube al cielo. Ambos brazos forman una linea vertical. Mira hacia la mano de arriba o al suelo segun tu cuello.",tip:"Un bloque bajo la mano es una solucion inteligente que te permite abrir el pecho sin sacrificar la postura.",breath:"Inhala para alargar la columna, exhala y abre el pecho hacia arriba"},
+      {name:"Arbol (Vrksasana)",dur:"1 min c/lado",desc:"De pie sobre el pie derecho. Dobla la rodilla izquierda y coloca la planta del pie izquierdo en el tobillo (nivel basico), espinilla (intermedio) o muslo interno (avanzado) — nunca en la rodilla. Las manos en oracion al pecho o extendidas al cielo. Fija la mirada en un punto fijo al frente.",tip:"Caerse es parte de la practica. El equilibrio no es no caerse — es saber volver con calma.",breath:"Respira suave y regular para mantener la estabilidad"},
+      {name:"Guerrero III preparatorio",dur:"1 min c/lado",desc:"Desde Guerrero I con el pie derecho adelante, transfiere todo el peso a la pierna derecha. Mientras el torso se inclina hacia adelante, la pierna izquierda sube atras. Intenta llegar a que el torso y la pierna trasera queden paralelos al suelo. Los brazos al frente o en las caderas segun tu nivel.",tip:"El torso y la pierna trasera forman una sola linea. Activa el gluteo de la pierna levantada.",breath:"Exhala para estabilizar y activar el core"},
+      {name:"Savasana",dur:"3 min",desc:"El equilibrio requiere una concentracion que agota el sistema nervioso. Esta savasana es recuperacion activa. Nota como se sienten los tobillos y pies despues de trabajar.",tip:"Nota la diferencia de sensacion entre el tobillo derecho e izquierdo despues de trabajar uno mas que otro.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"3-2",name:"Nucleo Fuerte",mins:32,
      endel:{scene:"Move",energy:65,prompt:"Oceano en movimiento, fuerza constante, respiracion activa",tip:"Move de Endel para actividad fisica. Energia al 65%."},
      poses:[
-      {name:"Plancha completa",dur:"3 x 30 seg",desc:"Manos bajo hombros, cuerpo en linea recta de cabeza a talones. Activa abdomen, gluteos y piernas.",tip:"Si duele la zona lumbar: rodillas en el suelo. Forma primero.",breath:"Respira continuamente. Nunca retengas"},
-      {name:"Plancha lateral en rodillas",dur:"45 seg c/lado",desc:"Desde plancha, gira al lado. Rodilla inferior en el suelo. Cadera arriba en linea diagonal.",tip:"Aprieta el costado activo. La cadera no puede hundirse.",breath:"Exhala larga para estabilizar"},
-      {name:"Barco (Navasana)",dur:"3 x 20-30 seg",desc:"Sentado, piernas a 45° (o dobladas). Espalda en angulo. Brazos paralelos al suelo.",tip:"Es normal que tiemble. Es la adaptacion.",breath:"Exhala profundo al mantener"},
-      {name:"Superman",dur:"2 x 45 seg",desc:"Boca abajo, brazos al frente. Levanta simultaneamente brazos, pecho y piernas.",tip:"Trabaja la espalda baja, el antagonista del abdomen.",breath:"Inhala para levantar, exhala sostenido"},
-      {name:"Puente con un pie",dur:"45 seg c/lado",desc:"Desde el puente, extiende una pierna al cielo. Caderas niveladas.",tip:"Reduce el tiempo si la cadera cae.",breath:"Respira constante"},
+      {name:"Plancha completa",dur:"3 x 30 seg",desc:"Coloca las manos directamente bajo los hombros, brazos extendidos. Los dedos de los pies en el suelo. El cuerpo forma una linea perfectamente recta de cabeza a talones: aprieta el abdomen, activa los gluteos y presiona los talones hacia atras. La cadera no sube ni se hunde. Mantén 30 seg, descansa 10 seg, repite 3 veces.",tip:"Si la zona lumbar duele, baja las rodillas al suelo inmediatamente. La forma es lo primero, siempre.",breath:"Respira lento y continuo. Nunca retengas el aire en fuerza"},
+      {name:"Plancha lateral en rodillas",dur:"45 seg c/lado",desc:"Desde cuatro puntos, extiende el cuerpo de lado con la mano derecha en el suelo bajo el hombro. La rodilla izquierda esta en el suelo, piernas apiladas. El cuerpo forma una linea diagonal de rodilla a cabeza. Levanta la cadera — no dejes que caiga. El brazo izquierdo sube al cielo. Aprieta el oblicuo izquierdo activamente.",tip:"El punto mas comun de falla es que la cadera se hunde. Mantén activo el costado de arriba.",breath:"Exhala larga para estabilizar el core lateral"},
+      {name:"Barco (Navasana)",dur:"3 x 20-30 seg",desc:"Sentado con rodillas dobladas, pies en el suelo. Agarra detras de los muslos. Inclinate hacia atras hasta que la espalda este en 45°. Levanta los pies — espinillas paralelas al suelo. La columna se alarga. Si puedes, suelta las manos y extiendelas al frente. Para avanzar, extiende las piernas a 45°.",tip:"Temblar es completamente normal. Es el sistema nervioso y muscular calibrandose. Es la adaptacion.",breath:"Exhala profundo para activar el core y mantener la postura"},
+      {name:"Superman",dur:"2 x 45 seg",desc:"Acustate boca abajo con los brazos extendidos al frente. Simultáneamente levanta los brazos, el pecho y las piernas del suelo. Los musculos que se trabajan son los de la espalda baja, gluteos y espalda alta. Mantén la cabeza neutral — la mirada al suelo, no al frente.",tip:"Este ejercicio trabaja la espalda baja (erector espinae), el antagonista directo del abdomen. Esencial para un core equilibrado.",breath:"Inhala para preparar, exhala al levantar y mantenerte arriba"},
+      {name:"Puente con un pie",dur:"45 seg c/lado",desc:"Desde el puente clasico con caderas levantadas, extiende lentamente la pierna derecha hacia el cielo o paralela al suelo. Mantén ambas caderas a la misma altura — la que sube cuando levantamos la pierna es el error comun. El pie de apoyo presiona activamente el suelo.",tip:"Si la cadera del lado levantado cae, reduce el tiempo o vuelve al puente con ambos pies.",breath:"Respira continuo y constante"},
       {name:"Savasana",dur:"3 min",desc:"El core se recupera y fortalece en el descanso.",tip:"Siente la diferencia en tu espalda baja.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"3-3",name:"Flexibilidad Profunda",mins:35,
      endel:{scene:"Relax",energy:25,prompt:"Crepusculo en el bosque, completa entrega, tierra acogedora",tip:"Minima energia. La flexibilidad profunda requiere sistema nervioso en calma."},
      poses:[
-      {name:"Paloma completa",dur:"3 min c/lado",desc:"Rodilla derecha detras de la muneca. Pierna trasera extendida. Antebrazos o frente en el suelo.",tip:"Es intensa. Respira hacia la incomodidad, no te alejes.",breath:"10 respiraciones lentas antes de cambiar"},
-      {name:"Doble paloma",dur:"2 min c/lado",desc:"Espinillas apiladas, una sobre otra. Inclinate hacia adelante suavemente.",tip:"Si el tobillo de arriba cuelga, apoyalo en un bloque.",breath:"Exhala profunda para liberar caderas externas"},
-      {name:"Flexion sentada larga",dur:"2 min",desc:"Piernas extendidas, dobla rodillas levemente. Avanza el torso con espalda larga.",tip:"La meta es acercar el pecho a los muslos, no tocar los pies.",breath:"Inhala para alargar, exhala para avanzar 1mm"},
-      {name:"Torsion sentada",dur:"1.5 min c/lado",desc:"Dobla rodilla derecha, pie fuera del muslo izquierdo. Abraza la rodilla. Gira.",tip:"La torsion empieza desde la base de la columna.",breath:"Exhala para torcer un poco mas"},
-      {name:"Piernas en la pared",dur:"4 min",desc:"Sistema nervioso en modo restauracion completa.",tip:"Bolsita sobre los ojos para mayor relajacion.",breath:"Respira natural, sin controlar"}
+      {name:"Paloma completa",dur:"3 min c/lado",desc:"Desde cuatro puntos, lleva la rodilla derecha detras de la muneca derecha, el tobillo avanza hacia la muneca izquierda. Extiende la pierna izquierda completamente atras. Baja las caderas. Descansa en los antebrazos o con la frente en el suelo y los brazos extendidos. El estiramiento profundo en el gluteo y rotadores externos es normal — es el tejido conectivo respondiendo.",tip:"Es una de las poses mas intensas. Respira directamente hacia la incomodidad en lugar de alejarte de ella.",breath:"10 respiraciones lentas antes de considerar cambiar"},
+      {name:"Doble paloma",dur:"2 min c/lado",desc:"Sentado, dobla la rodilla derecha con la espinilla paralela al frente de la esterilla. Coloca la espinilla izquierda encima, alineando el tobillo izquierdo con la rodilla derecha. Las espinillas quedan apiladas. Desde las caderas, inclinate hacia adelante con la espalda larga. El estiramiento es profundo en ambas caderas externas.",tip:"Si el tobillo de arriba queda colgando en el aire sin apoyo, coloca un bloque o manta debajo. La postura sin apoyo puede lesionar.",breath:"Exhala profundo para liberar las caderas externas"},
+      {name:"Flexion sentada larga",dur:"2 min",desc:"Piernas extendidas juntas al frente, pies flexionados. Dobla levemente las rodillas. Con la columna completamente larga, inclinate desde las caderas — no desde la cintura. Las manos van donde llegan. La meta NO es tocar los pies; es mantener la espalda larga mientras el pecho avanza hacia los muslos.",tip:"Doblar las rodillas 10° o 20° puede cambiar radicalmente la sensacion. No es trampa, es inteligencia.",breath:"Inhala para alargar la columna, exhala para avanzar 1mm"},
+      {name:"Torsion sentada",dur:"1.5 min c/lado",desc:"Sentado con piernas extendidas, dobla la rodilla derecha y coloca el pie derecho en el suelo fuera del muslo izquierdo. Inhala para crecer. Al exhalar, gira el torso hacia la derecha. El brazo izquierdo abraza la rodilla derecha como palanca. La mano derecha en el suelo detras. La torsion empieza desde la base de la columna, no desde los hombros.",tip:"Cada exhala te permite torcer un poco mas. La torsion sigue a la respiracion, nunca la precede.",breath:"Exhala para torcer un poco mas, inhala para alargar"},
+      {name:"Piernas en la pared",dur:"4 min",desc:"Siéntate junto a la pared. En un movimiento, gira y sube las piernas. Espalda plana en el suelo, gluteos cerca de la pared. Cierra los ojos. Esta postura activa directamente el sistema nervioso parasimpatico — la respuesta de descanso y digestion. Es restauracion a nivel fisiologico.",tip:"Una bolsita de te fria, una manta o un antifaz sobre los ojos aumentan significativamente la relajacion.",breath:"Respira natural, sin controlar"}
      ]}
    ]},
   {id:4,name:"Elevar",emoji:"🔥",sub:"Siente tu fuerza",color:"#f59e0b",
@@ -563,29 +571,29 @@ const LEVELS=[
     {id:"4-1",name:"Guerrero",mins:35,
      endel:{scene:"Move",energy:70,prompt:"Amanecer en cumbre, determinacion tranquila, fuerza que fluye",tip:"Move al 70%. El ritmo marca el compas de tus transiciones."},
      poses:[
-      {name:"Flujo G1 > G2 > G3",dur:"3 min c/lado",desc:"Guerrero I: caderas cuadradas, brazos arriba. > Guerrero II: cadera abierta, brazos en T. > Guerrero III: torso inclina, pierna trasera sube.",tip:"Primero aprende cada pose sola. Luego unelas.",breath:"Un movimiento = una respiracion"},
-      {name:"Guerrero Inverso",dur:"1.5 min c/lado",desc:"Desde Guerrero II, mano trasera por la pierna trasera. Inclinate atras. Brazo delantero al cielo.",tip:"Mantén la rodilla delantera sobre el tobillo.",breath:"Inhala al abrir el pecho lateral"},
-      {name:"Media Luna Creciente",dur:"1.5 min c/lado",desc:"Pie trasero levantado, bola del pie. Rodilla trasera extendida. Caderas cuadradas. Brazos al cielo.",tip:"Si las caderas ruedan, acorta el paso.",breath:"Exhala para alargar la pierna trasera"},
-      {name:"Triangulo > Media Luna prep",dur:"2 min c/lado",desc:"Desde triangulo, dobla rodilla delantera. Mano al suelo o bloque. Pierna trasera paralela al suelo.",tip:"Primero enfocate en no caer. El equilibrio llega.",breath:"Respira suave y constante"},
-      {name:"Savasana larga",dur:"4 min",desc:"Has trabajado mucho. Tu cuerpo lo merece.",tip:"Pasa mentalmente por cada parte del cuerpo y sueltala.",breath:"Respira natural, sin controlar"}
+      {name:"Flujo G1 > G2 > G3",dur:"3 min c/lado",desc:"G1: pie trasero atras, caderas al frente, brazos al cielo, rodilla delantera sobre el tobillo. → Al exhalar, abre la cadera y los brazos a los lados: G2. → Transfiere el peso a la pierna delantera, el torso baja paralelo al suelo y la pierna trasera sube: G3. Una respiracion por transicion. Mantén 2-3 respiraciones en cada posicion antes de continuar.",tip:"Aprende cada posicion por separado antes de intentar el flujo. La transicion entre poses es parte de la practica.",breath:"Un movimiento = una respiracion"},
+      {name:"Guerrero Inverso",dur:"1.5 min c/lado",desc:"Desde Guerrero II, desliza la mano trasera por la pierna trasera mientras el torso se inclina hacia atras. El brazo delantero sube al cielo, la mirada puede seguirlo. La rodilla delantera se mantiene doblada sobre el tobillo — no se mueve. Sientes el estiramiento en el costado y la ingle del lado que mira al cielo.",tip:"La rodilla delantera no cambia de posicion al entrar en Guerrero Inverso. Solo el torso y los brazos se mueven.",breath:"Inhala profundo para abrir el pecho lateral"},
+      {name:"Media Luna Creciente",dur:"1.5 min c/lado",desc:"Desde Guerrero I, levanta el talon trasero y extiende completamente la pierna de atras. Solo la bola del pie trasero toca el suelo. La rodilla trasera no toca el piso. Las caderas miran al frente. Sube los brazos al cielo. Es mas exigente que Guerrero I por la inestabilidad.",tip:"Si las caderas ruedan hacia un lado, acorta el paso entre los pies para recuperar el cuadrado de caderas.",breath:"Exhala para alargar la pierna trasera y estabilizar"},
+      {name:"Triangulo > Media Luna prep",dur:"2 min c/lado",desc:"Desde Triangulo, dobla la rodilla delantera. Coloca la mano en el suelo o un bloque directamente debajo del hombro. Transfiere el peso a esa mano y al pie delantero. Levanta la pierna trasera hasta que quede paralela al suelo. La cadera de arriba se apila sobre la de abajo. El brazo libre al cielo.",tip:"La primera prioridad es no caer, la segunda es la forma. El equilibrio en Media Luna llega con semanas de practica.",breath:"Respira suave y constante para mantener el equilibrio"},
+      {name:"Savasana larga",dur:"4 min",desc:"Esta fue la sesion de guerreros mas exigente hasta ahora. 4 minutos de savasana completa. Escanea mentalmente cada parte del cuerpo desde los pies y sueltala conscientemente al llegar.",tip:"La recuperacion activa en savasana es cuando el sistema nervioso consolida los patrones de movimiento que acabas de aprender.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"4-2",name:"Potencia Core",mins:35,
      endel:{scene:"Move",energy:75,prompt:"Volcan latente, poder interno, fuego controlado",tip:"La energia mas alta hasta ahora."},
      poses:[
-      {name:"Plancha completa",dur:"3 x 45 seg",desc:"Cuerpo en linea perfecta. Si el temblor no cede, descansa 10 seg y vuelve.",tip:"Presiona el suelo como si quisieras abrirlo. Activa lats.",breath:"Respiracion lenta y controlada"},
-      {name:"Plancha lateral completa",dur:"45 seg c/lado",desc:"Apoyo en la mano. Cuerpo en linea diagonal. Cadera que no cae.",tip:"Siempre forma sobre duracion.",breath:"Respira continuamente"},
-      {name:"Barco + dobla + sube",dur:"3 x 10 reps",desc:"Piernas a 45°. Dobla rodillas al pecho. Vuelve a extender. 1 rep. Lento.",tip:"Sin balanceo. El movimiento es deliberado.",breath:"Exhala al doblar, inhala al extender"},
-      {name:"Cuervo preparatorio",dur:"5 min practica",desc:"Cuclillas, manos en el suelo. Rodillas en la parte externa de los brazos. Inclinate hacia adelante.",tip:"No saltes. El peso se transfiere gradualmente. Puede tomar semanas.",breath:"Exhala al inclinarte"},
-      {name:"Savasana",dur:"3 min",desc:"El fuego necesita apagarse para que el cuerpo reconstruya.",tip:"Nota como se siente diferente tu centro.",breath:"Respira natural, sin controlar"}
+      {name:"Plancha completa",dur:"3 x 45 seg",desc:"Manos bajo hombros, cuerpo en linea perfecta de cabeza a talones. Activa abdomen, gluteos y piernas al mismo tiempo. Presiona el suelo con las palmas como si quisieras separar las manos — eso activa los latissimus dorsi y estabiliza los hombros. Si el cuerpo tiembla, descansa 10 seg y regresa.",tip:"Presionar el suelo hacia afuera activa musculos estabilizadores que pocas personas usan en plancha. Pruebalo.",breath:"Respiracion lenta y controlada — nunca apnea"},
+      {name:"Plancha lateral completa",dur:"45 seg c/lado",desc:"Desde plancha, gira todo el cuerpo al lado derecho. El pie derecho es el apoyo, con el borde externo en el suelo. O apila ambos pies. La mano derecha directamente bajo el hombro. El cuerpo forma una linea diagonal de pies a cabeza. La cadera no cae — eso es lo mas importante.",tip:"La forma siempre gana sobre la duracion. 20 segundos bien ejecutados valen mas que 45 a medio hacer.",breath:"Respira continuamente para oxigenar"},
+      {name:"Barco + dobla + sube",dur:"3 x 10 reps",desc:"En posicion de Barco con piernas a 45°. Sin bajar las piernas al suelo: dobla las rodillas al pecho (exhala) y luego extiende las piernas de vuelta a 45° (inhala). Eso es 1 repeticion. Hazlo extremadamente lento — 3 segundos en cada direccion. Sin balanceo, el movimiento sale del core.",tip:"Si balanceas el torso para ayudarte, el movimiento se vuelve momentum. Hazlo lento hasta que el momentum sea imposible.",breath:"Exhala al doblar, inhala al extender"},
+      {name:"Cuervo preparatorio",dur:"5 min practica",desc:"Cuclillas con los pies juntos. Coloca las manos en el suelo, al ancho de los hombros. Apoya la parte interna de las rodillas en la parte externa de los brazos (en el triceps). Inclinate lentamente hacia adelante transfiriendo el peso a las manos. Una rodilla levanta, luego la otra. El objetivo no es volar — es sentir el punto de equilibrio.",tip:"No saltes nunca. El peso se transfiere de manera progresiva. Esta habilidad puede tomar semanas o meses de practica regular.",breath:"Exhala mientras te inclinas hacia adelante para activar el core"},
+      {name:"Savasana",dur:"3 min",desc:"El fuego necesita apagarse para que el cuerpo pueda reconstruir fibras musculares mas fuertes. La supercompensacion muscular ocurre durante el descanso, no durante el esfuerzo.",tip:"Nota como se siente tu centro despues de esta sesion. Esa sensacion de activacion es el core despertado.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"4-3",name:"Gran Apertura",mins:40,
      endel:{scene:"Relax",energy:20,prompt:"Noche estrellada, rendicion total, cuerpo que se derrama",tip:"Minima energia, maxima relajacion."},
      poses:[
-      {name:"Media splits",dur:"3 min c/lado",desc:"Desde media luna baja, extiende la pierna delantera. Caderas retroceden hasta sentir el isquiotibial.",tip:"No es el splits completo. Es alargar progresivamente.",breath:"Exhala profundo para liberar el isquiotibial"},
-      {name:"Paloma con variacion",dur:"3 min c/lado",desc:"En paloma, prueba brazos al frente y frente al suelo. O levanta el torso.",tip:"Despues, una torsion suave ayuda a cerrar la cadera.",breath:"10 respiraciones largas antes de cambiar"},
-      {name:"Piernas abiertas sentado",dur:"3 min",desc:"Abre las piernas sin esfuerzo. Columna larga. Inclinate desde las caderas.",tip:"Primero trabaja la abertura lateral, luego la inclinacion.",breath:"Cada exhala: 1mm mas adelante"},
-      {name:"Puente profundo",dur:"2 min",desc:"Sube mas alto empujando fuerte con los pies.",tip:"Si sientes presion lumbar, baja la altura.",breath:"Inhala profundo, exhala para subir mas"},
-      {name:"Savasana larga",dur:"5 min",desc:"La sesion mas intensa del nivel 4.",tip:"Escanea tu cuerpo de pies a cabeza.",breath:"Respira natural, sin controlar"}
+      {name:"Media splits",dur:"3 min c/lado",desc:"Desde Media Luna baja (rodilla trasera en el suelo, pie delantero entre las manos), desliza la pierna delantera hacia adelante mientras las caderas retroceden. La pierna delantera queda extendida, el pie flexionado. Las caderas bajan hacia el suelo. El estiramiento se siente en la parte posterior del muslo delantero y en la ingle trasera.",tip:"No es el splits completo. Es la conversacion progresiva con tu limite. Cada sesion un centimetro mas.",breath:"Exhala profundo para liberar el isquiotibial"},
+      {name:"Paloma con variacion",dur:"3 min c/lado",desc:"En Paloma (rodilla delantera doblada, pierna trasera extendida), explora variaciones segun tu nivel: A) Antebrazos en el suelo, frente abajo — maxima apertura. B) Brazos extendidos al frente — alarga la espalda. C) Levanta el torso con manos en el suelo — apertura de cadera con extension de columna. Elige la que mas sientas hoy.",tip:"Una torsion suave hacia la pierna doblada despues de salir de Paloma ayuda a cerrar y asentar la cadera.",breath:"10 respiraciones largas antes de cambiar de lado"},
+      {name:"Piernas abiertas sentado",dur:"3 min",desc:"Sentado, abre las piernas lateralmente hasta donde lleguen sin esfuerzo muscular. Flexiona los pies. Con la columna larga, inclinate desde las caderas hacia adelante hasta donde llegues. Primero trabaja la abertura lateral (que las piernas se abran mas), luego la inclinacion hacia adelante.",tip:"La inclinacion hacia adelante llega sola cuando la apertura lateral mejora. Prioriza la apertura, no la inclinacion.",breath:"Cada exhala: 1mm mas adelante"},
+      {name:"Puente profundo",dur:"2 min",desc:"En puente, con los pies bien plantados cerca de los gluteos, presiona los pies contra el suelo con fuerza, como si quisieras alejarlos del cuerpo. Eso eleva mas las caderas. Puedes subir mas en las puntillas para mayor altura. Entrelaza las manos bajo la espalda y presiona los brazos contra el suelo.",tip:"Si sientes presion en la zona lumbar, baja la altura hasta que desaparezca. El puente nunca debe doler en la espalda.",breath:"Inhala profundo para expandir el pecho, exhala para mantener"},
+      {name:"Savasana larga",dur:"5 min",desc:"Esta sesion combino apertura profunda de caderas e isquiotibiales con poses de fuerza. El cuerpo necesita tiempo para integrar. 5 minutos completos. Escanea mentalmente de pies a cabeza, soltando cada parte al nombrarla.",tip:"Escaneo corporal: pies → pantorrillas → rodillas → muslos → caderas → abdomen → pecho → hombros → brazos → manos → cuello → cara. Suelta cada zona.",breath:"Respira natural, sin controlar"}
      ]}
    ]},
   {id:5,name:"Integrar",emoji:"✨",sub:"Eres un practicante",color:"#ec4899",
@@ -595,26 +603,26 @@ const LEVELS=[
     {id:"5-1",name:"Flujo Completo",mins:40,
      endel:{scene:"Move",energy:60,prompt:"Marea que sube y baja, ritmo de ola, presencia completa",tip:"Ajusta la energia segun la intensidad de cada secuencia."},
      poses:[
-      {name:"Saludo al Sol completo (5 rondas)",dur:"15 min",desc:"Montana > Brazos > Flexion > Medio lev. > Plancha > Caturanga > Perro boca arriba > Perro boca abajo > Camina > Medio lev. > Flexion > Montana.",tip:"Rondas 1-2 lentas para calentar. Las 3 restantes con mas fluidez.",breath:"Un movimiento = una respiracion exacta"},
-      {name:"Flujo de pie G1 > G2 > Triangulo > Media Luna",dur:"4 min c/lado",desc:"Sin bajar la pierna entre poses. 4-5 respiraciones en cada una.",tip:"Enfocate en la calidad de las transiciones.",breath:"Respiracion lenta y consciente"},
-      {name:"Secuencia sentada (5 poses)",dur:"8 min",desc:"Mariposa 2min > Flexion 2min > Piernas abiertas 2min > Torsion derecha > Torsion izquierda.",tip:"Observa cuanto cambio tu flexibilidad desde el Nivel 1.",breath:"Exhala en cada torsion"},
-      {name:"Savasana meditativa",dur:"5 min",desc:"Recorre mentalmente tu viaje en JAYYOGA. Siente lo que ha cambiado.",tip:"Si quieres, practica 5 minutos de meditacion sentado despues.",breath:"Respira natural, sin controlar"}
+      {name:"Saludo al Sol completo (5 rondas)",dur:"15 min",desc:"Secuencia completa: MONTANA → inhala BRAZOS AL CIELO → exhala FLEXION → inhala MEDIO LEVANTAMIENTO → exhala PLANCHA → CATURANGA (baja lento, codos pegados) → inhala PERRO BOCA ARRIBA (pecho abierto) → exhala PERRO BOCA ABAJO (caderas altas) → camina los pies → MEDIO LEVANTAMIENTO → FLEXION → inhala BRAZOS → MONTANA. Rondas 1-2 lentas para calentar, rondas 3-5 con ritmo.",tip:"Caturanga es la transicion mas dificil: codos pegados al cuerpo, bajas lento. No colapses. Si no llega, baja rodillas primero.",breath:"Un movimiento = una respiracion exacta, sin pausas"},
+      {name:"Flujo de pie G1 > G2 > Triangulo > Media Luna",dur:"4 min c/lado",desc:"Sin bajar la pierna entre poses. Guerrero I (caderas al frente, brazos arriba) → Guerrero II (abre cadera y brazos) → Triangulo (extiende rodilla, mano abajo) → Media Luna (dobla rodilla, levanta pierna). 4-5 respiraciones en cada posicion antes de transitar a la siguiente.",tip:"La calidad de las transiciones es lo que distingue una practica de principiante de una intermedia. Lento y consciente.",breath:"Respiracion lenta y consciente durante todo el flujo"},
+      {name:"Secuencia sentada (5 poses)",dur:"8 min",desc:"Mariposa 2min (pies juntos, inclinate) → Flexion piernas extendidas 2min (columna larga) → Piernas abiertas 2min (inclinate al centro) → Torsion derecha 1min (pie derecho fuera del muslo) → Torsion izquierda 1min. Compara como se siente tu flexibilidad versus el Nivel 1.",tip:"Si hiciste el programa en orden, notaras una diferencia real desde la primera sesion. Eso es 14 sesiones de trabajo.",breath:"Exhala en cada torsion para torcer un poco mas"},
+      {name:"Savasana meditativa",dur:"5 min",desc:"Acustate y cierra los ojos. Recorre mentalmente el camino recorrido en JAYYOGA — la primera sesion, cada pose que antes no podia y ahora si. Siente lo que ha cambiado en tu cuerpo, en tu respiracion, en tu relacion contigo mismo.",tip:"Si quieres, termina con 5 minutos de meditacion sentado. Ya tienes la capacidad de atencion para hacerlo.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"5-2",name:"Fuego Interior",mins:40,
      endel:{scene:"Move",energy:80,prompt:"Amanecer de verano, maxima vitalidad, plenitud fisica",tip:"La energia mas alta del programa. Preparate antes de empezar."},
      poses:[
-      {name:"Circuito Core (4 x 3 rondas)",dur:"15 min",desc:"Plancha 45seg > Plancha lateral izq 30seg > Plancha lateral der 30seg > Barco 30seg. Descanso 30seg entre rondas.",tip:"Mantén el registro. La mejora sera visible.",breath:"Nunca retengas la respiracion en poses de fuerza"},
-      {name:"Secuencia de equilibrio",dur:"8 min c/lado",desc:"Arbol 1min > Guerrero III 1min > Media Luna 1min > Guerrero III 30seg.",tip:"El equilibrio en yoga es 80% mental, 20% fuerza.",breath:"Mirada fija, respiracion suave"},
-      {name:"Apertura profunda",dur:"10 min",desc:"Paloma derecha 3min > Paloma izquierda 3min > Media splits 2min > Postura del nino 2min.",tip:"Tus caderas se sentiran mas abiertas que nunca.",breath:"4 tiempos adentro, 8 tiempos afuera"},
-      {name:"Savasana restaurativa",dur:"5 min",desc:"Lo has hecho extraordinariamente bien.",tip:"Esta savasana es un regalo que te das a ti mismo.",breath:"Respira natural, sin controlar"}
+      {name:"Circuito Core (4 x 3 rondas)",dur:"15 min",desc:"3 rondas del siguiente circuito, 30 seg de descanso entre rondas: Plancha completa 45seg → Plancha lateral izquierda 30seg → Plancha lateral derecha 30seg → Barco 30seg. La primera ronda aprende el ritmo, la segunda y tercera dalo todo. Mantén un registro mental de cuanto mejoras.",tip:"La mejora entre la primera y la ultima ronda de hoy es medible. En 2 semanas, la diferencia entre sesiones sera evidente.",breath:"Nunca retengas la respiracion durante esfuerzo. El oxigeno es el combustible."},
+      {name:"Secuencia de equilibrio",dur:"8 min c/lado",desc:"Sin bajar el pie entre poses: Arbol 1min (pie en tobillo, espinilla o muslo) → Guerrero III 1min (torso paralelo al suelo) → Media Luna 1min (pierna levantada, mano al suelo) → Guerrero III 30seg para cerrar. Repite el lado izquierdo completo.",tip:"El equilibrio es 80% mental — la mirada fija en un punto y la respiracion suave son mas importantes que la fuerza.",breath:"Mirada fija en un punto, respiracion suave y regular"},
+      {name:"Apertura profunda",dur:"10 min",desc:"Paloma lado derecho 3min (cadera derecha estirada) → Paloma lado izquierdo 3min → Media splits derecho 1min → Media splits izquierdo 1min → Postura del Nino 2min para integrar. Para la Paloma, busca la posicion mas profunda que hayas logrado hasta ahora.",tip:"Despues de los circuitos de fuerza, el cuerpo esta caliente. Las caderas se abriran mas de lo usual hoy.",breath:"4 tiempos adentro, 8 tiempos afuera — la proporcion de restauracion profunda"},
+      {name:"Savasana restaurativa",dur:"5 min",desc:"Esta fue una sesion de nivel avanzado. 5 minutos completos de savasana. Permite que el sistema nervioso procese, que los musculos reciban sangre, y que la mente descanse del esfuerzo sostenido.",tip:"Esta savasana es un regalo que te das despues de un trabajo extraordinario.",breath:"Respira natural, sin controlar"}
      ]},
     {id:"5-3",name:"Renacimiento",mins:45,
      endel:{scene:"Relax",energy:40,prompt:"Ultimo respiro del dia, completud, paz que ya no busca nada",tip:"La sesion final. Endel Relax para una practica meditativa."},
      poses:[
-      {name:"Flujo personal libre",dur:"15 min",desc:"Sin instrucciones. Muevete como tu cuerpo pida.",tip:"Confia en tu cuerpo. Despues de 15 sesiones, ya sabe.",breath:"La respiracion guia el movimiento"},
-      {name:"Pose cumbre (tu eliges)",dur:"5 min",desc:"Una pose que al principio parecia imposible: Cuervo, Splits, Media luna, Rueda.",tip:"No importa si no llegas. Importa que lo intentas.",breath:"Respira largo y profundo"},
-      {name:"Secuencia restaurativa completa",dur:"15 min",desc:"Paloma ambos lados 4min > Piernas en la pared 4min > Torsion supina 3min > Nino 2min > Savasana 2min.",tip:"Esta secuencia cierra el ciclo.",breath:"Respiracion lenta y profunda"},
-      {name:"Savasana final del programa",dur:"7 min",desc:"Mereces cada segundo. Nada que hacer. Solo ser.",tip:"Escribe despues: 3 cosas que cambiaron en tu cuerpo durante el programa.",breath:"Respira natural, sin controlar"}
+      {name:"Flujo personal libre",dur:"15 min",desc:"Sin instrucciones. Pon la musica de Endel y muevete como tu cuerpo pida. Puede ser un Saludo al Sol, puede ser solo estiramientos, puede ser quedarte en Postura del Nino 15 minutos. Despues de 14 sesiones, tu cuerpo ya sabe lo que necesita.",tip:"Confia en lo que surja. Si no sabes que hacer, empieza con Gato-Vaca y deja que el cuerpo te guie desde ahi.",breath:"La respiracion guia el movimiento, no al reves"},
+      {name:"Pose cumbre (tu eliges)",dur:"5 min",desc:"Elige una pose que al inicio del programa te parecia imposible: Cuervo (equilibrio en manos), Media Luna (equilibrio en un pie y una mano), Splits parciales, o Rueda (backbend completo). Dedica 5 minutos a explorarla con calma, calentamiento previo y sin expectativas de resultado.",tip:"No importa si llegas completamente o no. Lo que importa es que tienes la conciencia corporal y la respiracion para intentarlo con inteligencia.",breath:"Respira largo y profundo para mantener la calma en la incomodidad"},
+      {name:"Secuencia restaurativa completa",dur:"15 min",desc:"La secuencia de cierre: Paloma derecha 3min → Paloma izquierda 3min → Piernas en la pared 4min → Torsion supina derecha 1.5min → Torsion supina izquierda 1.5min → Postura del Nino 2min. Cada transicion lenta y consciente.",tip:"Esta secuencia es la misma desde el principio del programa. Nota como se siente diferente ahora.",breath:"Respiracion lenta y profunda — este es el cierre de todo el ciclo"},
+      {name:"Savasana final del programa",dur:"7 min",desc:"La ultima pose del programa JAYYOGA. 7 minutos. No hay nada mas que hacer, ninguna pose que alcanzar, ningun nivel siguiente. Solo acostarte y sentir lo que has construido en tu cuerpo y mente a lo largo de todo este camino.",tip:"Despues, antes de levantarte: escribe 3 cosas que cambiaron en tu cuerpo. Y 1 cosa que cambio en como te relacionas contigo mismo.",breath:"Respira natural, sin controlar"}
      ]}
    ]}
 ];
@@ -624,85 +632,85 @@ const EXPRESS=[
   {id:"e1",name:"Despertar Lento",cat:"Manana",level:1,mins:20,color:"#10b981",
    endel:{scene:"Relax",energy:20,prompt:"Primera luz del dia, silencio del hogar, cuerpo que despierta sin prisa",tip:"Volumen muy bajo, sin auriculares si puedes."},
    poses:[
-    {name:"Respiracion consciente",dur:"3 min",desc:"Acostado, manos en el abdomen. Observa como sube y baja con cada respiracion. Sin cambiar nada.",tip:"No cambies nada. Solo observa.",breath:"Natural, sin controlar"},
-    {name:"Gato-Vaca suave",dur:"3 min",desc:"5 segundos en cada posicion. Lento. No hay apuro.",tip:"La columna se lubrica con el movimiento. Dale tiempo.",breath:"Inhala vaca / Exhala gato"},
-    {name:"Torsion supina",dur:"2 min c/lado",desc:"Acostado, rodilla al pecho y cruzala al lado opuesto. 5 respiraciones lentas.",tip:"El hombro opuesto intenta tocar el suelo.",breath:"Exhala profundo en cada respiracion"},
-    {name:"Savasana",dur:"5 min",desc:"Sin apuro. Puedes quedarte mas tiempo si quieres.",tip:"Este es tu tiempo.",breath:"Respira natural"}
+    {name:"Respiracion consciente",dur:"3 min",desc:"Acostado boca arriba, coloca una mano en el abdomen y la otra en el pecho. Cierra los ojos. Observa cual de las dos manos se mueve mas al respirar. Sin cambiar nada todavia — solo observa. Si la mano del pecho sube mas, eso es respiracion superficial. La del abdomen indica respiracion diafragmatica.",tip:"No hay nada que corregir todavia. Solo observar. La consciencia es el primer cambio.",breath:"Natural, sin controlar — solo observa"},
+    {name:"Gato-Vaca suave",dur:"3 min",desc:"En cuatro puntos. VACA: al inhalar, deja caer el abdomen, levanta cabeza y coccix, espalda arqueada. GATO: al exhalar, redondea toda la espalda, menton al pecho, coccix abajo. Hazlo extremadamente lento — 5 segundos en cada posicion. Siente cada vertebra.",tip:"La columna se lubrica con este movimiento. Es el mejor despertador matutino para la espalda.",breath:"Inhala completamente en vaca / Exhala completamente en gato"},
+    {name:"Torsion supina",dur:"2 min c/lado",desc:"Acostado, dobla la rodilla derecha al pecho. Con la mano izquierda, cruzala al lado izquierdo del cuerpo. El brazo derecho se extiende en T. Mira hacia la derecha. El hombro derecho intenta mantenerse en el suelo aunque la rodilla tire hacia arriba. 5 respiraciones largas. Cambia.",tip:"El hombro opuesto hacia el suelo es lo que crea la torsion real. La gravedad hace el trabajo — no fuerces.",breath:"Exhala profundo en cada respiracion para profundizar suavemente"},
+    {name:"Savasana",dur:"5 min",desc:"Acustate completamente y cierra los ojos. Esta manana no hay apuro. 5 minutos de quietud antes de empezar el dia cambian la calidad de todo lo que viene despues.",tip:"Si quieres quedarte mas tiempo, quedate. Este es tu tiempo.",breath:"Respira natural"}
    ]},
   {id:"e2",name:"Reset de Mediodia",cat:"Energia",level:2,mins:15,color:"#06b6d4",
    endel:{scene:"Focus",energy:55,prompt:"Brisa marina en la tarde, claridad mental, energia renovada",tip:"Auriculares. El ritmo de Focus te saca del letargo."},
    poses:[
-    {name:"Saludo al Sol x 3",dur:"5 min",desc:"3 rondas a ritmo medio. Activa el cuerpo dormido por estar sentado.",tip:"Despues de estar sentado, el cuerpo necesita moverse en todas direcciones.",breath:"Un movimiento = una respiracion"},
-    {name:"Guerrero I x 30 seg c/lado",dur:"2 min",desc:"Sin demora. Activa piernas y core rapidamente.",tip:"Planta los pies con fuerza. Raiz antes de crecer.",breath:"Inhala al subir, exhala al mantener"},
-    {name:"Flexion adelante",dur:"2 min",desc:"Deja caer el torso. Dobla rodillas. Cabeza pesada. Balancea.",tip:"Libera tension acumulada en cuello y hombros.",breath:"Exhala completamente cada vez"},
-    {name:"Savasana corta",dur:"2 min",desc:"Cierra ojos. 5 respiraciones largas. Vuelves con energia renovada.",tip:"2 minutos de savasana equivalen a 20 minutos de descanso pasivo.",breath:"Respira largo y profundo"}
+    {name:"Saludo al Sol x 3",dur:"5 min",desc:"3 rondas completas a ritmo medio. Secuencia: Montana → Brazos → Flexion → Medio levantamiento → Plancha (o rodillas) → Perro boca abajo → camina → Medio levantamiento → Flexion → Montana. Despues de horas sentado, el cuerpo necesita moverse en todas las direcciones posibles.",tip:"El cuerpo lleva horas en una sola posicion. El Saludo al Sol contrarresta exactamente eso: extiende, comprime, gira y flexiona.",breath:"Un movimiento = una respiracion, sin pausas entre poses"},
+    {name:"Guerrero I x 30 seg c/lado",dur:"2 min",desc:"Sin perder tiempo. Pie trasero atras, rodilla delantera sobre el tobillo, caderas al frente, brazos al cielo. 30 segundos con toda la activacion. Cambia sin descanso. El objetivo es activar piernas y core rapidamente, no profundizar la pose.",tip:"Planta los pies con fuerza antes de subir los brazos. La raiz precede al crecimiento.",breath:"Inhala al subir los brazos, exhala para mantener activo"},
+    {name:"Flexion adelante",dur:"2 min",desc:"De pie, dobla ligeramente las rodillas y deja caer el torso hacia el suelo. La cabeza y los brazos cuelgan completamente pesados. Puedes balancearte suavemente de lado a lado. Esta posicion invierte la tension de cuello y hombros acumulada frente a una pantalla.",tip:"Cuanto mas blandos los rodillas, mas se libera la espalda baja. No importa si las manos no tocan el suelo.",breath:"Exhala completamente hasta vaciar los pulmones, luego inhala fresco"},
+    {name:"Savasana corta",dur:"2 min",desc:"Acustate o sientate comodo. Cierra los ojos. 5 respiraciones largas — inhala contando 4, exhala contando 6. Al terminar la quinta exhala, abre los ojos lentamente. Vas a volver con mas energia de la que tenias.",tip:"2 minutos de savasana con respiracion consciente tienen un efecto equivalente a 20 minutos de descanso pasivo en el sofa.",breath:"Inhala 4 tiempos, exhala 6 tiempos — 5 ciclos"}
    ]},
   {id:"e3",name:"Core Express",cat:"Core",level:3,mins:25,color:"#8b5cf6",
    endel:{scene:"Move",energy:70,prompt:"Fuego controlado, centro de gravedad, fuerza que no grita",tip:"Move a 70%. El ritmo te mantiene en el esfuerzo justo."},
    poses:[
-    {name:"Plancha completa",dur:"3 x 30 seg",desc:"Forma perfecta. Activa abdomen, gluteos y piernas simultaneamente.",tip:"Presiona el suelo con las palmas como si quisieras abrirlo.",breath:"Respira continuamente"},
-    {name:"Pajaro-Perro",dur:"2 min c/lado",desc:"Lento y controlado. Cadera nivelada. Sin rotar el torso.",tip:"Imagina el vaso de agua en la espalda.",breath:"Exhala al extender"},
-    {name:"Barco (Navasana)",dur:"3 x 25 seg",desc:"Piernas extendidas o dobladas. Espalda larga. Sin romper la postura.",tip:"Si tiemblas: bien. Es la adaptacion.",breath:"Exhala profundo al mantener"},
-    {name:"Puente dinamico",dur:"2 min",desc:"Sube y baja con control. 10 reps lentas, luego mantén 30 seg.",tip:"Activa los gluteos en cada subida.",breath:"Inhala subir, exhala bajar"},
-    {name:"Savasana",dur:"3 min",desc:"Core trabajado. Sistema nervioso en calma.",tip:"Siente la diferencia en tu centro ahora.",breath:"Respira natural"}
+    {name:"Plancha completa",dur:"3 x 30 seg",desc:"Manos bajo hombros, cuerpo en linea recta de cabeza a talones. Activa abdomen, gluteos y cuadriceps al mismo tiempo. Presiona el suelo con las palmas como si quisieras separar las manos — eso estabiliza los hombros. Descansa 10 seg entre series.",tip:"Presionar el suelo activamente hacia afuera activa mas musculos estabilizadores que simplemente sostenerse.",breath:"Respira continuo — nunca apnea durante plancha"},
+    {name:"Pajaro-Perro",dur:"2 min c/lado",desc:"En cuatro puntos, extiende el brazo derecho y la pierna izquierda simultaneamente. Ambos paralelos al suelo. La clave: las caderas no rotan — ninguna sube ni baja. Lento y deliberado, 3 segundos al extender, 3 al volver. Cambia.",tip:"Imagina un vaso de agua sobre la espalda. Si ruedan las caderas, se derrama. Eso te dice si lo estas haciendo bien.",breath:"Exhala al extender, inhala al volver al centro"},
+    {name:"Barco (Navasana)",dur:"3 x 25 seg",desc:"Sentado, inclinate atras y levanta los pies. Rodillas dobladas (nivel basico) o piernas extendidas (intermedio). La columna larga — no dejes que la espalda baja se redondee. Brazos paralelos al suelo o agarra detras de los muslos para ayudarte. Temblar es adaptacion.",tip:"El temblor es buena senal: es el sistema neuromuscular aprendiendo.",breath:"Exhala profundo para mantener el core activado"},
+    {name:"Puente dinamico",dur:"2 min",desc:"Acostado, pies cerca de los gluteos. Levanta y baja las caderas lentamente — 10 repeticiones a 3 segundos por movimiento. Luego sube y mantén 30 segundos apretando los gluteos activamente.",tip:"En cada subida, aprieta los gluteos como si quisieras juntar los talones. Eso activa completamente el gluteo mayor.",breath:"Inhala al subir, exhala lenta al bajar o mantener"},
+    {name:"Savasana",dur:"3 min",desc:"El core acaba de ser solicitado en todos sus grupos: anterior (plancha, barco), posterior (puente, superman) y lateral (pajaro-perro). Ahora el sistema nervioso necesita integrar.",tip:"Siente la diferencia entre tu centro ahora y cuando comenzaste la sesion. Esa sensacion es el core despertado.",breath:"Respira natural, sin controlar"}
    ]},
   {id:"e4",name:"Liberacion de Caderas",cat:"Estiramiento",level:2,mins:30,color:"#06b6d4",
    endel:{scene:"Relax",energy:30,prompt:"Tierra calida, caderas que se derraman, profunda liberacion",tip:"Endel Relax al minimo. Necesitas calma total en el sistema nervioso."},
    poses:[
-    {name:"Mariposa",dur:"4 min",desc:"Plantas de pies juntas. Columna larga. Inclinate muy suavemente.",tip:"No empujes las rodillas. Tiempo y respiracion hacen el trabajo.",breath:"Inhala crece, exhala sueltate"},
-    {name:"Paloma preparatoria",dur:"3 min c/lado",desc:"Rodilla detras de la muneca. Pierna trasera larga. Antebrazos en el suelo.",tip:"Respira en el limite. No te alejes de la incomodidad.",breath:"10 respiraciones lentas antes de cambiar"},
-    {name:"Figura 4 supina",dur:"2 min c/lado",desc:"Tobillo sobre muslo opuesto. Acerca piernas al pecho.",tip:"Si la cadera se resiste, deja el pie contrario en el suelo.",breath:"Exhala para profundizar"},
-    {name:"Piernas en la pared",dur:"4 min",desc:"Piernas completamente apoyadas. Ojos cerrados.",tip:"Permite que el cuerpo libere sin esfuerzo.",breath:"Respira natural, sin controlar"}
+    {name:"Mariposa",dur:"4 min",desc:"Sentado con plantas de pies juntas y rodillas abiertas. Sujeta los pies o tobillos. Columna larga. Inclinate muy ligeramente hacia adelante desde las caderas. Las rodillas caen por su propio peso — no las empujes con las manos. Mientras mas cerca del cuerpo esten los pies, mas intensa es la apertura.",tip:"El tiempo y la respiracion hacen el trabajo. No empujes las rodillas — nunca.",breath:"Inhala para crecer, exhala para sueltarte un poco mas"},
+    {name:"Paloma preparatoria",dur:"3 min c/lado",desc:"Desde cuatro puntos, lleva la rodilla derecha al suelo detras de la muneca derecha. La pierna trasera se extiende completamente. Baja las caderas. Descansa en los antebrazos o con la frente al suelo. El estiramiento en el gluteo derecho puede ser muy intenso — es exactamente donde la mayoria acumulamos tension.",tip:"Respira directamente hacia la incomodidad en lugar de contraerte o alejarte de ella. La resistencia aumenta el dolor.",breath:"10 respiraciones lentas antes de cambiar — sin importar cuanto cueste"},
+    {name:"Figura 4 supina",dur:"2 min c/lado",desc:"Acostado boca arriba, cruza el tobillo derecho sobre el muslo izquierdo (encima de la rodilla). Flexiona el pie derecho. Entrelaza las manos detras del muslo izquierdo y acerca ambas piernas al pecho. Sientes el estiramiento en el gluteo y rotadores externos del lado derecho.",tip:"Si la cadera se resiste mucho, mantén el pie izquierdo en el suelo sin levantar la pierna — igual estira.",breath:"Exhala para profundizar suavemente sin forzar"},
+    {name:"Piernas en la pared",dur:"4 min",desc:"Siéntate junto a la pared. Gira y sube las piernas hasta apoyarlas completamente en la pared. Espalda plana en el suelo. Ojos cerrados. Esta inversion suave activa el sistema nervioso parasimpatico — la respuesta de relajacion profunda del cuerpo.",tip:"Permite que el cuerpo se libere sin hacer nada activo. La inversion hace el trabajo.",breath:"Respira natural, sin controlar — cada exhala un poco mas profunda"}
    ]},
   {id:"e5",name:"Mindfulness en Movimiento",cat:"Mindfulness",level:4,mins:35,color:"#f59e0b",
    endel:{scene:"Focus",energy:40,prompt:"Presencia total, movimiento como meditacion, cada pose un refugio",tip:"Focus bajo (40%) — el sonido como ancla, no como estimulacion."},
    poses:[
-    {name:"Saludo al Sol meditativo (3 rondas)",dur:"9 min",desc:"Extremadamente lento. 5 respiraciones en cada posicion. La mente en el cuerpo.",tip:"Si la mente se va, regresala con la siguiente respiracion.",breath:"5 respiraciones por posicion"},
-    {name:"Guerrero II estatico",dur:"3 min c/lado",desc:"Sin mover nada. 20 respiraciones en cada lado.",tip:"Esto es yoga real: no flexibilidad, sino presencia ante la incomodidad.",breath:"Respira largo y uniforme"},
-    {name:"Arbol",dur:"2 min c/lado",desc:"Equilibrio como practica de presencia. Si caes, vuelves sin juicio.",tip:"El punto de equilibrio esta en la mirada fija y la respiracion suave.",breath:"Respira suave y constante"},
-    {name:"Savasana con escaneo corporal",dur:"7 min",desc:"Pasa mentalmente por cada parte del cuerpo de pies a cabeza. Suelta conscientemente.",tip:"Esta es la parte mas avanzada de la practica.",breath:"Respira natural, sin controlar"}
+    {name:"Saludo al Sol meditativo (3 rondas)",dur:"9 min",desc:"3 rondas extremadamente lentas del Saludo al Sol. 5 respiraciones completas en cada posicion antes de moverse. La mente permanece en la sensacion del cuerpo en cada pose — la presion del pie en el suelo, la elongacion de la columna, el calor en los musculos. Cuando la mente divague (y lo hara), regresala con la proxima respiracion.",tip:"Si la mente se va 100 veces, la traes 100 veces. Cada regreso es la practica, no el fallo.",breath:"5 respiraciones completas por posicion — sin apuro"},
+    {name:"Guerrero II estatico",dur:"3 min c/lado",desc:"Entra en Guerrero II y no muevas nada durante 3 minutos completos — 20 respiraciones. Los muslos empiezan a quemar. La mente quiere que te vayas. Tu decides quedarte y respirar. Esto es yoga real: no es flexibilidad sino presencia ante la incomodidad.",tip:"El proposito no es aguantar el dolor. Es observar la historia que la mente cuenta sobre el dolor — 'ya no puedo', 'esto es demasiado' — sin creerla.",breath:"Inhala profundo y largo, exhala completa. Uniforme."},
+    {name:"Arbol",dur:"2 min c/lado",desc:"De pie en un pie, coloca el otro en el tobillo, espinilla o muslo (no rodilla). Las manos en oracion al pecho. Fija la mirada en un punto que no se mueva. Si caes, vuelves sin comentarios internos. El equilibrio como practica de presencia: cuando la mente se calma, el cuerpo se estabiliza.",tip:"El equilibrio fisico y el mental son el mismo proceso. Cuando la mente se aquieta, el cuerpo deja de tambalearse.",breath:"Respiracion suave y constante — una respiracion cortada rompe el equilibrio"},
+    {name:"Savasana con escaneo corporal",dur:"7 min",desc:"Acustate y cierra los ojos. Lleva la atencion a los pies — sueltalos conscientemente. Sube lentamente: pantorrillas, rodillas, muslos, caderas, abdomen, pecho, hombros, brazos, manos, cuello, cara. En cada zona, suelta cualquier tension que encuentres. El escaneo corporal es la habilidad meditativa mas directa.",tip:"Esta es la parte mas avanzada de la practica de hoy. Requiere mas atencion que cualquier pose fisica.",breath:"Respira natural, sin controlar"}
    ]},
   {id:"e6",name:"Potencia Guerrero",cat:"Flujo",level:4,mins:30,color:"#f59e0b",
    endel:{scene:"Move",energy:75,prompt:"Determinacion silenciosa, guerrero que no pelea, fortaleza tranquila",tip:"Move al 75%. Deja que el ritmo marque el compas de las transiciones."},
    poses:[
-    {name:"Saludo al Sol x 5 (caliente)",dur:"10 min",desc:"Rondas 1-2 lentas, 3-5 a ritmo constante. Cuerpo completamente activado.",tip:"Despues de 5 rondas tu cuerpo deberia sentirse caliente y vivo.",breath:"Fluye con la respiracion"},
-    {name:"Flujo Guerrero: G1 > G2 > GInverso > GIII",dur:"5 min c/lado",desc:"Una transicion por respiracion. Fluye como agua entre las poses.",tip:"Si necesitas descanso, postura del nino. Siempre.",breath:"Un movimiento = una respiracion"},
-    {name:"Media Luna",dur:"1.5 min c/lado",desc:"Desde triangulo, dobla la rodilla y levanta la pierna trasera. Mano libre al cielo.",tip:"Mira hacia arriba cuando el equilibrio se estabilice.",breath:"Respira suave y constante"},
-    {name:"Savasana",dur:"4 min",desc:"Guerrero descansando. Igual de poderoso.",tip:"La fuerza se construye en el descanso.",breath:"Respira natural"}
+    {name:"Saludo al Sol x 5 (caliente)",dur:"10 min",desc:"5 rondas del Saludo al Sol completo. Rondas 1-2 muy lentas para calentar articulaciones. Rondas 3-5 a ritmo constante, una respiracion por movimiento sin pausa. Despues de 5 rondas el cuerpo debe sentirse completamente caliente, los pulmones abiertos, y las articulaciones lubricadas.",tip:"Si el cuerpo no esta caliente despues de 5 rondas, agrega 2 mas. El calentamiento no es opcional en este flujo.",breath:"Fluye — el movimiento y la respiracion son un mismo gesto"},
+    {name:"Flujo Guerrero: G1 > G2 > GInverso > GIII",dur:"5 min c/lado",desc:"Secuencia: G1 (caderas al frente, brazos arriba) → G2 (cadera abierta, brazos en T) → Guerrero Inverso (torso atras, brazo al cielo) → Guerrero III (torso al suelo, pierna trasera sube). Una transicion por respiracion. 2-3 ciclos completos por lado antes de cambiar.",tip:"Cuando el cuerpo esta caliente por los Saludos, este flujo se siente completamente diferente. Las transiciones fluyen solas.",breath:"Un movimiento = una respiracion, sin pausas"},
+    {name:"Media Luna",dur:"1.5 min c/lado",desc:"Desde Triangulo (mano en espinilla o suelo), dobla la rodilla delantera. Transfiere el peso a esa mano y ese pie. Levanta la pierna trasera hasta paralela al suelo. La cadera de arriba se apila sobre la de abajo. El brazo libre va al cielo. Cuando el equilibrio se estabilice, gira la cabeza para mirar la mano arriba.",tip:"Mira hacia arriba solo cuando el equilibrio ya este estable, no como primer gesto. Hacerlo demasiado pronto desestabiliza.",breath:"Respira suave y constante — una respiracion cortada rompe el equilibrio"},
+    {name:"Savasana",dur:"4 min",desc:"4 minutos de descanso completo despues de una de las sesiones de flujo mas exigentes. El guerrero sabe descansar con la misma plenitud con que lucha. La fuerza se construye en la recuperacion.",tip:"La fuerza muscular se desarrolla en el descanso post-esfuerzo, no durante el esfuerzo mismo.",breath:"Respira natural, sin controlar"}
    ]},
   {id:"e7",name:"Equilibrio y Tierra",cat:"Equilibrio",level:3,mins:28,color:"#8b5cf6",
    endel:{scene:"Focus",energy:50,prompt:"Roca en el rio, todo fluye alrededor, tu permaneces",tip:"Focus al 50%. Ni muy activo, ni muy relajante. El equilibrio exacto."},
    poses:[
-    {name:"Montana con ojos cerrados",dur:"2 min",desc:"De pie, ojos cerrados, 2 minutos. Observa como el cuerpo se balancea constantemente.",tip:"Nunca estamos completamente quietos. El equilibrio es continuo.",breath:"Respira natural"},
-    {name:"Arbol prolongado",dur:"3 min c/lado",desc:"1 minuto con ojos abiertos, 1 con semicerrados, 1 con cerrados.",tip:"Avanza gradualmente. No saltes al nivel mas dificil.",breath:"Respira suave y regular"},
-    {name:"Guerrero III estatico",dur:"1.5 min c/lado",desc:"Mantén sin mover. La mente querra que te vayas. Tu decides quedarte.",tip:"El temblor es normal. Es el sistema nervioso calibrandose.",breath:"Exhala para estabilizar"},
-    {name:"Arbol con torsion",dur:"1 min c/lado",desc:"En arbol, lleva las manos al pecho y gira levemente hacia el lado de la pierna levantada.",tip:"Variacion avanzada. Explora sin presion.",breath:"Exhala al girar"},
-    {name:"Savasana",dur:"4 min",desc:"El equilibrio se aprende en el descanso.",tip:"Siente como los pies se hunden en el suelo.",breath:"Respira natural"}
+    {name:"Montana con ojos cerrados",dur:"2 min",desc:"Parate con pies al ancho de caderas. Cierra los ojos. 2 minutos. Observa: el cuerpo nunca esta completamente quieto. Se balancea constantemente en micro-movimientos. Los tobillos, las rodillas, las caderas se ajustan continuamente. El equilibrio es un proceso activo, no un estado estatico.",tip:"Este ejercicio revela cuanto trabaja el sistema nervioso para mantenerte de pie sin que lo notes.",breath:"Respira natural — no controles nada"},
+    {name:"Arbol prolongado",dur:"3 min c/lado",desc:"En Arbol (pie en tobillo, espinilla o muslo), divide los 3 minutos en tres etapas: 1 minuto con ojos completamente abiertos → 1 minuto con ojos semicerrados (solo luz y sombra) → 1 minuto con ojos cerrados. Cada etapa es considerablemente mas dificil que la anterior.",tip:"Avanza gradualmente entre etapas sin presion. Si te caes en la etapa cerrada, vuelve a semicerrado. El progreso es en semanas, no en minutos.",breath:"Respiracion suave y regular — cada movimiento del pecho altera el equilibrio"},
+    {name:"Guerrero III estatico",dur:"1.5 min c/lado",desc:"Entra en Guerrero III (torso paralelo al suelo, una pierna levantada) y no muevas nada durante 90 segundos. El cuerpo temblara. La mente dira que ya es suficiente. Tu decides quedarte y respirar. Los brazos pueden estar al frente, en las caderas, o en oracion — elige segun tu nivel.",tip:"El temblor es el sistema nervioso calibrandose para una demanda de equilibrio que no habia enfrentado. Es adaptacion, no fallo.",breath:"Exhala larga para estabilizar el core y la cadera"},
+    {name:"Arbol con torsion",dur:"1 min c/lado",desc:"En Arbol con el equilibrio ya establecido, lleva las manos en oracion al pecho. Gira el torso lentamente hacia el lado de la pierna levantada. La cadera y el pie de apoyo no se mueven. Es una variacion avanzada que combina equilibrio y torsion.",tip:"Solo intenta esto cuando el Arbol ya este completamente estable. La torsion agrega complejidad neurologica importante.",breath:"Exhala al girar, inhala para volver al centro"},
+    {name:"Savasana",dur:"4 min",desc:"El equilibrio se aprende durante el descanso, no durante el esfuerzo. El sistema nervioso consolida los nuevos patrones propioceptivos mientras descansas. 4 minutos completos.",tip:"Al levantarte, nota como los pies se sienten mas conectados al suelo. Es real — no es imaginacion.",breath:"Respira natural, sin controlar"}
    ]},
   {id:"e8",name:"Noche Restaurativa",cat:"Noche",level:1,mins:25,color:"#10b981",
    endel:{scene:"Relax",energy:15,prompt:"Luna llena sobre el mar, cuerpo que se funde con la esterilla, noche que abraza",tip:"Endel al minimo posible. Volumen muy bajo. Esta sesion es silencio."},
    poses:[
-    {name:"Postura del Nino largo",dur:"5 min",desc:"Brazos extendidos. Frente en el suelo o un cojin. Respira profundo hacia la espalda baja.",tip:"Deja que el dia se vaya con cada exhala.",breath:"Inhala profundo, exhala suelta el dia"},
-    {name:"Bebe feliz",dur:"3 min",desc:"Sujeta los pies. Rodillas hacia el suelo. Balancea suavemente.",tip:"Tu sistema nervioso recibe el mensaje: es seguro relajarse.",breath:"Respira libre y natural"},
-    {name:"Torsion supina larga",dur:"3 min c/lado",desc:"Sin apuro. 6 respiraciones largas en cada lado.",tip:"Cada exhala libera tension fisica y mental del dia.",breath:"Exhala profundo, lento"},
-    {name:"Piernas en la pared",dur:"5 min",desc:"El cierre perfecto del dia. Sistema nervioso parasimpatico.",tip:"Si puedes, queda aqui 10 minutos.",breath:"Respira natural, sin controlar"}
+    {name:"Postura del Nino largo",dur:"5 min",desc:"Rodillas separadas al ancho de la esterilla, pies juntos. Torso cae entre los muslos, frente al suelo o sobre un cojin. Brazos extendidos al frente, palmas abajo. Respira profundo hacia la espalda baja — siente como la parte baja de la espalda se expande hacia los lados con cada inhala.",tip:"Con cada exhala, imagina que el dia — todo lo que paso hoy — se va con el aire.",breath:"Inhala hacia la espalda baja, exhala y suelta el dia"},
+    {name:"Bebe feliz",dur:"3 min",desc:"Acostado boca arriba, dobla las rodillas y sujeta la parte externa de los pies. Las rodillas se abren y bajan hacia el suelo, alineadas con las axilas. Las pantorrillas quedan perpendiculares al suelo. Puedes mecerte suavemente de lado a lado como un bebe tranquilo.",tip:"Tu sistema nervioso recibe el mensaje exacto que necesita antes de dormir: todo esta bien, es seguro relajarse.",breath:"Respira libre y natural sin controlar nada"},
+    {name:"Torsion supina larga",dur:"3 min c/lado",desc:"Acostado, dobla la rodilla derecha y cruzala al lado izquierdo con la mano izquierda. Brazo derecho en T. Mira a la derecha. Sin apuro — 6 respiraciones largas y completas antes de cambiar. Cada exhala libera tension de la columna, las caderas y la mente.",tip:"Cada exhala suelta un poco mas. No fuerces — permite.",breath:"Exhala profundo y lento, sintiendo como la torsion se profundiza sola"},
+    {name:"Piernas en la pared",dur:"5 min",desc:"El cierre perfecto de cualquier dia. Acercate a la pared, sube las piernas y recuestate con la espalda plana. Ojos cerrados. Esta posicion drena el liquido acumulado en piernas por estar de pie o sentado, y activa el sistema nervioso parasimpatico — la respuesta de descanso y digestion.",tip:"Si puedes quedarte 10 minutos, hazlo. Esta es una de las posturas mas beneficiosas que existen.",breath:"Respira natural, sin controlar — cada exhala mas profunda que la anterior"}
    ]},
   {id:"e9",name:"Flexibilidad Radical",cat:"Estiramiento",level:5,mins:40,color:"#ec4899",
    endel:{scene:"Relax",energy:20,prompt:"Rendicion total, tejidos que se ablandan, cuerpo sin resistencia",tip:"Endel Relax al 20%. La flexibilidad profunda necesita un sistema nervioso en calma absoluta."},
    poses:[
-    {name:"Paloma completa profunda",dur:"5 min c/lado",desc:"Busca la posicion mas profunda que hayas estado. Frente al suelo, brazos extendidos. Quietud total.",tip:"Respira en el dolor sordo. Ese es el tejido conectivo liberandose.",breath:"10 respiraciones antes de considerar cambiar"},
-    {name:"Media splits",dur:"3 min c/lado",desc:"Pierna delantera extendida al maximo. Caderas al suelo si es posible.",tip:"El objetivo no es el splits. Es la conversacion con tu limite.",breath:"Exhala profundo para liberar el isquiotibial"},
-    {name:"Piernas abiertas maximas",dur:"4 min",desc:"Abre al maximo sin esfuerzo muscular. Inclinate muy lentamente hacia adelante.",tip:"No compitas contigo mismo. Compara solo con la semana pasada.",breath:"Cada exhala: 1mm mas"},
-    {name:"Puente de rueda preparatorio",dur:"3 min",desc:"Puente con manos cerca de la cabeza, codos al cielo. Si llega, empuja para abrir el pecho.",tip:"Si la rueda no llega: el puente profundo es igual de valioso.",breath:"Inhala para preparar, exhala para abrir"},
-    {name:"Savasana larga",dur:"7 min",desc:"El tejido conectivo necesita tiempo para re-organizarse.",tip:"Esta savasana es parte del estiramiento. No la acortes.",breath:"Respira natural, sin controlar"}
+    {name:"Paloma completa profunda",dur:"5 min c/lado",desc:"Entra en Paloma (rodilla delantera doblada, pierna trasera extendida). Busca la posicion mas profunda que hayas logrado hasta ahora. Antebrazos o frente en el suelo. Brazos extendidos. Quietud total. El dolor sordo en el gluteo es el tejido conectivo respondiendo al estiramiento prolongado — es exactamente donde quieres estar.",tip:"La diferencia entre estiramiento productivo y lesion: el primero es un dolor sordo que cede con la respiracion. El segundo es agudo o con hormigueo.",breath:"10 respiraciones lentas y completas antes de considerar cambiar"},
+    {name:"Media splits",dur:"3 min c/lado",desc:"Desde Media Luna baja (rodilla trasera en el suelo), desliza el pie delantero hacia adelante mientras las caderas retroceden. La pierna delantera se extiende, el pie flexionado. Las caderas bajan al maximo posible. Puedes apoyarte en los antebrazos o en bloques a los lados.",tip:"El objetivo no es el splits completo. Es la conversacion progresiva con tu limite — cada sesion un poco mas.",breath:"Exhala profundo para liberar el isquiotibial y la ingle"},
+    {name:"Piernas abiertas maximas",dur:"4 min",desc:"Sentado, abre las piernas al maximo lateral sin esfuerzo muscular activo — que sea la gravedad. Flexiona los pies. Primero trabaja que las piernas se abran mas. Luego, con la columna larga, inclinate desde las caderas hacia adelante muy lentamente, centimetro a centimetro.",tip:"No compitas con la sesion pasada ni con lo que crees que 'deberia' ser. Compara solo con la semana anterior.",breath:"Cada exhala: 1mm mas adelante — sin apuro"},
+    {name:"Puente de rueda preparatorio",dur:"3 min",desc:"Acostado, dobla las rodillas con pies en el suelo. Coloca las manos con los dedos apuntando hacia los hombros, codos al cielo. Desde ahi, presiona manos y pies contra el suelo para levantar el cuerpo. Si llegas: estas en la Rueda. Si no: en Puente profundo con manos — ambas son validas.",tip:"Si la Rueda no llega hoy, el Puente profundo con manos en el suelo es igualmente valioso. La diferencia es de semanas de practica.",breath:"Inhala profundo para expandir el pecho, exhala para subir mas"},
+    {name:"Savasana larga",dur:"7 min",desc:"Despues de estiramiento profundo, el tejido conectivo (fascia, tendones, ligamentos) necesita tiempo para reorganizarse en su nueva longitud. 7 minutos de quietud completa son parte del estiramiento — tan importantes como las poses.",tip:"Esta savasana no es opcional. Acortar el descanso post-estiramiento profundo reduce el 40% del beneficio.",breath:"Respira natural, sin controlar"}
    ]},
   {id:"e10",name:"Fuego y Calma",cat:"Reset",level:5,mins:45,color:"#ec4899",
    endel:{scene:"Move",energy:65,prompt:"Dos mundos en uno, esfuerzo y rendicion, yin y yang en movimiento",tip:"Move al 65%. Ni muy intenso ni muy relajante. El balance perfecto para esta sesion."},
    poses:[
-    {name:"Circuito core intenso",dur:"12 min",desc:"Plancha 1min > Plancha lateral 45seg c/lado > Barco 45seg > Elevaciones supinas 20reps > Descanso 1min. Repite 2 veces.",tip:"Primera ronda: aprende el circuito. Segunda ronda: dale todo.",breath:"Nunca retengas la respiracion"},
-    {name:"Flujo de guerreros completo",dur:"8 min",desc:"Saludo al Sol x 2 > Flujo G1/G2/GInverso/GIII x 2 c/lado. Sin pausa entre elementos.",tip:"La transicion entre poses es parte de la practica.",breath:"Fluye con cada movimiento"},
-    {name:"Secuencia restaurativa completa",dur:"15 min",desc:"Paloma 3min c/lado > Media splits 2min c/lado > Piernas abiertas 3min > Piernas en la pared 4min.",tip:"El contraste entre el fuego y la calma hace que ambas partes sean mas efectivas.",breath:"Respira profundo en cada pose restaurativa"},
-    {name:"Savasana final",dur:"7 min",desc:"Integracion total. Fuego y calma juntos en el descanso.",tip:"Siente la combinacion de fuerza y suavidad en tu cuerpo.",breath:"Respira natural, sin controlar"}
+    {name:"Circuito core intenso",dur:"12 min",desc:"2 rondas del siguiente circuito con 1 minuto de descanso entre rondas: Plancha completa 1min → Plancha lateral derecha 45seg → Plancha lateral izquierda 45seg → Barco 45seg → Elevaciones de piernas supino 20 reps lentas. Primera ronda: aprende el ritmo. Segunda ronda: dale todo lo que tienes.",tip:"La diferencia entre ronda 1 y ronda 2 te dice exactamente donde esta tu limite actual. Es informacion valiosa.",breath:"Nunca retengas el aire durante esfuerzo — el oxygen es el combustible del core"},
+    {name:"Flujo de guerreros completo",dur:"8 min",desc:"Sin pausa entre elementos: Saludo al Sol x 2 (calentamiento) → Flujo G1/G2/Guerrero Inverso/GIII por el lado derecho, 2 ciclos completos → Saludo al Sol x 1 → Flujo por el lado izquierdo, 2 ciclos. Las transiciones entre guerreros son parte de la practica, no interrupciones.",tip:"Cuando el cuerpo esta caliente del circuito, el flujo de guerreros se siente completamente diferente — mas fluido y mas poderoso.",breath:"Fluye — un movimiento, una respiracion, sin pausa"},
+    {name:"Secuencia restaurativa completa",dur:"15 min",desc:"El contraste entre el fuego del circuito y la calma de esta secuencia potencia ambas partes: Paloma derecha 3min → Paloma izquierda 3min → Media splits derecho 2min → Media splits izquierdo 2min → Piernas abiertas con inclinacion 3min → Piernas en la pared 2min.",tip:"El cuerpo caliente por el esfuerzo previo permite aperturas mas profundas. Esta secuencia es mas efectiva despues del fuego.",breath:"Respira profundo y largo en cada pose restaurativa"},
+    {name:"Savasana final",dur:"7 min",desc:"Has combinado fuego intenso y calma profunda en una sola sesion. Esta combinacion hace que el cuerpo integre fuerza y flexibilidad al mismo tiempo. 7 minutos de quietud completa para que esa integracion suceda.",tip:"Al terminar, nota como conviven la sensacion de fuerza y la suavidad en un mismo cuerpo. Eso es lo que el yoga construye.",breath:"Respira natural, sin controlar"}
    ]}
 ];
 
@@ -802,6 +810,15 @@ function getStats(){
   const favCat=Object.entries(catCounts).sort((a,b)=>b[1]-a[1])[0]?.[0]||null;
   return{totalMins,sessions:completed.size,favCat};
 }
+function animCount(el,target,dur=600){
+  if(!el)return;
+  const start=performance.now();
+  (function tick(now){
+    const p=Math.min((now-start)/dur,1);
+    el.textContent=Math.round(target*p);
+    if(p<1)requestAnimationFrame(tick);
+  })(start);
+}
 function renderStats(){
   const streak=getStreak();
   const {totalMins,sessions,favCat}=getStats();
@@ -810,21 +827,21 @@ function renderStats(){
   strip.innerHTML=`
     <div class="stat-item">
       <div>
-        <div class="streak-val"><span class="${fireClass}">🔥</span>${streak}</div>
+        <div class="streak-val"><span class="${fireClass}">🔥</span><span id="s-streak">0</span></div>
         <div class="stat-lbl">dias seguidos</div>
       </div>
     </div>
     <div class="stat-divider"></div>
     <div class="stat-item">
       <div>
-        <div class="stat-val">${sessions}</div>
+        <div class="stat-val" id="s-sess">0</div>
         <div class="stat-lbl">sesiones</div>
       </div>
     </div>
     <div class="stat-divider"></div>
     <div class="stat-item">
       <div>
-        <div class="stat-val">${totalMins}</div>
+        <div class="stat-val" id="s-mins">0</div>
         <div class="stat-lbl">minutos totales</div>
       </div>
     </div>
@@ -835,6 +852,9 @@ function renderStats(){
         <div class="stat-lbl">categoria fav</div>
       </div>
     </div>`:''}`;
+  animCount(document.getElementById('s-streak'),streak);
+  animCount(document.getElementById('s-sess'),sessions);
+  animCount(document.getElementById('s-mins'),totalMins,800);
 }
 
 // ─── TABS ────────────────────────────────────────
@@ -966,7 +986,7 @@ function renderLevel(lid){
     <div class="section-label">Sesiones</div>
     ${level.sessions.map((s,si)=>{
       const done=completed.has(s.id);
-      return`<div class="session-card${done?' done':''}" onclick="showSession('${s.id}','level')">
+      return`<div class="session-card${done?' done':''}" style="--s-accent:${level.color}" onclick="showSession('${s.id}','level')">
         <div class="session-num" style="${done?`background:${level.color}18;color:${level.color}`:''}">${done?'&#10003;':si+1}</div>
         <div class="session-info">
           <div class="session-name">${s.name}</div>
@@ -1062,7 +1082,10 @@ function renderSession(sid){
     <div class="endel-card">
       <div class="endel-hdr" onclick="toggleEndel(this)">
         <div class="endel-pill">endel</div>
-        <div class="endel-hdr-title">Configuracion de audio</div>
+        <div style="flex:1;min-width:0">
+          <div class="endel-hdr-title">Configuracion de audio</div>
+          <div class="endel-hdr-prompt">"${e.prompt}"</div>
+        </div>
         <div class="endel-chevron open">&#9660;</div>
       </div>
       <div class="endel-body open">
@@ -1100,9 +1123,10 @@ function renderSession(sid){
       <div class="breath-hint">inhala 4s &middot; exhala 6s</div>
     </div>
 
-    <div class="poses-label">Poses</div>
+    <div class="poses-label">Poses — <span id="pose-count-lbl">0 / ${session.poses.length}</span></div>
+    <div class="pose-prog-wrap"><div class="pose-prog-fill" id="pose-prog-fill"></div></div>
     ${session.poses.map((p,i)=>`
-      <div class="pose-card${done?' done':''}" id="pose-${i}">
+      <div class="pose-card${done?' done':''}" id="pose-${i}" style="--pose-color:${level.color}">
         <div class="pose-hdr" onclick="togglePose(${i})">
           <div class="pose-chk" onclick="checkPose(event,${i})"><div class="pose-chk-dot"></div></div>
           <div class="pose-name">${p.name}</div>
@@ -1143,6 +1167,17 @@ function checkPose(e,i){
   const wasDone=card.classList.contains('done');
   card.classList.toggle('done');
   if(!wasDone)bellEnd();
+  updatePoseProgress();
+}
+function updatePoseProgress(){
+  const all=document.querySelectorAll('.pose-card');
+  const done=[...all].filter(c=>c.classList.contains('done')).length;
+  const total=all.length;if(!total)return;
+  const pct=done/total*100;
+  const fill=document.getElementById('pose-prog-fill');
+  const lbl=document.getElementById('pose-count-lbl');
+  if(fill)fill.style.width=pct+'%';
+  if(lbl)lbl.textContent=`${done} / ${total}`;
 }
 
 function completeSession(sid){
