@@ -33,7 +33,7 @@ body{
 
 /* ── Orbs ── */
 .orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.orb{position:absolute;border-radius:50%;filter:blur(120px);animation:drift 26s ease-in-out infinite alternate}
+.orb{position:absolute;border-radius:50%;filter:blur(120px);animation:drift 26s ease-in-out infinite alternate;transition:background 1.8s ease}
 .orb-1{width:700px;height:700px;background:radial-gradient(#6d28d9,transparent);top:-25%;left:-15%;opacity:.08;animation-duration:28s}
 .orb-2{width:550px;height:550px;background:radial-gradient(#0891b2,transparent);top:30%;right:-20%;opacity:.07;animation-duration:22s;animation-delay:-11s}
 .orb-3{width:450px;height:450px;background:radial-gradient(#065f46,transparent);bottom:-10%;left:20%;opacity:.06;animation-duration:32s;animation-delay:-18s}
@@ -43,10 +43,10 @@ body{
 .screen{position:relative;z-index:1;display:none;min-height:100vh}
 .screen.active{display:block}
 
-/* ── Wide container (home/explore) ── */
+/* ── Wide container ── */
 .cw{max-width:var(--w);margin:0 auto;padding:0 clamp(18px,4vw,48px)}
 
-/* ── Narrow container (session/level detail) ── */
+/* ── Narrow container ── */
 .cn{max-width:680px;margin:0 auto;padding:0 clamp(16px,4vw,32px)}
 
 /* ── App header ── */
@@ -65,6 +65,25 @@ body{
   cursor:pointer;font-size:12px;font-family:var(--font);letter-spacing:.04em;transition:all .2s;
 }
 .back-btn:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+
+/* ── Stats strip ── */
+.stats-strip{
+  display:flex;align-items:center;gap:clamp(12px,2vw,28px);
+  padding:clamp(10px,2vw,14px) clamp(14px,2vw,22px);
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  margin:clamp(12px,2vw,20px) 0 0;flex-wrap:wrap;
+}
+.stat-item{display:flex;align-items:center;gap:7px}
+.stat-val{font-size:clamp(16px,2.5vw,20px);font-weight:700;font-family:var(--mono);letter-spacing:-.03em}
+.stat-lbl{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.stat-divider{width:1px;height:24px;background:var(--border);flex-shrink:0}
+.streak-val{
+  display:flex;align-items:center;gap:4px;
+  font-size:clamp(16px,2.5vw,20px);font-weight:700;font-family:var(--mono);letter-spacing:-.03em;
+}
+.fire{display:inline-block;animation:fireFlicker 1.2s ease-in-out infinite alternate}
+@keyframes fireFlicker{0%{transform:scale(1) rotate(-3deg)}100%{transform:scale(1.15) rotate(3deg)}}
+.fire-dim{opacity:.35;animation:none}
 
 /* ── Tabs ── */
 .tabs{display:flex;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:100px;padding:3px}
@@ -223,26 +242,29 @@ body{
 /* Breath */
 .breath-zone{display:flex;flex-direction:column;align-items:center;padding:clamp(22px,4vw,36px) 0}
 .breath-ring{
-  width:130px;height:130px;border-radius:50%;
+  width:140px;height:140px;border-radius:50%;
   border:1px solid rgba(255,255,255,.07);
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;position:relative;
 }
 .breath-ring::after{content:'';position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(255,255,255,.025)}
 .breath-inner{
-  width:106px;height:106px;border-radius:50%;
+  width:116px;height:116px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;flex-direction:column;
   background:radial-gradient(circle,rgba(109,40,217,.2) 0%,transparent 70%);
   border:1px solid rgba(109,40,217,.14);transition:transform .3s ease;
+  user-select:none;
 }
-.breath-ring.inhale .breath-inner{animation:bIn 4s ease-in-out infinite}
-.breath-ring.exhale .breath-inner{animation:bOut 6s ease-in-out infinite}
-@keyframes bIn{0%{transform:scale(1)}50%{transform:scale(1.26)}100%{transform:scale(1)}}
-@keyframes bOut{0%{transform:scale(1.18)}50%{transform:scale(.85)}100%{transform:scale(1.18)}}
-.breath-emoji{font-size:22px}
-.breath-txt{font-size:9px;color:var(--muted);margin-top:3px;letter-spacing:.1em;text-transform:uppercase}
-.breath-status{font-size:12px;color:var(--muted);margin-top:14px}
-.breath-hint{font-size:10px;color:var(--dim);margin-top:5px;font-family:var(--mono)}
+.breath-ring.inhale .breath-inner{animation:bIn 4s ease-in-out forwards}
+.breath-ring.exhale .breath-inner{animation:bOut 6s ease-in-out forwards}
+@keyframes bIn{0%{transform:scale(.88)}100%{transform:scale(1.22)}}
+@keyframes bOut{0%{transform:scale(1.22)}100%{transform:scale(.88)}}
+.breath-emoji{font-size:22px;margin-bottom:2px}
+.breath-phase{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--text);opacity:.8;text-transform:uppercase;margin-bottom:1px}
+.breath-count-num{font-size:22px;font-weight:700;font-family:var(--mono);letter-spacing:-.03em;color:var(--text);line-height:1}
+.breath-tap-hint{font-size:9px;color:var(--muted);margin-top:2px;letter-spacing:.08em;text-transform:uppercase}
+.breath-status{font-size:12px;color:var(--muted);margin-top:16px;text-align:center}
+.breath-hint{font-size:10px;color:var(--dim);margin-top:5px;font-family:var(--mono);text-align:center}
 
 /* Endel card */
 .endel-card{
@@ -279,9 +301,10 @@ body{
 .poses-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;font-weight:500}
 .pose-card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:15px;padding:15px 18px;margin-bottom:8px;
+  border-radius:15px;padding:15px 18px;margin-bottom:8px;transition:border-color .2s;
 }
 .pose-card.done{border-color:rgba(16,185,129,.2);opacity:.6}
+.pose-card.active-pose{border-color:rgba(139,92,246,.25);background:rgba(139,92,246,.04)}
 .pose-hdr{display:flex;align-items:center;gap:10px;cursor:pointer}
 .pose-chk{
   width:24px;height:24px;border-radius:7px;border:1px solid var(--border2);
@@ -322,7 +345,8 @@ body{
 .cel-emoji{font-size:60px;margin-bottom:20px;animation:celPop .4s cubic-bezier(.34,1.56,.64,1)}
 @keyframes celPop{0%{transform:scale(0)}100%{transform:scale(1)}}
 .celebration h2{font-size:clamp(20px,4vw,26px);font-weight:700;letter-spacing:-.02em;margin-bottom:10px}
-.celebration p{color:var(--muted);font-size:13px;line-height:1.7;max-width:280px;margin-bottom:30px}
+.celebration p{color:var(--muted);font-size:13px;line-height:1.7;max-width:280px;margin-bottom:8px}
+.cel-streak{font-size:22px;margin-bottom:22px}
 .cel-btn{
   padding:14px 38px;border-radius:100px;border:none;
   background:linear-gradient(135deg,rgba(109,40,217,.9),rgba(8,145,178,.85));
@@ -347,10 +371,13 @@ body{
     <div class="app-header">
       <div class="logo">Jayyoga</div>
       <div class="tabs">
-        <button class="tab-btn active" onclick="setTab('todas')">Todas las sesiones</button>
-        <button class="tab-btn" onclick="setTab('programa')">Programa</button>
+        <button class="tab-btn active" data-tab="todas" onclick="setTab('todas')">Todas las sesiones</button>
+        <button class="tab-btn" data-tab="programa" onclick="setTab('programa')">Programa</button>
       </div>
     </div>
+
+    <!-- Stats strip -->
+    <div class="stats-strip" id="stats-strip"></div>
 
     <!-- Tab: Todas -->
     <div id="tab-todas" class="tab-pane active">
@@ -427,6 +454,7 @@ body{
   <div class="cel-emoji" id="cel-emoji">&#127881;</div>
   <h2 id="cel-title">Sesion completada</h2>
   <p id="cel-msg"></p>
+  <div class="cel-streak" id="cel-streak"></div>
   <button class="cel-btn" id="cel-btn">Continuar</button>
 </div>
 
@@ -680,6 +708,20 @@ const EXPRESS=[
 
 const CATS=["Todas","Manana","Energia","Core","Estiramiento","Mindfulness","Flujo","Equilibrio","Noche","Reset"];
 
+// ─── CATEGORY → ORB COLORS ──────────────────────
+const CAT_ORBS={
+  'Core':     ['#8b5cf6','#6d28d9','#1e1b4b'],
+  'Estiramiento':['#0891b2','#06b6d4','#065f46'],
+  'Mindfulness': ['#a78bfa','#6d28d9','#2e1065'],
+  'Flujo':    ['#f59e0b','#d97706','#451a03'],
+  'Equilibrio':  ['#8b5cf6','#0891b2','#1e1b4b'],
+  'Noche':    ['#065f46','#0f172a','#1e1b4b'],
+  'Manana':   ['#10b981','#059669','#064e3b'],
+  'Energia':  ['#06b6d4','#0891b2','#083344'],
+  'Reset':    ['#ec4899','#db2777','#4a044e'],
+};
+const ORB_DEFAULT=['#6d28d9','#0891b2','#065f46'];
+
 // ─── STATE ──────────────────────────────────────
 let completed=new Set(JSON.parse(localStorage.getItem('jy_done')||'[]'));
 let activeLevelId=null;
@@ -689,6 +731,111 @@ let activeTab='todas';
 
 function save(){localStorage.setItem('jy_done',JSON.stringify([...completed]))}
 function levelDone(l){return l.sessions.filter(s=>completed.has(s.id)).length}
+
+// ─── BELL (Web Audio) ───────────────────────────
+let audioCtx=null;
+function getAudioCtx(){
+  if(!audioCtx)try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}
+  return audioCtx;
+}
+function playBell(freq=528,vol=0.28,dur=2.6){
+  const ctx=getAudioCtx();if(!ctx)return;
+  if(ctx.state==='suspended')ctx.resume();
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  const osc2=ctx.createOscillator(); // subtle harmonic
+  const gain2=ctx.createGain();
+  osc.connect(gain);gain.connect(ctx.destination);
+  osc2.connect(gain2);gain2.connect(ctx.destination);
+  osc.type='sine';osc.frequency.setValueAtTime(freq,ctx.currentTime);
+  osc2.type='sine';osc2.frequency.setValueAtTime(freq*2.756,ctx.currentTime); // bowl overtone
+  gain.gain.setValueAtTime(0,ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(vol,ctx.currentTime+0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
+  gain2.gain.setValueAtTime(0,ctx.currentTime);
+  gain2.gain.linearRampToValueAtTime(vol*0.3,ctx.currentTime+0.01);
+  gain2.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur*0.6);
+  osc.start();osc.stop(ctx.currentTime+dur);
+  osc2.start();osc2.stop(ctx.currentTime+dur);
+}
+function bellStart(){playBell(432,0.3,3.0)} // lower, fuller for "start"
+function bellEnd(){playBell(528,0.22,2.0)}  // higher, softer for "done"
+
+// ─── ORBS ───────────────────────────────────────
+function setOrbTheme(colors){
+  const orbs=document.querySelectorAll('.orb');
+  const c=colors||ORB_DEFAULT;
+  if(orbs[0])orbs[0].style.background=`radial-gradient(${c[0]},transparent)`;
+  if(orbs[1])orbs[1].style.background=`radial-gradient(${c[1]},transparent)`;
+  if(orbs[2])orbs[2].style.background=`radial-gradient(${c[2]},transparent)`;
+}
+
+// ─── STREAK ─────────────────────────────────────
+function todayStr(){return new Date().toISOString().slice(0,10)}
+function prevDayStr(dateStr){
+  const d=new Date(dateStr);d.setDate(d.getDate()-1);return d.toISOString().slice(0,10);
+}
+function getStreak(){
+  const dates=new Set(JSON.parse(localStorage.getItem('jy_streak')||'[]'));
+  const today=todayStr();
+  const yesterday=prevDayStr(today);
+  let start=dates.has(today)?today:dates.has(yesterday)?yesterday:null;
+  if(!start)return 0;
+  let streak=0,cur=start;
+  while(dates.has(cur)){streak++;cur=prevDayStr(cur);}
+  return streak;
+}
+function markToday(){
+  const dates=JSON.parse(localStorage.getItem('jy_streak')||'[]');
+  const today=todayStr();
+  if(!dates.includes(today)){dates.push(today);localStorage.setItem('jy_streak',JSON.stringify(dates));}
+}
+
+// ─── STATS ──────────────────────────────────────
+function getStats(){
+  let totalMins=0;const catCounts={};
+  completed.forEach(sid=>{
+    for(const l of LEVELS){const s=l.sessions.find(s=>s.id===sid);if(s){totalMins+=s.mins;return;}}
+    const ex=EXPRESS.find(s=>s.id===sid);
+    if(ex){totalMins+=ex.mins;catCounts[ex.cat]=(catCounts[ex.cat]||0)+1;}
+  });
+  const favCat=Object.entries(catCounts).sort((a,b)=>b[1]-a[1])[0]?.[0]||null;
+  return{totalMins,sessions:completed.size,favCat};
+}
+function renderStats(){
+  const streak=getStreak();
+  const {totalMins,sessions,favCat}=getStats();
+  const strip=document.getElementById('stats-strip');if(!strip)return;
+  const fireClass=streak>0?'fire':'fire fire-dim';
+  strip.innerHTML=`
+    <div class="stat-item">
+      <div>
+        <div class="streak-val"><span class="${fireClass}">🔥</span>${streak}</div>
+        <div class="stat-lbl">dias seguidos</div>
+      </div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div>
+        <div class="stat-val">${sessions}</div>
+        <div class="stat-lbl">sesiones</div>
+      </div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div>
+        <div class="stat-val">${totalMins}</div>
+        <div class="stat-lbl">minutos totales</div>
+      </div>
+    </div>
+    ${favCat?`<div class="stat-divider"></div>
+    <div class="stat-item">
+      <div>
+        <div class="stat-val" style="font-size:14px;font-family:var(--font);letter-spacing:-.01em">${favCat}</div>
+        <div class="stat-lbl">categoria fav</div>
+      </div>
+    </div>`:''}`;
+}
 
 // ─── TABS ────────────────────────────────────────
 function setTab(tab){
@@ -701,6 +848,8 @@ function setTab(tab){
 // ─── SCREENS ────────────────────────────────────
 function showHome(){
   switchScreen('screen-home');
+  setOrbTheme(null);
+  renderStats();
   if(activeTab==='programa')renderPrograma();
 }
 function showLevel(lid){
@@ -709,8 +858,16 @@ function showLevel(lid){
 function showSession(sid,back){
   activeBackScreen=back||'home';
   switchScreen('screen-session');
+  // set orb theme from session category
+  let cat=null;
+  for(const l of LEVELS){if(l.sessions.find(s=>s.id===sid)){cat=null;break;}}
+  const ex=EXPRESS.find(s=>s.id===sid);
+  if(ex)cat=ex.cat;
+  setOrbTheme(cat&&CAT_ORBS[cat]?CAT_ORBS[cat]:null);
+
   document.getElementById('session-back').onclick=()=>{
-    breathActive=false;clearTimeout(breathTimer);
+    breathActive=false;clearTimeout(breathTimer);clearInterval(breathCountInterval);
+    setOrbTheme(null);
     if(activeBackScreen==='level')showLevel(activeLevelId);
     else showHome();
   };
@@ -723,11 +880,8 @@ function switchScreen(id){
 
 // ─── RENDER TODAS ───────────────────────────────
 function renderTodas(){
-  // Filter chips
   const fr=document.getElementById('filter-row');
   fr.innerHTML=CATS.map(c=>`<button class="filter-chip${activeFilter===c?' active':''}" onclick="setFilter('${c}')">${c}</button>`).join('');
-  // Assign data-tab to tab buttons now
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>{b.dataset.tab=i===0?'todas':'programa'});
 
   const grid=document.getElementById('sessions-grid');
   grid.innerHTML=EXPRESS.map(s=>{
@@ -824,9 +978,70 @@ function renderLevel(lid){
     <div style="height:40px"></div>`;
 }
 
-// ─── RENDER SESSION ─────────────────────────────
-let breathActive=false,breathTimer=null;
+// ─── BREATH ENGINE ──────────────────────────────
+let breathActive=false,breathTimer=null,breathCountInterval=null;
 
+function renderBreathIdle(emoji){
+  const ring=document.getElementById('breath-ring');if(!ring)return;
+  const inner=ring.querySelector('.breath-inner');
+  inner.innerHTML=`<div class="breath-emoji">${emoji}</div><div class="breath-tap-hint">toca para respirar</div>`;
+  ring.className='breath-ring';
+}
+function renderBreathPhase(emoji,phase,secs,colorHex){
+  const ring=document.getElementById('breath-ring');if(!ring)return;
+  const inner=ring.querySelector('.breath-inner');
+  const status=document.getElementById('breath-status');
+  inner.innerHTML=`
+    <div class="breath-emoji">${emoji}</div>
+    <div class="breath-phase" style="color:${colorHex}">${phase}</div>
+    <div class="breath-count-num" id="breath-live">${secs}</div>`;
+  if(status)status.textContent='';
+}
+function startCountdown(seconds,elementId){
+  clearInterval(breathCountInterval);
+  let remaining=seconds;
+  const el=document.getElementById(elementId);
+  if(el)el.textContent=remaining;
+  breathCountInterval=setInterval(()=>{
+    remaining--;
+    const e2=document.getElementById(elementId);
+    if(e2)e2.textContent=Math.max(0,remaining);
+    if(remaining<=0)clearInterval(breathCountInterval);
+  },1000);
+}
+
+function toggleBreath(){
+  if(!breathActive){
+    breathActive=true;
+    getAudioCtx(); // warm up context on user gesture
+    doBreath();
+  }else{
+    breathActive=false;clearTimeout(breathTimer);clearInterval(breathCountInterval);
+    const emoji=document.querySelector('.breath-emoji')?.textContent||'🧘';
+    renderBreathIdle(emoji);
+    const status=document.getElementById('breath-status');
+    if(status)status.textContent='Toca para activar guia de respiracion';
+  }
+}
+function doBreath(){
+  if(!breathActive)return;
+  const ring=document.getElementById('breath-ring');if(!ring)return;
+  const emoji=ring.querySelector('.breath-emoji')?.textContent||'🧘';
+  // INHALE 4s
+  ring.className='breath-ring inhale';
+  renderBreathPhase(emoji,'inhala',4,'rgba(196,181,253,.9)');
+  startCountdown(4,'breath-live');
+  breathTimer=setTimeout(()=>{
+    if(!breathActive)return;
+    // EXHALE 6s
+    ring.className='breath-ring exhale';
+    renderBreathPhase(emoji,'exhala',6,'rgba(103,232,249,.8)');
+    startCountdown(6,'breath-live');
+    breathTimer=setTimeout(doBreath,6000);
+  },4000);
+}
+
+// ─── RENDER SESSION ─────────────────────────────
 function renderSession(sid){
   let session,level,isExpress=false;
   for(const l of LEVELS){const s=l.sessions.find(s=>s.id===sid);if(s){session=s;level=l;break;}}
@@ -841,7 +1056,7 @@ function renderSession(sid){
   document.getElementById('session-content').innerHTML=`
     <div class="session-title-bar">
       <h2>${session.name}</h2>
-      <p>${isExpress?session.cat+' &middot; ':''} ${session.mins} MIN &middot; NIVEL ${level.id} &middot; ${level.name.toUpperCase()}</p>
+      <p>${isExpress?session.cat+' &middot; ':''}${session.mins} MIN &middot; NIVEL ${level.id} &middot; ${level.name.toUpperCase()}</p>
     </div>
 
     <div class="endel-card">
@@ -878,7 +1093,7 @@ function renderSession(sid){
       <div class="breath-ring" id="breath-ring" onclick="toggleBreath()" style="border-color:${level.color}22">
         <div class="breath-inner" style="background:radial-gradient(circle,${level.color}28 0%,transparent 70%);border-color:${level.color}18">
           <div class="breath-emoji">${level.emoji}</div>
-          <div class="breath-txt">respira</div>
+          <div class="breath-tap-hint">toca para respirar</div>
         </div>
       </div>
       <div class="breath-status" id="breath-status">Toca para activar guia de respiracion</div>
@@ -905,7 +1120,7 @@ function renderSession(sid){
     </button>
     <div style="height:20px"></div>`;
 
-  breathActive=false;clearTimeout(breathTimer);
+  breathActive=false;clearTimeout(breathTimer);clearInterval(breathCountInterval);
   togglePose(0);
 }
 
@@ -919,39 +1134,33 @@ function togglePose(i){
   const c=document.getElementById('pose-'+i);if(!c)return;
   const was=c.classList.contains('expanded');
   document.querySelectorAll('.pose-card.expanded').forEach(el=>el.classList.remove('expanded'));
-  if(!was)c.classList.add('expanded');
+  document.querySelectorAll('.pose-card.active-pose').forEach(el=>el.classList.remove('active-pose'));
+  if(!was){c.classList.add('expanded','active-pose');bellStart();}
 }
-function checkPose(e,i){e.stopPropagation();document.getElementById('pose-'+i).classList.toggle('done')}
-
-function toggleBreath(){
-  const ring=document.getElementById('breath-ring');
-  const status=document.getElementById('breath-status');
-  if(!breathActive){breathActive=true;doBreath();}
-  else{breathActive=false;clearTimeout(breathTimer);ring.className='breath-ring';status.textContent='Toca para activar guia de respiracion';}
-}
-function doBreath(){
-  if(!breathActive)return;
-  const ring=document.getElementById('breath-ring');
-  const status=document.getElementById('breath-status');
-  ring.className='breath-ring inhale';status.textContent='Inhala... (4s)';
-  breathTimer=setTimeout(()=>{
-    if(!breathActive)return;
-    ring.className='breath-ring exhale';status.textContent='Exhala... (6s)';
-    breathTimer=setTimeout(doBreath,6000);
-  },4000);
+function checkPose(e,i){
+  e.stopPropagation();
+  const card=document.getElementById('pose-'+i);
+  const wasDone=card.classList.contains('done');
+  card.classList.toggle('done');
+  if(!wasDone)bellEnd();
 }
 
 function completeSession(sid){
   if(completed.has(sid))return;
-  completed.add(sid);save();
+  completed.add(sid);save();markToday();
   const btn=document.getElementById('comp-btn');
   if(btn){btn.className='complete-btn done';btn.innerHTML='&#10003; Sesion completada';}
+
+  const streak=getStreak();
+  const streakTxt=streak>1?`🔥 ${streak} dias seguidos`:streak===1?'🔥 Primer dia de tu racha':'';
 
   let session,level;
   for(const l of LEVELS){const s=l.sessions.find(s=>s.id===sid);if(s){session=s;level=l;break;}}
 
   const cel=document.getElementById('celebration');
   const celBtn=document.getElementById('cel-btn');
+  const celStreak=document.getElementById('cel-streak');
+  if(celStreak)celStreak.textContent=streakTxt;
 
   if(session&&level){
     const lvlComplete=level.sessions.every(s=>completed.has(s.id));
@@ -964,14 +1173,14 @@ function completeSession(sid){
         :'Has completado todo JAYYOGA. Tu cuerpo, mente y respiracion te lo agradecen.';
       celBtn.textContent='Continuar';
       celBtn.onclick=()=>{cel.classList.remove('show');showLevel(level.id);};
-    } else {
+    }else{
       document.getElementById('cel-emoji').textContent='🧘';
       document.getElementById('cel-title').textContent='Sesion completada';
       document.getElementById('cel-msg').textContent='Excelente practica. Tu cuerpo integra mientras descansas.';
       celBtn.textContent='Continuar';
       celBtn.onclick=()=>{cel.classList.remove('show');showLevel(activeLevelId);};
     }
-  } else {
+  }else{
     const exS=EXPRESS.find(s=>s.id===sid);
     document.getElementById('cel-emoji').textContent=LEVELS[exS.level-1].emoji;
     document.getElementById('cel-title').textContent='Sesion completada';
@@ -983,8 +1192,7 @@ function completeSession(sid){
 }
 
 // ─── INIT ───────────────────────────────────────
-// Set data-tab on buttons
-document.querySelectorAll('.tab-btn').forEach((b,i)=>{b.dataset.tab=i===0?'todas':'programa'});
+renderStats();
 renderTodas();
 </script>
 </body>
